@@ -3,5 +3,6 @@
 
     <string name="app_name">UpwardAlarm</string>
     <string name="action_add">Add</string>
+    <string name="title_activity_alarm_define">AlarmDefineActivity</string>
 
 </resources>

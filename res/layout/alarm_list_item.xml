@@ -13,6 +13,7 @@
 
     <TextView
         android:id="@+id/alarm_list_item_time"
+        style="@style/AlarmTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/alarm_list_item_handle" />
