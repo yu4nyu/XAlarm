@@ -2,21 +2,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".AlarmDefineActivity"
-    android:background="@android:color/darker_gray" >
-    
+    tools:context=".AlarmDefineActivity" >
+
     <TextView
         android:id="@+id/activity_alarm_define_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Label" />
+        android:text="@string/label"
+        android:textSize="32sp" />
     
+    <Switch
+        android:id="@+id/activity_alarm_define_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_alarm_define_label"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:id="@+id/activity_alarm_define_hour"
         style="@style/AlarmTime"
@@ -25,14 +33,15 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:text="08" />
-    
+
     <TextView
+        android:id="@+id/activity_alarm_define_colon"
         style="@style/AlarmTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text=":" />
-    
+        android:text="@string/time_separator" />
+
     <TextView
         android:id="@+id/activity_alarm_define_minute"
         style="@style/AlarmTime"
@@ -41,5 +50,111 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:text="00" />
+
+    <LinearLayout
+        android:id="@+id/activity_alarm_define_repetition_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <ToggleButton
+            android:id="@+id/activity_alarm_define_sunday_toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textOn="@string/sunday"
+            android:textOff="@string/sunday" />
+        
+        <ToggleButton
+            android:id="@+id/activity_alarm_define_monday_toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textOn="@string/monday"
+            android:textOff="@string/monday" />
+        
+        <ToggleButton
+            android:id="@+id/activity_alarm_define_tuesday_toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textOn="@string/tuesday"
+            android:textOff="@string/tuesday" />
+        
+        <ToggleButton
+            android:id="@+id/activity_alarm_define_wednesday_toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textOn="@string/wednesday"
+            android:textOff="@string/wednesday" />
+        
+        <ToggleButton
+            android:id="@+id/activity_alarm_define_thursday_toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textOn="@string/thursday"
+            android:textOff="@string/thursday" />
+        
+        <ToggleButton
+            android:id="@+id/activity_alarm_define_friday_toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textOn="@string/friday"
+            android:textOff="@string/friday" />
+        
+        <ToggleButton
+            android:id="@+id/activity_alarm_define_saturday_toggle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textOn="@string/saturday"
+            android:textOff="@string/saturday" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/activity_alarm_define_left_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/activity_alarm_define_label"
+        android:layout_toLeftOf="@id/activity_alarm_define_colon"
+        android:layout_above="@id/activity_alarm_define_repetition_layout" />
+
+    <ImageView
+        android:id="@+id/activity_alarm_define_right_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/activity_alarm_define_label"
+        android:layout_toRightOf="@id/activity_alarm_define_colon"
+        android:layout_above="@id/activity_alarm_define_repetition_layout" />
+    
+    <TextView
+        android:id="@+id/activity_alarm_define_ringtone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/activity_alarm_define_repetition_layout"
+        android:text="@string/silent" />
+    
+    <CheckedTextView
+        android:id="@+id/activity_alarm_define_vibrate"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/activity_alarm_define_ringtone"
+        android:text="@string/vibrate" />
 
 </RelativeLayout>
