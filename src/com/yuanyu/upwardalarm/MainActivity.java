@@ -1,14 +1,16 @@
 package com.yuanyu.upwardalarm;
 
 import android.os.Bundle;
+import android.app.Activity;
 import android.app.ListActivity;
-import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TimePicker;
 
 public class MainActivity extends ListActivity {
 
+	private final static int ACTIVITY_ALARM_DEFINE = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,19 +27,19 @@ public class MainActivity extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.action_add) {
-			showTimePickerDialog();
+			Intent intent = new Intent(MainActivity.this, AlarmDefineActivity.class);
+			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	private void showTimePickerDialog() {
-		TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener(){
-			@Override
-			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == ACTIVITY_ALARM_DEFINE) {
+			if(resultCode == Activity.RESULT_OK) {
 				// TODO
 			}
-		};
-		TimePickerDialog dialog = new TimePickerDialog(this, timeSetListener, 8, 0, true);
-		dialog.show();
+		}
 	}
 }
