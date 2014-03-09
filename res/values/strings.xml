@@ -6,13 +6,13 @@
     
     <string name="title_activity_alarm_define">AlarmDefineActivity</string>
     
-    <string name="sunday">SUN</string>
-    <string name="monday">MON</string>
-    <string name="tuesday">TUE</string>
-    <string name="wednesday">WED</string>
-    <string name="thursday">THU</string>
-    <string name="friday">FRI</string>
-    <string name="saturday">SAT</string>
+    <string name="sunday">Sun</string>
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tue</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thu</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
     
     <string name="label">Label</string>
     <string name="time_separator">:</string>

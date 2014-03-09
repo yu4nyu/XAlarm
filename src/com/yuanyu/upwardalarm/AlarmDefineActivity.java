@@ -1,6 +1,11 @@
 package com.yuanyu.upwardalarm;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnGenericMotionListener;
+import android.view.View.OnTouchListener;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -14,7 +19,11 @@ public class AlarmDefineActivity extends Activity {
 
 	private TextView mLabelTxt;
 	private TextView mHourTxt;
+	private TextView mHourBeforTxt;
+	private TextView mHourAfterTxt;
 	private TextView mMinuteTxt;
+	private TextView mMinuteBeforeTxt;
+	private TextView mMinuteAfterTxt;
 	private Switch mSwitch;
 	
 	private ToggleButton mSunday;
@@ -30,19 +39,26 @@ public class AlarmDefineActivity extends Activity {
 	private TextView mRingtoneTxt;
 	private CheckedTextView mVibrateCheck;
 	
+	private int mCurrentHour;
+	private int mCurrentMinute;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_alarm_define);
 		
 		initViews();
-		drawCircles(mLeftCircle, mRightCircle);
+		addTouchListeners();
 	}
 
 	private void initViews() {
 		mLabelTxt = (TextView) findViewById(R.id.activity_alarm_define_label);
 		mHourTxt = (TextView) findViewById(R.id.activity_alarm_define_hour);
+		mHourBeforTxt = (TextView) findViewById(R.id.activity_alarm_define_hour_before);
+		mHourAfterTxt = (TextView) findViewById(R.id.activity_alarm_define_hour_after);
 		mMinuteTxt = (TextView) findViewById(R.id.activity_alarm_define_minute);
+		mMinuteBeforeTxt = (TextView) findViewById(R.id.activity_alarm_define_minute_before);
+		mMinuteAfterTxt = (TextView) findViewById(R.id.activity_alarm_define_minute_after);
 		mSwitch = (Switch) findViewById(R.id.activity_alarm_define_switch);
 		
 		mSunday = (ToggleButton) findViewById(R.id.activity_alarm_define_sunday_toggle);
@@ -59,25 +75,24 @@ public class AlarmDefineActivity extends Activity {
 		mVibrateCheck = (CheckedTextView) findViewById(R.id.activity_alarm_define_vibrate);
 	}
 	
-	private void drawCircles(final ImageView left, final ImageView right) {
-		left.post(new Runnable(){
+	private void addTouchListeners() {
+		mLeftCircle.setOnTouchListener(new OnTouchListener(){
 			@Override
-			public void run() {
-				Bitmap circle = BitmapFactory.decodeResource(getResources(), R.drawable.circle);
-				int radius = circle.getWidth() / 2;
-				
-				// Draw left image
-				//int width = left.getWidth();
-				int height = left.getHeight();
-				int cropWidth = (int) ( radius - Math.sqrt(radius*radius - height*height/4));
-				int x = 2*radius - cropWidth;
-				int y = radius - height/2;
-				Bitmap leftBitmap = Bitmap.createBitmap(circle, x, y, cropWidth, height);
-				left.setImageBitmap(leftBitmap);
-				
-				// Draw right image
-				Bitmap rightBitmap = Bitmap.createBitmap(circle, 0, y, cropWidth, height);
-				right.setImageBitmap(rightBitmap);
+			public boolean onTouch(View v, MotionEvent event) {
+				float x = event.getRawX() - mLeftCircle.getLeft();
+				float y = event.getRawY() - mLeftCircle.getTop();
+				switch(event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					TimePickerAnimation.INSTANCE.calculateRadius(mLeftCircle);
+					TimePickerAnimation.INSTANCE.initHourPicker(mHourBeforTxt, mHourTxt, mHourAfterTxt, x, y);
+					break;
+				case MotionEvent.ACTION_MOVE:
+					TimePickerAnimation.INSTANCE.hourPickerAnimation(mHourBeforTxt, mHourTxt, mHourAfterTxt, x, y);
+					break;
+				case MotionEvent.ACTION_UP:
+					break;
+				}
+				return true;
 			}
 		});
 	}
