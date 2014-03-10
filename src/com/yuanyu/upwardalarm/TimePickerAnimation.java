@@ -1,5 +1,6 @@
 package com.yuanyu.upwardalarm;
 
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -15,6 +16,8 @@ public enum TimePickerAnimation {
 	
 	INSTANCE;
 	
+	private final static String TAG = "TimePickerAnimation";
+	
 	class PickerPositions {
 		public float beforeX;
 		public float beforeY;
@@ -24,7 +27,12 @@ public enum TimePickerAnimation {
 		public float afterY;
 		
 		public PickerPositions() {
-			
+			beforeX = 0;
+			beforeY = 0;
+			currentX = 0;
+			currentY = 0;
+			afterX = 0;
+			afterY = 0;
 		}
 		
 		public PickerPositions(PickerPositions pp) {
@@ -63,9 +71,14 @@ public enum TimePickerAnimation {
 	 * @param image
 	 */
 	public void calculateRadius(ImageView image) {
-		int height = image.getHeight();
-		mRadius = (float) (2*height / Math.sqrt(3));
 		mImageHeight = image.getHeight();
+		mRadius = (float) (mImageHeight / Math.sqrt(3));
+		
+		mImageHeight /= 2;
+		mRadius /= 2;
+		
+		Log.d(TAG, "Got radius = " + mRadius);
+		Log.d(TAG, "Got image height = " + mImageHeight);
 	}
 	
 	/**
@@ -80,13 +93,15 @@ public enum TimePickerAnimation {
 		// Convert the origin to the center of circle
 		float newX = x + mRadius/2;
 		float newY = mImageHeight/2 - y;
-		double angle = Math.atan(y/x);
+		double angle = Math.atan(newY/newX);
 		result[0] = (float) (mRadius * Math.cos(angle));
 		result[1] = (float) (mRadius * Math.sin(angle));
 		
 		// Convert the origin back to the left-top corner of image view
 		result[0] -= mRadius/2;
-		result[1] = mImageHeight - result[1];
+		result[1] = mImageHeight/2 - result[1];
+		
+		//Log.d(TAG, "Got standard positions x = " + result[0] + " y = " + result[1]);
 		
 		return result;
 	}
@@ -104,7 +119,7 @@ public enum TimePickerAnimation {
 		// Convert the origin to the center of circle
 		float newX = x + mRadius/2;
 		float newY = mImageHeight/2 - y;
-		double angle = Math.atan(y/x);
+		double angle = Math.atan(newY/newX);
 		result[0] = (float) (mRadius * Math.cos(angle));
 		result[1] = (float) (mRadius * Math.sin(angle));
 		
@@ -122,10 +137,15 @@ public enum TimePickerAnimation {
 		mHourPositions.currentY = current.getY();
 		mHourPositions.afterX = after.getX();
 		mHourPositions.afterY = after.getY();
-		mCurrentPositions = new PickerPositions(mHourPositions);
+		
+		
+		mCurrentPositions = new PickerPositions();
 		float[] positions = getHourStandardPosition(x, y);
 		mCurrentStandardX = positions[0];
 		mCurrentStandardY = positions[1];
+		
+		//mImageHeight = mHourPositions.afterY - mHourPositions.beforeY;
+		//mRadius = (float) (mImageHeight / Math.sqrt(3));
 	}
 	
 	public void initMinutePicker(TextView before, TextView current, TextView after, float x, float y) {
@@ -135,7 +155,7 @@ public enum TimePickerAnimation {
 		mMinutePositions.currentY = current.getY();
 		mMinutePositions.afterX = after.getX();
 		mMinutePositions.afterY = after.getY();
-		mCurrentPositions = new PickerPositions(mMinutePositions);
+		mCurrentPositions = new PickerPositions();
 		float[] positions = getMinuteStandardPosition(x, y);
 		mCurrentStandardX = positions[0];
 		mCurrentStandardY = positions[1];
@@ -145,18 +165,42 @@ public enum TimePickerAnimation {
 		float[] positions = getHourStandardPosition(x, y);
 		float deltaX = positions[0] - mCurrentStandardX;
 		float deltaY = positions[1] - mCurrentStandardY;
+		mCurrentStandardX = positions[0];
+		mCurrentStandardY = positions[1];
 		
-		Animation beforeAnimation = new TranslateAnimation(mCurrentPositions.beforeX, deltaX, mCurrentPositions.beforeY, deltaY);
+		Log.d(TAG, "deltaX = " + deltaX + " deltaY = " + deltaY);
+		
+		/*Animation beforeAnimation = new TranslateAnimation(mCurrentPositions.beforeX, deltaX, mCurrentPositions.beforeY, deltaY);
 		before.startAnimation(beforeAnimation);
 		
 		Animation currentAnimation = new TranslateAnimation(mCurrentPositions.currentX, deltaX, mCurrentPositions.currentY, deltaY);
 		current.setAnimation(currentAnimation);
 		
 		Animation afterAnimation = new TranslateAnimation(mCurrentPositions.afterX, deltaX, mCurrentPositions.afterY, deltaY);
-		after.setAnimation(afterAnimation);
+		after.setAnimation(afterAnimation);*/
+		hourPickerTranslateAnimation(before, current, after, deltaY);
 		
 		mCurrentPositions.addDeltaX(deltaX);
 		mCurrentPositions.addDeltaY(deltaY);
+	}
+	
+	private float getSlope(TextView before, TextView current) {
+		float beforeX = before.getX() + before.getWidth()/2;
+		float beforeY = before.getY() + before.getHeight()/2;
+		float currentX = current.getX() + current.getWidth()/2;
+		float currentY = current.getY() + current.getHeight()/2;
+		return (currentX - beforeX) / (currentY - beforeY);
+	}
+	
+	private void hourPickerTranslateAnimation(TextView before, TextView current, TextView after, float deltaY) {
+		//float slope = (mHourPositions.currentX - mHourPositions.beforeX) / (mHourPositions.currentY - mHourPositions.beforeY);
+		float slope = getSlope(before, current);
+		Animation beforeAnimation = new TranslateAnimation(mCurrentPositions.beforeX, deltaY*slope, mCurrentPositions.beforeY, deltaY);
+		before.startAnimation(beforeAnimation);
+		Animation currentAnimation = new TranslateAnimation(mCurrentPositions.currentX, -deltaY*slope, mCurrentPositions.currentY, deltaY);
+		current.setAnimation(currentAnimation);
+		Animation afterAnimation = new TranslateAnimation(mCurrentPositions.afterX, -deltaY*slope, mCurrentPositions.afterY, deltaY);
+		after.setAnimation(afterAnimation);
 	}
 	
 	public void minutePickerAnimation() {

@@ -17,6 +17,8 @@ import android.graphics.BitmapFactory;
 
 public class AlarmDefineActivity extends Activity {
 
+	private final static String TAG = "AlarmDefineActivity";
+	
 	private TextView mLabelTxt;
 	private TextView mHourTxt;
 	private TextView mHourBeforTxt;
@@ -79,8 +81,11 @@ public class AlarmDefineActivity extends Activity {
 		mLeftCircle.setOnTouchListener(new OnTouchListener(){
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				float x = event.getRawX() - mLeftCircle.getLeft();
-				float y = event.getRawY() - mLeftCircle.getTop();
+				int[] locations = new int[2];
+				mLeftCircle.getLocationOnScreen(locations);
+				float x = event.getRawX() - locations[0];
+				float y = event.getRawY() - locations[1];
+				//Log.d(TAG, "onTouch(), x = " + x + ", y = " + y);
 				switch(event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
 					TimePickerAnimation.INSTANCE.calculateRadius(mLeftCircle);
