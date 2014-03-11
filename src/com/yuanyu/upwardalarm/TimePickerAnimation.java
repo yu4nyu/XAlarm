@@ -44,16 +44,16 @@ public enum TimePickerAnimation {
 			afterY = pp.afterY;
 		}
 		
-		public void addDeltaX(float deltaX) {
-			beforeX += deltaX;
-			currentX += deltaX;
-			afterX += deltaX;
+		public void addDeltaX(float beforeDelta, float currentDelta, float afterDelta) {
+			beforeX += beforeDelta;
+			currentX += currentDelta;
+			afterX += afterDelta;
 		}
 		
-		public void addDeltaY(float deltaY) {
-			beforeY += deltaY;
-			currentY += deltaY;
-			afterY += deltaY;
+		public void addDeltaY(float beforeDelta, float currentDelta, float afterDelta) {
+			beforeY += beforeDelta;
+			currentY += currentDelta;
+			afterY += afterDelta;
 		}
 	}
 	
@@ -65,6 +65,8 @@ public enum TimePickerAnimation {
 	
 	private float mRadius;
 	private float mImageHeight;
+	
+	private int mCurrentHour = 8;
 
 	/**
 	 * Suppose width of the image part is 1/2 of radius
@@ -138,14 +140,10 @@ public enum TimePickerAnimation {
 		mHourPositions.afterX = after.getX();
 		mHourPositions.afterY = after.getY();
 		
-		
 		mCurrentPositions = new PickerPositions();
 		float[] positions = getHourStandardPosition(x, y);
 		mCurrentStandardX = positions[0];
 		mCurrentStandardY = positions[1];
-		
-		//mImageHeight = mHourPositions.afterY - mHourPositions.beforeY;
-		//mRadius = (float) (mImageHeight / Math.sqrt(3));
 	}
 	
 	public void initMinutePicker(TextView before, TextView current, TextView after, float x, float y) {
@@ -170,18 +168,7 @@ public enum TimePickerAnimation {
 		
 		Log.d(TAG, "deltaX = " + deltaX + " deltaY = " + deltaY);
 		
-		/*Animation beforeAnimation = new TranslateAnimation(mCurrentPositions.beforeX, deltaX, mCurrentPositions.beforeY, deltaY);
-		before.startAnimation(beforeAnimation);
-		
-		Animation currentAnimation = new TranslateAnimation(mCurrentPositions.currentX, deltaX, mCurrentPositions.currentY, deltaY);
-		current.setAnimation(currentAnimation);
-		
-		Animation afterAnimation = new TranslateAnimation(mCurrentPositions.afterX, deltaX, mCurrentPositions.afterY, deltaY);
-		after.setAnimation(afterAnimation);*/
 		hourPickerTranslateAnimation(before, current, after, deltaY);
-		
-		mCurrentPositions.addDeltaX(deltaX);
-		mCurrentPositions.addDeltaY(deltaY);
 	}
 	
 	private float getSlope(TextView before, TextView current) {
@@ -192,15 +179,60 @@ public enum TimePickerAnimation {
 		return (currentX - beforeX) / (currentY - beforeY);
 	}
 	
+	/**
+	 * Scrolled the before hour to the current hour
+	 */
+	private void changeCurrentToAfter(TextView before, TextView current, TextView after) {
+		before.setText("" + (mCurrentHour%24));
+		current.setText("" + ((mCurrentHour+1)%24));
+		after.setText("" + ((mCurrentHour+2)%24));
+	}
+	
+	/**
+	 * Scrolled the before hour to the current hour
+	 */
+	private void changeCurrentToBefore(TextView before, TextView current, TextView after) {
+		if(mCurrentHour >= 2) {
+			before.setText("" + (mCurrentHour-2));
+			current.setText("" + (mCurrentHour-1));
+			after.setText("" + (mCurrentHour));
+		}
+		else if(mCurrentHour == 1) {
+			before.setText("" + 23);
+			current.setText("" + (mCurrentHour-1));
+			after.setText("" + (mCurrentHour));
+		}
+		else if(mCurrentHour == 0) {
+			before.setText("" + 22);
+			current.setText("" + 23);
+			after.setText("" + mCurrentHour);
+		}
+	}
+	
 	private void hourPickerTranslateAnimation(TextView before, TextView current, TextView after, float deltaY) {
-		//float slope = (mHourPositions.currentX - mHourPositions.beforeX) / (mHourPositions.currentY - mHourPositions.beforeY);
 		float slope = getSlope(before, current);
-		Animation beforeAnimation = new TranslateAnimation(mCurrentPositions.beforeX, deltaY*slope, mCurrentPositions.beforeY, deltaY);
-		before.startAnimation(beforeAnimation);
-		Animation currentAnimation = new TranslateAnimation(mCurrentPositions.currentX, -deltaY*slope, mCurrentPositions.currentY, deltaY);
-		current.setAnimation(currentAnimation);
-		Animation afterAnimation = new TranslateAnimation(mCurrentPositions.afterX, -deltaY*slope, mCurrentPositions.afterY, deltaY);
-		after.setAnimation(afterAnimation);
+		if(deltaY > 0) { // Scroll downwards
+			Animation beforeAnimation = new TranslateAnimation(mCurrentPositions.beforeX, deltaY*slope, mCurrentPositions.beforeY, deltaY);
+			before.startAnimation(beforeAnimation);
+			Animation currentAnimation = new TranslateAnimation(mCurrentPositions.currentX, -deltaY*slope, mCurrentPositions.currentY, deltaY);
+			current.setAnimation(currentAnimation);
+			Animation afterAnimation = new TranslateAnimation(mCurrentPositions.afterX, -deltaY*slope*2, mCurrentPositions.afterY, deltaY/2);
+			after.setAnimation(afterAnimation);
+			
+			mCurrentPositions.addDeltaX(deltaY*slope, -deltaY*slope, -deltaY*slope*2);
+			mCurrentPositions.addDeltaY(deltaY, deltaY, deltaY/2);
+		}
+		else { // Scroll upwards
+			Animation beforeAnimation = new TranslateAnimation(mCurrentPositions.beforeX, deltaY*slope*2, mCurrentPositions.beforeY, deltaY/2);
+			before.startAnimation(beforeAnimation);
+			Animation currentAnimation = new TranslateAnimation(mCurrentPositions.currentX, deltaY*slope, mCurrentPositions.currentY, deltaY);
+			current.setAnimation(currentAnimation);
+			Animation afterAnimation = new TranslateAnimation(mCurrentPositions.afterX, -deltaY*slope, mCurrentPositions.afterY, deltaY);
+			after.setAnimation(afterAnimation);
+			
+			mCurrentPositions.addDeltaX(deltaY*slope*2, deltaY*slope, -deltaY*slope);
+			mCurrentPositions.addDeltaY(deltaY/2, deltaY, deltaY);
+		}
 	}
 	
 	public void minutePickerAnimation() {
