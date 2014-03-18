@@ -59,7 +59,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_alarm_define);
+		setContentView(R.layout.activity_alarm_define_standard);
 		
 		initViews();
 		setOnClickListeners();

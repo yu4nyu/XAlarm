@@ -27,7 +27,7 @@ public class MainActivity extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.action_add) {
-			Intent intent = new Intent(MainActivity.this, AlarmDefineActivity.class);
+			Intent intent = new Intent(MainActivity.this, AlarmDefineStandardActivity.class);
 			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
 		}
 		return super.onOptionsItemSelected(item);

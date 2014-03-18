@@ -26,6 +26,9 @@
             android:name="com.yuanyu.upwardalarm.AlarmDefineActivity"
             android:label="@string/title_activity_alarm_define" >
         </activity>
+        <activity 
+            android:name="com.yuanyu.upwardalarm.AlarmDefineStandardActivity" >
+        </activity>
     </application>
 
 </manifest>
