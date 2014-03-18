@@ -4,6 +4,8 @@
     <string name="app_name">UpwardAlarm</string>
     <string name="action_add">Add</string>
     
+    <!-- Alarm Define Activity -->
+    
     <string name="title_activity_alarm_define">AlarmDefineActivity</string>
     
     <string name="sunday">Sun</string>
@@ -18,4 +20,8 @@
     <string name="time_separator">:</string>
     <string name="silent">Silent</string>
     <string name="vibrate">Vibrate</string>
+    
+    <string name="label_define_dialog_title">Label of alarm</string>
+    <string name="ringtone_picker_title">Select ringtone for alarm</string>
+    
 </resources>
