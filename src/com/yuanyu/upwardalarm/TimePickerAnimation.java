@@ -166,7 +166,7 @@ public enum TimePickerAnimation {
 		mCurrentStandardX = positions[0];
 		mCurrentStandardY = positions[1];
 		
-		Log.d(TAG, "deltaX = " + deltaX + " deltaY = " + deltaY);
+		//Log.d(TAG, "deltaX = " + deltaX + " deltaY = " + deltaY);
 		
 		hourPickerTranslateAnimation(before, current, after, deltaY);
 	}
