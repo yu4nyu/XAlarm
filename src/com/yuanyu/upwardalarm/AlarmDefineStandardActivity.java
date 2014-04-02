@@ -130,6 +130,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	}
 	
 	private void done() {
+		// TODO just put a serializable Alarm object as extra
 		Intent intent = new Intent();
 		intent.putExtra(EXTRA_LABEL, mLabel);
 		intent.putExtra(EXTRA_ENABLE, mSwitch.isChecked());
