@@ -10,6 +10,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true" />
+    
+    <ImageView
+        android:id="@+id/alarm_list_top_right_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+    
+    <ImageView
+        android:id="@+id/alarm_list_icon_left_to_top_right_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/alarm_list_top_right_icon" />
 
     <TextView
         android:id="@+id/alarm_list_item_time"

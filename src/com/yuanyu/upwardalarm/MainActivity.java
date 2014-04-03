@@ -1,5 +1,8 @@
 package com.yuanyu.upwardalarm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ListActivity;
@@ -11,10 +14,14 @@ public class MainActivity extends ListActivity {
 
 	private final static int ACTIVITY_ALARM_DEFINE = 0;
 	
+	private List<Alarm> mData = new ArrayList<Alarm>();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// TODO get alarm data from file
 	}
 
 	@Override
@@ -38,7 +45,9 @@ public class MainActivity extends ListActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == ACTIVITY_ALARM_DEFINE) {
 			if(resultCode == Activity.RESULT_OK) {
-				// TODO
+				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineStandardActivity.EXTRA_ALARM);
+				mData.add(alarm);
+				// TODO update adapter
 			}
 		}
 	}
