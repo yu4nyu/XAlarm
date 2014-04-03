@@ -18,24 +18,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 public class AlarmDefineStandardActivity extends Activity implements View.OnClickListener {
-
-	private final static String TAG = "AlarmDefineActivity";
 	
 	private final static int ACTIVITY_RINGTONE_PICKER = 0;
 	
-	public final static String EXTRA_LABEL = "label"; // String extra
-	public final static String EXTRA_ENABLE = "enable"; // Boolean extra
-	public final static String EXTRA_HOUR = "hour"; // Integer extra
-	public final static String EXTRA_MINUTE = "minute"; // Integer extra
-	public final static String EXTRA_RINGTONE = "ringtone"; // String extra, absolute path of ringtone file
-	public final static String EXTRA_VIBRATE = "vibrate"; // Boolean extra
-	public final static String EXTRA_REPEAT_SUNDAY = "sunday"; // Boolean extra;
-	public final static String EXTRA_REPEAT_MONDAY = "monday"; // Boolean extra;
-	public final static String EXTRA_REPEAT_TUESDAY = "tuesday"; // Boolean extra;
-	public final static String EXTRA_REPEAT_WEDNESDAY = "wednesday"; // Boolean extra;
-	public final static String EXTRA_REPEAT_THURSDAY = "thursday"; // Boolean extra;
-	public final static String EXTRA_REPEAT_FRIDAY = "friday"; // Boolean extra;
-	public final static String EXTRA_REPEAT_SATURDAY = "saturday"; // Boolean extra;
+	public final static String EXTRA_ALARM = "alarm";
 	
 	private TextView mLabelTxt;
 	private Switch mSwitch;
@@ -130,21 +116,26 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	}
 	
 	private void done() {
-		// TODO just put a serializable Alarm object as extra
+		
+		Alarm.Builder builder = new Alarm.Builder();
+		builder.setLable(mLabel)
+			.setEnable(mSwitch.isChecked())
+			.setHour(mTimePicker.getCurrentHour())
+			.setMinute(mTimePicker.getCurrentMinute())
+			.setRingtone(mRingtone)
+			.setVibrateEnable(mVibrateCheck.isChecked())
+			.setRepeat(mSunday.isChecked(),
+					mMonday.isChecked(),
+					mTuesday.isChecked(),
+					mWednesday.isChecked(),
+					mThursday.isChecked(),
+					mFriday.isChecked(),
+					mSaturday.isChecked())
+			;
+		Alarm alarm = builder.build();
+		
 		Intent intent = new Intent();
-		intent.putExtra(EXTRA_LABEL, mLabel);
-		intent.putExtra(EXTRA_ENABLE, mSwitch.isChecked());
-		intent.putExtra(EXTRA_HOUR, mTimePicker.getCurrentHour());
-		intent.putExtra(EXTRA_MINUTE, mTimePicker.getCurrentMinute());
-		intent.putExtra(EXTRA_RINGTONE, mRingtone);
-		intent.putExtra(EXTRA_VIBRATE, mVibrateCheck.isChecked());
-		intent.putExtra(EXTRA_REPEAT_SUNDAY, mSunday.isChecked());
-		intent.putExtra(EXTRA_REPEAT_MONDAY, mMonday.isChecked());
-		intent.putExtra(EXTRA_REPEAT_TUESDAY, mTuesday.isChecked());
-		intent.putExtra(EXTRA_REPEAT_WEDNESDAY, mWednesday.isChecked());
-		intent.putExtra(EXTRA_REPEAT_THURSDAY, mThursday.isChecked());
-		intent.putExtra(EXTRA_REPEAT_FRIDAY, mFriday.isChecked());
-		intent.putExtra(EXTRA_REPEAT_SATURDAY, mSaturday.isChecked());
+		intent.putExtra(EXTRA_ALARM, alarm);
 		setResult(Activity.RESULT_OK, intent);
 		finish();
 	}

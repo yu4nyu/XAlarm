@@ -123,31 +123,37 @@ public class Alarm implements Serializable {
 			mAlarm = new Alarm();
 		}
 		
-		public void setLable(String label) {
+		public Builder setLable(String label) {
 			mAlarm.mLabel = label;
+			return this;
 		}
 		
-		public void setEnable(boolean enable) {
+		public Builder setEnable(boolean enable) {
 			mAlarm.mEnable = enable;
+			return this;
 		}
 		
-		public void setHour(int hour) {
+		public Builder setHour(int hour) {
 			mAlarm.mHour = hour;
+			return this;
 		}
 		
-		public void setMinute(int minute) {
+		public Builder setMinute(int minute) {
 			mAlarm.mMinute = minute;
+			return this;
 		}
 		
-		public void setRingtone(String ringtone) {
+		public Builder setRingtone(String ringtone) {
 			mAlarm.mRingtone = ringtone;
+			return this;
 		}
 		
-		public void setVibrateEnable(boolean enable) {
+		public Builder setVibrateEnable(boolean enable) {
 			mAlarm.mVibrate = enable;
+			return this;
 		}
 		
-		public void setRepeat(boolean sun, boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat) {
+		public Builder setRepeat(boolean sun, boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat) {
 			mAlarm.mRepeat[0] = sun;
 			mAlarm.mRepeat[1] = mon;
 			mAlarm.mRepeat[2] = tue;
@@ -155,12 +161,14 @@ public class Alarm implements Serializable {
 			mAlarm.mRepeat[4] = thu;
 			mAlarm.mRepeat[5] = fri;
 			mAlarm.mRepeat[6] = sat;
+			return this;
 		}
 		
-		public void setRepeatEveryday() {
+		public Builder setRepeatEveryday() {
 			for(int i = 0; i < mAlarm.mRepeat.length; i++) {
 				mAlarm.mRepeat[i] = true;
 			}
+			return this;
 		}
 		
 		public Alarm build() {
