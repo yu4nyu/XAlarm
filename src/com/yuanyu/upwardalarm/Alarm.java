@@ -64,6 +64,7 @@ public class Alarm implements Serializable {
 	 * @return null if can't get the valid File object
 	 */
 	public File getRingtone() {
+		// TODO take account if selected SILENCE
 		if(mRingtone == null || mRingtone.isEmpty()) {
 			return null;
 		}
