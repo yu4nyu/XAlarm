@@ -1,10 +1,10 @@
 package com.yuanyu.upwardalarm;
 
+import com.yuanyu.upwardalarm.ui.TimePickerAnimation;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnGenericMotionListener;
 import android.view.View.OnTouchListener;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
@@ -12,8 +12,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 public class AlarmDefineActivity extends Activity {
 

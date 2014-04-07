@@ -1,4 +1,4 @@
-package com.yuanyu.upwardalarm;
+package com.yuanyu.upwardalarm.ui;
 
 import android.util.Log;
 import android.view.animation.Animation;

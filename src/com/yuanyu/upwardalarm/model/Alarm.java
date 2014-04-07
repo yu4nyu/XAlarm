@@ -1,8 +1,10 @@
-package com.yuanyu.upwardalarm;
+package com.yuanyu.upwardalarm.model;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.Calendar;
+
+import android.content.Context;
 
 public class Alarm implements Serializable {
 
@@ -45,6 +47,10 @@ public class Alarm implements Serializable {
 		for(int i = 0; i < mRepeat.length; i++) {
 			mRepeat[i] = alarm.mRepeat[i];
 		}
+	}
+	
+	public int getId() {
+		return mId;
 	}
 	
 	public String getLabel() {
@@ -132,9 +138,9 @@ public class Alarm implements Serializable {
 		
 		Alarm mAlarm;
 		
-		public Builder() {
+		public Builder(Context context) {
 			mAlarm = new Alarm();
-			//mAlarm.mId = 0; TODO generate unique id
+			mAlarm.mId = Manager.INSTANCE.getUniqueId(context);
 		}
 		
 		public Builder setLable(String label) {

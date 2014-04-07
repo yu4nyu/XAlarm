@@ -1,6 +1,9 @@
-package com.yuanyu.upwardalarm;
+package com.yuanyu.upwardalarm.ui;
 
 import java.util.List;
+
+import com.yuanyu.upwardalarm.R;
+import com.yuanyu.upwardalarm.model.Alarm;
 
 import android.content.Context;
 import android.view.LayoutInflater;

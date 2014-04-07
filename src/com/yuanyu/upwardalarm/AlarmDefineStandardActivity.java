@@ -1,5 +1,7 @@
 package com.yuanyu.upwardalarm;
 
+import com.yuanyu.upwardalarm.model.Alarm;
+
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -117,7 +119,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	
 	private void done() {
 		
-		Alarm.Builder builder = new Alarm.Builder();
+		Alarm.Builder builder = new Alarm.Builder(this);
 		builder.setLable(mLabel)
 			.setEnable(mSwitch.isChecked())
 			.setHour(mTimePicker.getCurrentHour())
