@@ -76,7 +76,7 @@ public class AlarmListAdapter extends BaseAdapter {
 		holder.time.setText(alarm.getHour() + ":" + alarm.getMinute());
 		holder.enable.setChecked(alarm.getEnable());
 		
-		return null;
+		return convertView;
 	}
 
 	class ViewHolder {

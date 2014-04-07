@@ -15,6 +15,7 @@ public class MainActivity extends ListActivity {
 	private final static int ACTIVITY_ALARM_DEFINE = 0;
 	
 	private List<Alarm> mData = new ArrayList<Alarm>();
+	private AlarmListAdapter mAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,9 @@ public class MainActivity extends ListActivity {
 		setContentView(R.layout.activity_main);
 		
 		// TODO get alarm data from file
+
+		mAdapter = new AlarmListAdapter(this, mData);
+		setListAdapter(mAdapter);
 	}
 
 	@Override
@@ -42,13 +46,20 @@ public class MainActivity extends ListActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == ACTIVITY_ALARM_DEFINE) {
 			if(resultCode == Activity.RESULT_OK) {
 				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineStandardActivity.EXTRA_ALARM);
 				mData.add(alarm);
-				// TODO update adapter
+				mAdapter.notifyDataSetChanged();
+				registerAlarm(alarm);
 			}
 		}
+	}
+	
+	/**
+	 * Register the alarm to android system
+	 */
+	private void registerAlarm(Alarm alarm) {
+		// TODO
 	}
 }
