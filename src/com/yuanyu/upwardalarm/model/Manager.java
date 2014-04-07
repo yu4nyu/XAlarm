@@ -42,6 +42,7 @@ public enum Manager {
 	/**
 	 * Save alarm to file system
 	 */
+	// TODO maybe use a AsyncTask ?
 	void saveAlarm(Context context, Alarm alarm) {
 		try {
 			FileOutputStream fos;

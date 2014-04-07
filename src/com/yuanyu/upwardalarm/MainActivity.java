@@ -73,6 +73,7 @@ public class MainActivity extends ListActivity {
 		PendingIntent alarmPending = PendingIntent.getBroadcast(this, alarm.getId(), intent, 0);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getTimeMillis(), alarmPending);
+		// TODO set repeating
 	}
 	
 	/**

@@ -8,6 +8,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// TODO
+		Intent i = new Intent(context, AlarmGoOffActivity.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(i);
 	}
 }

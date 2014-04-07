@@ -22,13 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.yuanyu.upwardalarm.AlarmDefineActivity"
-            android:label="@string/title_activity_alarm_define" >
-        </activity>
-        <activity 
-            android:name="com.yuanyu.upwardalarm.AlarmDefineStandardActivity" >
-        </activity>
+        <activity android:name="com.yuanyu.upwardalarm.AlarmDefineActivity" />
+        <activity android:name="com.yuanyu.upwardalarm.AlarmDefineStandardActivity" />
+        <activity android:name="com.yuanyu.upwardalarm.AlarmGoOffActivity" />
+        <receiver android:name="com.yuanyu.upwardalarm.AlarmBroadcastReceiver" />
     </application>
 
 </manifest>
