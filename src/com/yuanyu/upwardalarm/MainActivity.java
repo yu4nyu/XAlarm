@@ -5,7 +5,10 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +63,13 @@ public class MainActivity extends ListActivity {
 	 * Register the alarm to android system
 	 */
 	private void registerAlarm(Alarm alarm) {
-		// TODO
+		Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
+		PendingIntent alarmPending = PendingIntent.getBroadcast(this, 0, intent, 0);
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getTimeMillis(), alarmPending);
+	}
+	
+	private void unregisterAlarm() {
+		
 	}
 }

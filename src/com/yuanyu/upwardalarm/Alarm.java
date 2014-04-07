@@ -2,10 +2,13 @@ package com.yuanyu.upwardalarm;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class Alarm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	private int mId;
 
 	private String mLabel;
 	
@@ -116,12 +119,22 @@ public class Alarm implements Serializable {
 		return true;
 	}
 	
+	public long getTimeMillis() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, mHour);
+		calendar.set(Calendar.MINUTE, mMinute);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTimeInMillis();
+	}
+	
 	public static class Builder {
 		
 		Alarm mAlarm;
 		
 		public Builder() {
 			mAlarm = new Alarm();
+			//mAlarm.mId = 0; TODO generate unique id
 		}
 		
 		public Builder setLable(String label) {
