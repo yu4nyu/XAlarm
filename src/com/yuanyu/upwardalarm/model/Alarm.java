@@ -187,8 +187,7 @@ public class Alarm implements Serializable {
 	 */
 	public void unregister(Context context) {
 		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-		intent.setData(Uri.parse(INTENT_DATA_PREFIX + mId)); // TODO verify if this works
-		//intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, mId); // TODO verify if needed
+		intent.setData(Uri.parse(INTENT_DATA_PREFIX + mId));
 		PendingIntent alarmPending = PendingIntent.getBroadcast(context, mId, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
 		alarmManager.cancel(alarmPending);
