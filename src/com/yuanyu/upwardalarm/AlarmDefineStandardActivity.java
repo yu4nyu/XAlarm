@@ -126,7 +126,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			.setMinute(mTimePicker.getCurrentMinute())
 			.setRingtone(mRingtone)
 			.setVibrateEnable(mVibrateCheck.isChecked())
-			.setRepeat(mSunday.isChecked(),
+			.enableRepeat(true) // TODO attach to a checkbox
+			.setWeekRepeat(mSunday.isChecked(),
 					mMonday.isChecked(),
 					mTuesday.isChecked(),
 					mWednesday.isChecked(),

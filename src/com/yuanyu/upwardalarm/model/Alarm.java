@@ -23,7 +23,10 @@ public class Alarm implements Serializable {
 	
 	private boolean mVibrate;
 	
-	private boolean[] mRepeat = new boolean[7]; // Begin with Sunday
+	private boolean mRepeat;
+	private boolean[] mWeekRepeat = new boolean[7]; // Begin with Sunday
+	
+	// TODO maybe define the month repeat ?
 	
 	private Alarm() {
 		mLabel = "";
@@ -32,8 +35,9 @@ public class Alarm implements Serializable {
 		mMinute = 0;
 		mRingtone = "";
 		mVibrate = true;
-		for(int i = 0; i < mRepeat.length; i++) {
-			mRepeat[i] = true;
+		mRepeat = false;
+		for(int i = 0; i < mWeekRepeat.length; i++) {
+			mWeekRepeat[i] = true;
 		}
 	}
 	
@@ -44,8 +48,9 @@ public class Alarm implements Serializable {
 		mMinute = alarm.mMinute;
 		mRingtone = alarm.mRingtone;
 		mVibrate = alarm.mVibrate;
-		for(int i = 0; i < mRepeat.length; i++) {
-			mRepeat[i] = alarm.mRepeat[i];
+		mRepeat = alarm.mRepeat;
+		for(int i = 0; i < mWeekRepeat.length; i++) {
+			mWeekRepeat[i] = alarm.mWeekRepeat[i];
 		}
 	}
 	
@@ -89,36 +94,45 @@ public class Alarm implements Serializable {
 	}
 	
 	public boolean isSundayRepeat() {
-		return mRepeat[0];
+		return mWeekRepeat[0];
 	}
 	
 	public boolean isMondayRepeat() {
-		return mRepeat[1];
+		return mWeekRepeat[1];
 	}
 	
 	public boolean isTuesdayRepeat() {
-		return mRepeat[1];
+		return mWeekRepeat[2];
 	}
 	
 	public boolean isWednesdayRepeat() {
-		return mRepeat[1];
+		return mWeekRepeat[3];
 	}
 	
 	public boolean isThursdayRepeat() {
-		return mRepeat[1];
+		return mWeekRepeat[4];
 	}
 	
 	public boolean isFridatRepeat() {
-		return mRepeat[1];
+		return mWeekRepeat[5];
 	}
 	
 	public boolean isSaturdayRepeat() {
-		return mRepeat[1];
+		return mWeekRepeat[6];
 	}
 	
-	public boolean isRepeatEveryday() {
-		for(int i = 0; i < mRepeat.length; i++) {
-			if(!mRepeat[i]) {
+	public boolean isRepeat() {
+		return mRepeat;
+	}
+	
+	/**
+	 * @return false if isRepeat() returns false,
+	 * then it determines if repeat everyday in a whole week.
+	 */
+	public boolean isRepeatWholeWeek() {
+		if(!mRepeat) return false;
+		for(int i = 0; i < mWeekRepeat.length; i++) {
+			if(!mWeekRepeat[i]) {
 				return false;
 			}
 		}
@@ -173,20 +187,40 @@ public class Alarm implements Serializable {
 			return this;
 		}
 		
-		public Builder setRepeat(boolean sun, boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat) {
-			mAlarm.mRepeat[0] = sun;
-			mAlarm.mRepeat[1] = mon;
-			mAlarm.mRepeat[2] = tue;
-			mAlarm.mRepeat[3] = wed;
-			mAlarm.mRepeat[4] = thu;
-			mAlarm.mRepeat[5] = fri;
-			mAlarm.mRepeat[6] = sat;
+		public Builder enableRepeat(boolean enable) {
+			mAlarm.mRepeat = enable;
 			return this;
 		}
 		
+		/**
+		 * This only works if enableRepeat(true) set
+		 * @param sun
+		 * @param mon
+		 * @param tue
+		 * @param wed
+		 * @param thu
+		 * @param fri
+		 * @param sat
+		 * @return
+		 */
+		public Builder setWeekRepeat(boolean sun, boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat) {
+			mAlarm.mWeekRepeat[0] = sun;
+			mAlarm.mWeekRepeat[1] = mon;
+			mAlarm.mWeekRepeat[2] = tue;
+			mAlarm.mWeekRepeat[3] = wed;
+			mAlarm.mWeekRepeat[4] = thu;
+			mAlarm.mWeekRepeat[5] = fri;
+			mAlarm.mWeekRepeat[6] = sat;
+			return this;
+		}
+		
+		/**
+		 * This only works if enableRepeat(true) set
+		 * @return
+		 */
 		public Builder setRepeatEveryday() {
-			for(int i = 0; i < mAlarm.mRepeat.length; i++) {
-				mAlarm.mRepeat[i] = true;
+			for(int i = 0; i < mAlarm.mWeekRepeat.length; i++) {
+				mAlarm.mWeekRepeat[i] = true;
 			}
 			return this;
 		}
