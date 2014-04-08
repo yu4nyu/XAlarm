@@ -15,30 +15,30 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public enum Manager {
-	
+
 	INSTANCE;
-	
+
 	public final static int GET_UNIQUE_ID_ERROR = -1;
-	
+
 	private final static String PREFS_KEY = "prefs";
 	private final static String PREFS_UNIQUE_ID_KEY = "unique_id";
-	
+
 	private final static String ALARM_DATA_FILE_PREFIX = "alarm_data_";
-	
+
 	int getUniqueId(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
 		int result = sp.getInt(PREFS_UNIQUE_ID_KEY, -1);
-		
+
 		if(result < 0) {
 			result = 0;
 			SharedPreferences.Editor editor = sp.edit();
 			editor.putInt(PREFS_UNIQUE_ID_KEY, result + 1); // Error will occur if result+1 > Integer.MAX. But... :)
 			editor.apply();
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Save alarm to file system
 	 */
@@ -56,14 +56,14 @@ public enum Manager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// TODO maybe use a AsyncTask ?
 	public List<Alarm> getSavedAlarms(Context context) {
-		
+
 		File dir = context.getFilesDir();
 		String[] files = dir.list();
 		List<Alarm> result = new ArrayList<Alarm>();
-		
+
 		for(String str : files) {
 			try {
 				FileInputStream fis = context.openFileInput(str);
@@ -81,10 +81,31 @@ public enum Manager {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return result;
 	}
-	
+
+	public Alarm getSavedAlarmById(Context context, int id) {
+		Alarm result = null;
+		String file = ALARM_DATA_FILE_PREFIX + id;
+		try {
+			FileInputStream fis = context.openFileInput(file);
+			ObjectInputStream is = new ObjectInputStream(fis);
+			result = (Alarm) is.readObject();
+			is.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (StreamCorruptedException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 	public void onApplicationExit() {
 		// TODO Delete the deleted alarm files
 	}

@@ -4,10 +4,18 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 
 public class Alarm implements Serializable {
 
+	private static final String INTENT_DATA_PREFIX = "com.yuanyu.upwardalarm:";
 	private static final long serialVersionUID = 1L;
 	
 	private int mId;
@@ -139,13 +147,91 @@ public class Alarm implements Serializable {
 		return true;
 	}
 	
-	public long getTimeMillis() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR_OF_DAY, mHour);
-		calendar.set(Calendar.MINUTE, mMinute);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		return calendar.getTimeInMillis();
+	/**
+	 * Get the next time in millisecond with the hour and minute of the alarm
+	 * @return
+	 */
+	private long getNextTimeMillis() {
+		return TimeUtils.getNextTimeMillis(mHour, mMinute);
+	}
+	
+	/**
+	 * Write the alarm object to file system
+	 */
+	public void saveToFile(Context context) {
+		Manager.INSTANCE.saveAlarm(context, this);
+	}
+	
+	/**
+	 * Register the alarm to android system with the given time
+	 */
+	private void register(Context context, long timeInMillis) {
+		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+		intent.setData(Uri.parse(INTENT_DATA_PREFIX + mId));
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, mId);
+		PendingIntent alarmPending = PendingIntent.getBroadcast(context, mId, intent, 0);
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
+		// TODO take account if API >= 19
+	}
+	
+	/**
+	 * Register the alarm to android system
+	 */
+	private void register(Context context) {
+		register(context, getNextTimeMillis());
+	}
+	
+	/**
+	 * Unregister the alarm to android system
+	 */
+	public void unregister(Context context) {
+		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+		intent.setData(Uri.parse(INTENT_DATA_PREFIX + mId)); // TODO verify if this works
+		//intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, mId); // TODO verify if needed
+		PendingIntent alarmPending = PendingIntent.getBroadcast(context, mId, intent, 0);
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
+		alarmManager.cancel(alarmPending);
+	}
+	
+	/**
+	 * Register the alarm to android system for the next time.
+	 */
+	public void resetIfRepeat(Context context) {
+		if(isRepeat()) {
+			if(isRepeatWholeWeek()) {
+				register(context);
+			}
+			else {
+				Calendar calendar = Calendar.getInstance();
+				int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // Sunday is 1
+				int daysAfter = 0;
+				boolean isFound = false;
+				for(int i = dayOfWeek; i < mWeekRepeat.length; i++) {
+					if(!mWeekRepeat[i]) {
+						daysAfter++;
+					}
+					else {
+						isFound = true;
+						break;
+					}
+				}
+				if(!isFound) {
+					for(int i = 0; i < dayOfWeek; i++) {
+						if(!mWeekRepeat[i]) {
+							daysAfter++;
+						}
+						else {
+							isFound = true;
+							break;
+						}
+					}
+				}
+				if(isFound) {
+					register(context, TimeUtils.getNextTimeMillisDaysAfter(mHour, mMinute, daysAfter));
+				}
+			}
+		}
 	}
 	
 	public static class Builder {

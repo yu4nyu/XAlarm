@@ -60,6 +60,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mRingtoneTxt = (TextView) findViewById(R.id.activity_alarm_define_ringtone);
 		mVibrateCheck = (CheckBox) findViewById(R.id.activity_alarm_define_vibrate);
 		
+		// TODO add repeat checkbox
 		mSunday = (ToggleButton) findViewById(R.id.activity_alarm_define_sunday_toggle);
 		mMonday = (ToggleButton) findViewById(R.id.activity_alarm_define_monday_toggle);
 		mTuesday = (ToggleButton) findViewById(R.id.activity_alarm_define_tuesday_toggle);
@@ -75,6 +76,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mLabelTxt.setOnClickListener(this);
 		mRingtoneTxt.setOnClickListener(this);
 		mDoneBtn.setOnClickListener(this);
+		
+		// TODO When deselect the whole week, enable toggle unchecked automatically
 	}
 
 	@Override
