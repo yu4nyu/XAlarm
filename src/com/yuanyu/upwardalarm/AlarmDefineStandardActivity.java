@@ -6,6 +6,8 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -51,6 +53,12 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		
 		initViews();
 		setOnClickListeners();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.alarm_define_standard, menu);
+		return true;
 	}
 
 	private void initViews() {
