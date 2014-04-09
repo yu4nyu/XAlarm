@@ -7,16 +7,16 @@ import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.TextView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 public class AlarmGoOffActivity extends Activity {
@@ -79,11 +79,10 @@ public class AlarmGoOffActivity extends Activity {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setView(view);
 			
-			
 			// For test
 			final Dialog dialog = builder.create();
 			final AlarmGoOffActivity activity = (AlarmGoOffActivity) getActivity();
-			Button button = (Button) view.findViewById(R.id.dialog_alarm_go_off_stop_button);
+			/*Button button = (Button) view.findViewById(R.id.dialog_alarm_go_off_stop_button);
 			button.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
@@ -91,11 +90,31 @@ public class AlarmGoOffActivity extends Activity {
 					dialog.dismiss();
 					activity.showData(mTracker.getData());
 				}
+			});*/
+			builder.setPositiveButton("Stop", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.d("YY", "onClick");
+					mTracker.stop();
+					activity.showData(mTracker.getData());
+				}
 			});
 			
 			return builder.create();
 		}
 		
+		@Override
+		public void onDestroyView() {
+			mTracker.stop();
+			super.onDestroyView();
+		}
+
+		@Override
+		public void onDestroy() {
+			mTracker.stop();
+			super.onDestroy();
+		}
+
 		private void startRingtone(String file) {
 			// TODO
 		}
@@ -114,6 +133,10 @@ public class AlarmGoOffActivity extends Activity {
 	}
 	
 	private void showData(List<Sample> data) {
-		
+		StringBuilder builder = new StringBuilder();
+		for(Sample s : data) {
+			builder.append(s.toString() + "\n");
+		}
+		mText.setText(builder.toString());
 	}
 }

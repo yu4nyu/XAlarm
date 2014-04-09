@@ -45,6 +45,10 @@ public class MainActivity extends ListActivity {
 			Intent intent = new Intent(MainActivity.this, AlarmDefineStandardActivity.class);
 			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
 		}
+		else if(item.getItemId() == R.id.action_test) {
+			Intent intent = new Intent(MainActivity.this, AlarmGoOffActivity.class);
+			startActivity(intent);
+		}
 		return super.onOptionsItemSelected(item);
 	}
 

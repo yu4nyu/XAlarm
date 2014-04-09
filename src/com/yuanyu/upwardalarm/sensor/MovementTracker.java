@@ -23,6 +23,10 @@ public class MovementTracker implements SensorEventListener {
 		float x;
 		float y;
 		float z;
+		
+		public String toString() {
+			return "x = " + x + ", y = " + y + ", z = " + z;
+		}
 	}
 	
 	private List<Sample> mData = new ArrayList<Sample>();
@@ -74,5 +78,6 @@ public class MovementTracker implements SensorEventListener {
 		sample.x = event.values[0];
 		sample.y = event.values[1];
 		sample.z = event.values[2];
+		mData.add(sample);
 	}
 }

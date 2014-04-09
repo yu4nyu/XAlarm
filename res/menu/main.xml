@@ -5,5 +5,11 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="@string/action_add"/>
+    
+    <item
+        android:id="@+id/action_test"
+        android:orderInCategory="101"
+        android:showAsAction="always"
+        android:title="TEST"/>
 
 </menu>
