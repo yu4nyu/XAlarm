@@ -7,7 +7,6 @@ import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -80,21 +79,10 @@ public class AlarmGoOffActivity extends Activity {
 			builder.setView(view);
 			
 			// For test
-			final Dialog dialog = builder.create();
 			final AlarmGoOffActivity activity = (AlarmGoOffActivity) getActivity();
-			/*Button button = (Button) view.findViewById(R.id.dialog_alarm_go_off_stop_button);
-			button.setOnClickListener(new OnClickListener(){
-				@Override
-				public void onClick(View v) {
-					mTracker.stop();
-					dialog.dismiss();
-					activity.showData(mTracker.getData());
-				}
-			});*/
 			builder.setPositiveButton("Stop", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					Log.d("YY", "onClick");
 					mTracker.stop();
 					activity.showData(mTracker.getData());
 				}
@@ -135,7 +123,7 @@ public class AlarmGoOffActivity extends Activity {
 	private void showData(List<Sample> data) {
 		StringBuilder builder = new StringBuilder();
 		for(Sample s : data) {
-			builder.append(s.toString() + "\n");
+			builder.append(s.getCalibratedSqrt() + "\n");
 		}
 		mText.setText(builder.toString());
 	}

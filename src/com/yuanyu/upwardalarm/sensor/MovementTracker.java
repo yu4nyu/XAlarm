@@ -1,5 +1,6 @@
 package com.yuanyu.upwardalarm.sensor;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,18 +19,35 @@ public class MovementTracker implements SensorEventListener {
 
 	private SensorManager mSensorManager;
 	private Sensor mAcceleroMeter;
-
+	
 	public static class Sample {
 		float x;
 		float y;
 		float z;
 		
+		// TODO delete this, for test only
 		public String toString() {
-			return "x = " + x + ", y = " + y + ", z = " + z;
+			return "" + x + "  " + y + "  " + z + "  " + (x+y+z);
+		}
+		public String getSqrt() {
+			double result = Math.sqrt(x*x + y*y + z*z);
+			DecimalFormat form = new DecimalFormat("0.000");
+			return form.format(result);
+		}
+		public String getCalibratedSqrt() {
+			double sqrt = Math.sqrt(x*x + y*y + z*z);
+			if(mLastSqrt != Double.MAX_VALUE) {
+				double result = mLastSqrt * 0.9f + sqrt * 0.1f;
+				DecimalFormat form = new DecimalFormat("0.000");
+				return form.format(result);
+			}
+			mLastSqrt = sqrt;
+			return "";
 		}
 	}
 	
 	private List<Sample> mData = new ArrayList<Sample>();
+	private static double mLastSqrt = Double.MAX_VALUE;
 
 	public MovementTracker(Context context) {
 		mSensorManager = (SensorManager) context.getSystemService(Service.SENSOR_SERVICE);
@@ -78,6 +96,12 @@ public class MovementTracker implements SensorEventListener {
 		sample.x = event.values[0];
 		sample.y = event.values[1];
 		sample.z = event.values[2];
+		
+		DecimalFormat form = new DecimalFormat("0.000");
+		sample.x = Float.parseFloat(form.format(sample.x));
+		sample.y = Float.parseFloat(form.format(sample.y));
+		sample.z = Float.parseFloat(form.format(sample.z));
+		
 		mData.add(sample);
 	}
 }

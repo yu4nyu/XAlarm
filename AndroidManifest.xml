@@ -24,7 +24,8 @@
         </activity>
         <activity android:name="com.yuanyu.upwardalarm.AlarmDefineActivity" />
         <activity android:name="com.yuanyu.upwardalarm.AlarmDefineStandardActivity" />
-        <activity android:name="com.yuanyu.upwardalarm.AlarmGoOffActivity" />
+        <activity android:name="com.yuanyu.upwardalarm.AlarmGoOffActivity"
+            android:screenOrientation="portrait" />
         <receiver android:name="com.yuanyu.upwardalarm.AlarmBroadcastReceiver" />
     </application>
 

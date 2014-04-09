@@ -11,11 +11,4 @@
         android:layout_gravity="center"
         android:text="Test" />
     
-    <Button
-        android:id="@+id/dialog_alarm_go_off_stop_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Stop(Only for test)" />
-    
 </LinearLayout>
