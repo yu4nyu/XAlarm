@@ -13,7 +13,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 public enum Manager {
 
@@ -67,7 +66,6 @@ public enum Manager {
 		List<Alarm> result = new ArrayList<Alarm>();
 
 		for(String str : files) {
-			Log.d("YY", "file name = " + str);
 			try {
 				FileInputStream fis = context.openFileInput(str);
 				ObjectInputStream is = new ObjectInputStream(fis);
