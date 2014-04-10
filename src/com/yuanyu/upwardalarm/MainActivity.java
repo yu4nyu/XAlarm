@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.test.TestActivity;
 import com.yuanyu.upwardalarm.ui.AlarmListAdapter;
 
@@ -27,8 +28,7 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		// TODO get alarm data from file
-
+		mData.addAll(Manager.INSTANCE.getSavedAlarms(this));
 		mAdapter = new AlarmListAdapter(this, mData);
 		setListAdapter(mAdapter);
 	}

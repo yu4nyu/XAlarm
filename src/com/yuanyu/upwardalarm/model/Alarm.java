@@ -12,6 +12,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 public class Alarm implements Serializable {
 
@@ -242,6 +243,7 @@ public class Alarm implements Serializable {
 		public Builder(Context context) {
 			mAlarm = new Alarm();
 			mAlarm.mId = Manager.INSTANCE.getUniqueId(context);
+			Log.d("YY", "id = " + mAlarm.mId);
 		}
 		
 		public Builder setLable(String label) {

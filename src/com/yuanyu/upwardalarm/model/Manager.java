@@ -13,6 +13,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public enum Manager {
 
@@ -31,10 +32,11 @@ public enum Manager {
 
 		if(result < 0) {
 			result = 0;
-			SharedPreferences.Editor editor = sp.edit();
-			editor.putInt(PREFS_UNIQUE_ID_KEY, result + 1); // Error will occur if result+1 > Integer.MAX. But... :)
-			editor.apply();
 		}
+
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putInt(PREFS_UNIQUE_ID_KEY, result + 1); // Error will occur if result+1 > Integer.MAX. But... :)
+		editor.apply();
 
 		return result;
 	}
@@ -65,6 +67,7 @@ public enum Manager {
 		List<Alarm> result = new ArrayList<Alarm>();
 
 		for(String str : files) {
+			Log.d("YY", "file name = " + str);
 			try {
 				FileInputStream fis = context.openFileInput(str);
 				ObjectInputStream is = new ObjectInputStream(fis);
