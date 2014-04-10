@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yuanyu.upwardalarm.R;
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.model.Utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -46,7 +47,7 @@ public class AlarmListAdapter extends BaseAdapter {
 			LayoutInflater inflater = LayoutInflater.from(mContext);
 			convertView = inflater.inflate(R.layout.alarm_list_item, null);
 			holder = new ViewHolder();
-			holder.handle = (ImageView) convertView.findViewById(R.id.alarm_list_item_handle);
+			//holder.handle = (ImageView) convertView.findViewById(R.id.alarm_list_item_handle);
 			holder.image1 = (ImageView) convertView.findViewById(R.id.alarm_list_top_right_icon);
 			holder.image2 = (ImageView) convertView.findViewById(R.id.alarm_list_icon_left_to_top_right_icon);
 			holder.time = (TextView) convertView.findViewById(R.id.alarm_list_item_time);
@@ -76,7 +77,7 @@ public class AlarmListAdapter extends BaseAdapter {
 			}
 		}
 		
-		holder.time.setText(alarm.getHour() + ":" + alarm.getMinute());
+		holder.time.setText(Utils.getTimeText(alarm.getHour(), alarm.getMinute()));
 		holder.enable.setChecked(alarm.getEnable());
 		
 		return convertView;

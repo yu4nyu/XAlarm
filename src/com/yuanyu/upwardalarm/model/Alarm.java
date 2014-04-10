@@ -152,7 +152,7 @@ public class Alarm implements Serializable {
 	 * @return
 	 */
 	private long getNextTimeMillis() {
-		return TimeUtils.getNextTimeMillis(mHour, mMinute);
+		return Utils.getNextTimeMillis(mHour, mMinute);
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public class Alarm implements Serializable {
 	/**
 	 * Register the alarm to android system
 	 */
-	private void register(Context context) {
+	public void register(Context context) {
 		register(context, getNextTimeMillis());
 	}
 	
@@ -229,7 +229,7 @@ public class Alarm implements Serializable {
 					}
 				}
 				if(isFound) {
-					register(context, TimeUtils.getNextTimeMillisDaysAfter(mHour, mMinute, daysAfter));
+					register(context, Utils.getNextTimeMillisDaysAfter(mHour, mMinute, daysAfter));
 				}
 			}
 		}

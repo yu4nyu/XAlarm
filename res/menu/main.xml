@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_add"
         android:title="@string/action_add"/>
     
-    <!-- item
+    <item
         android:id="@+id/action_test"
         android:orderInCategory="101"
         android:showAsAction="always"
-        android:title="TEST" -->
+        android:title="TEST" />
 
 </menu>

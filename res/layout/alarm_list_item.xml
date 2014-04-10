@@ -1,43 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <ImageView
-        android:id="@+id/alarm_list_item_handle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
-    
-    <ImageView
-        android:id="@+id/alarm_list_top_right_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="fitCenter"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
-    
-    <ImageView
-        android:id="@+id/alarm_list_icon_left_to_top_right_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/alarm_list_top_right_icon" />
+    android:background="@drawable/item_shadow" >
 
-    <TextView
-        android:id="@+id/alarm_list_item_time"
-        style="@style/AlarmTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/alarm_list_item_handle" />
-    
-    <Switch
-        android:id="@+id/alarm_list_item_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
-    
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_light" >
+        
+        <TextView
+            android:id="@+id/alarm_list_item_repeat_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="@dimen/item_side_margin"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:text="Lun, Mar, Mer" />
+
+        <ImageView
+            android:id="@+id/alarm_list_top_right_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_ringtone" />
+
+        <ImageView
+            android:id="@+id/alarm_list_icon_left_to_top_right_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/alarm_list_top_right_icon" />
+
+        <TextView
+            android:id="@+id/alarm_list_item_time"
+            style="@style/AlarmTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/alarm_list_item_repeat_text"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/item_side_margin"
+            android:background="@android:color/holo_orange_light" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/item_side_margin"
+            android:orientation="vertical" >
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="@dimen/item_side_margin_x_2" />
+
+            <Switch
+                android:id="@+id/alarm_list_item_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

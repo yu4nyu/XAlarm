@@ -18,9 +18,8 @@
     </style>
 
     <style name="AlarmTime" >
-        <item name="android:textSize">64sp</item>
+        <item name="android:textSize">@dimen/time_text_size</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
     </style>
     
 </resources>

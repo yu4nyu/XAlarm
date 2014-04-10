@@ -3,7 +3,10 @@ package com.yuanyu.upwardalarm.model;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class TimeUtils {
+import android.text.Html;
+import android.text.Spanned;
+
+public class Utils {
 	
 	/**
 	 * Determine if today's given hour and minute has passed or not
@@ -88,5 +91,18 @@ public class TimeUtils {
 			calendar.set(Calendar.DAY_OF_YEAR, 1);
 		}
 		return calendar.getTimeInMillis();
+	}
+	
+	public static Spanned getTimeText(int hour, int minute) {
+		String hourZero = "";
+		if(hour < 10) {
+			hourZero = "0";
+		}
+		String minuteZero = "";
+		if(minute < 10) {
+			minuteZero = "0";
+		}
+		String html = "<b>" + hourZero + hour + "</b>" + ":" + minuteZero + minute;
+		return Html.fromHtml(html);
 	}
 }

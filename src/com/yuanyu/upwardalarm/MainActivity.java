@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.test.TestActivity;
 import com.yuanyu.upwardalarm.ui.AlarmListAdapter;
 
 import android.os.Bundle;
@@ -45,10 +46,10 @@ public class MainActivity extends ListActivity {
 			Intent intent = new Intent(MainActivity.this, AlarmDefineStandardActivity.class);
 			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
 		}
-		/*else if(item.getItemId() == R.id.action_test) {
-			Intent intent = new Intent(MainActivity.this, AlarmGoOffActivity.class);
+		else if(item.getItemId() == R.id.action_test) {
+			Intent intent = new Intent(MainActivity.this, TestActivity.class);
 			startActivity(intent);
-		}*/
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -69,7 +70,7 @@ public class MainActivity extends ListActivity {
 	 */
 	private void registerAlarm(Alarm alarm) {
 		if(alarm.getEnable()) {
-			alarm.saveToFile(this);
+			alarm.register(this);
 		}
 		alarm.saveToFile(this);
 	}
