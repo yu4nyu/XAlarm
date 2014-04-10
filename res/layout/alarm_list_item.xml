@@ -16,8 +16,7 @@
             android:textColor="@android:color/white"
             android:layout_marginLeft="@dimen/item_side_margin"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:text="Lun, Mar, Mer" />
+            android:layout_alignParentLeft="true" />
 
         <ImageView
             android:id="@+id/alarm_list_top_right_icon"
@@ -42,9 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/alarm_list_item_repeat_text"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/item_side_margin"
-            android:background="@android:color/holo_orange_light" />
+            android:layout_marginTop="@dimen/item_side_margin_negative"
+            android:layout_marginLeft="@dimen/item_side_margin" />
 
         <LinearLayout
             android:layout_width="wrap_content"
