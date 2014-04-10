@@ -1,40 +1,37 @@
-package com.yuanyu.upwardalarm;
+package com.yuanyu.upwardalarm.test;
 
+import java.util.List;
+
+import com.yuanyu.upwardalarm.R;
+import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
 import com.yuanyu.upwardalarm.sensor.MovementTracker;
+import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Intent;
+import android.content.DialogInterface;
 
-public class AlarmGoOffActivity extends Activity {
-
-	private static final String ARGS_KEY_VIBRATE = "vibrate";
-	private static final String ARGS_KEY_RINGTONE = "ringtone";
+public class TestActivity extends Activity {
 	
-	private boolean mIsVibrate;
-	private String mRingtoneFile; // Absolute path of ringtone file, may be null
+	private TextView mText;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_test);
-		
-		Intent intent = getIntent();
-		mIsVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
-		mRingtoneFile = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE);
+		mText = (TextView) findViewById(R.id.activity_alarm_go_off_text);
+		mText.setMovementMethod(new ScrollingMovementMethod());
 		
 		AlarmGoOffDialog dialog = new AlarmGoOffDialog();
-		Bundle args = new Bundle();
-		args.putBoolean(ARGS_KEY_VIBRATE, mIsVibrate);
-		args.putString(ARGS_KEY_RINGTONE, mRingtoneFile);
-		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "alarmGoOff");
 	}
 	
@@ -46,18 +43,10 @@ public class AlarmGoOffActivity extends Activity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setCancelable(false);
-			Bundle args = getArguments();
-			boolean isVibrate = args.getBoolean(ARGS_KEY_VIBRATE, false);
-			if(isVibrate) {
-				startVibration();
-			}
-			String ringtone = args.getString(ARGS_KEY_RINGTONE);
-			if(ringtone != null) {
-				startRingtone(ringtone);
-			}
 			
 			mTracker = new MovementTracker(getActivity());
 			mTracker.start();
+			MovementAnalysor.INSTANCE.setMovementListener(null);
 		}
 
 		@Override
@@ -66,6 +55,17 @@ public class AlarmGoOffActivity extends Activity {
 			View view = inflater.inflate(R.layout.dialog_alarm_go_off, null);
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setView(view);
+			
+			// For test
+			final TestActivity activity = (TestActivity) getActivity();
+			builder.setPositiveButton("Stop", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					mTracker.stop();
+					activity.showData(mTracker.getData());
+				}
+			});
+			
 			return builder.create();
 		}
 		
@@ -80,21 +80,13 @@ public class AlarmGoOffActivity extends Activity {
 			mTracker.stop();
 			super.onDestroy();
 		}
-
-		private void startRingtone(String file) {
-			// TODO
+	}
+	
+	private void showData(List<Sample> data) {
+		StringBuilder builder = new StringBuilder();
+		for(Sample s : data) {
+			builder.append(s.independentValue() + "\n");
 		}
-		
-		private void startVibration() {
-			// TODO
-		}
-		
-		private void stopRingtone() {
-			// TODO
-		}
-		
-		private void stopVibration() {
-			// TODO
-		}
+		mText.setText(builder.toString());
 	}
 }

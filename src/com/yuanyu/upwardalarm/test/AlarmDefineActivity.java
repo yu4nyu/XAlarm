@@ -1,6 +1,8 @@
-package com.yuanyu.upwardalarm;
+package com.yuanyu.upwardalarm.test;
 
-import com.yuanyu.upwardalarm.ui.TimePickerAnimation;
+import com.yuanyu.upwardalarm.R;
+import com.yuanyu.upwardalarm.R.id;
+import com.yuanyu.upwardalarm.R.layout;
 
 import android.os.Bundle;
 import android.view.MotionEvent;

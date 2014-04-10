@@ -26,7 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yuanyu.upwardalarm.AlarmDefineActivity" />
+        <activity android:name="com.yuanyu.upwardalarm.test.AlarmDefineActivity" />
         <activity android:name="com.yuanyu.upwardalarm.AlarmDefineStandardActivity" />
         <activity
             android:name="com.yuanyu.upwardalarm.AlarmGoOffActivity"
