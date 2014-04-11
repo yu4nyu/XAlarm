@@ -1,17 +1,20 @@
 package com.yuanyu.upwardalarm.model;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.Calendar;
 
 import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 
 public class Alarm implements Serializable {
 
@@ -27,21 +30,19 @@ public class Alarm implements Serializable {
 	private int mHour;
 	private int mMinute;
 	
-	private String mRingtone;
+	private String mRingtoneUri;
 	
 	private boolean mVibrate;
 	
 	private boolean mRepeat;
 	private boolean[] mWeekRepeat = new boolean[7]; // Begin with Sunday
 	
-	// TODO maybe define the month repeat ?
-	
 	private Alarm() {
 		mLabel = "";
 		mEnable = false;
 		mHour = 8;
 		mMinute = 0;
-		mRingtone = "";
+		mRingtoneUri = "";
 		mVibrate = true;
 		mRepeat = false;
 		for(int i = 0; i < mWeekRepeat.length; i++) {
@@ -55,7 +56,7 @@ public class Alarm implements Serializable {
 		mEnable = alarm.mEnable;
 		mHour = alarm.mHour;
 		mMinute = alarm.mMinute;
-		mRingtone = alarm.mRingtone;
+		mRingtoneUri = alarm.mRingtoneUri;
 		mVibrate = alarm.mVibrate;
 		mRepeat = alarm.mRepeat;
 		for(int i = 0; i < mWeekRepeat.length; i++) {
@@ -84,18 +85,17 @@ public class Alarm implements Serializable {
 	}
 	
 	/**
-	 * @return null if can't get the valid File object
+	 * @return null if can't get the valid Ringtone object
 	 */
-	public File getRingtone() {
-		// TODO take account if selected SILENCE
-		if(mRingtone == null || mRingtone.isEmpty()) {
+	public Ringtone getRingtone(Context context) {
+		if(mRingtoneUri == null || mRingtoneUri.isEmpty()) {
 			return null;
 		}
-		File file = new File(mRingtone);
-		if(!file.isFile() || !file.exists()) {
+		Uri uri = Uri.parse(mRingtoneUri);
+		if(uri == null) {
 			return null;
 		}
-		return file;
+		return RingtoneManager.getRingtone(context, uri);
 	}
 	
 	public boolean getVibrateEnable() {
@@ -163,6 +163,11 @@ public class Alarm implements Serializable {
 		Manager.INSTANCE.saveAlarm(context, this);
 	}
 	
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	private void registerForKitKatOrLater(AlarmManager alarmManager, long timeInMillis, PendingIntent alarmPending) {
+		alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
+	}
+	
 	/**
 	 * Register the alarm to android system with the given time
 	 */
@@ -171,11 +176,15 @@ public class Alarm implements Serializable {
 		intent.setData(Uri.parse(INTENT_DATA_PREFIX + mId));
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, mId);
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, mVibrate);
-		intent.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE, getRingtone().getAbsolutePath());
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, mRingtoneUri);
 		PendingIntent alarmPending = PendingIntent.getBroadcast(context, mId, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
-		// TODO take account if API >= 19
+		if(Utils.isKitKatOrLater()) {
+			registerForKitKatOrLater(alarmManager, timeInMillis, alarmPending);
+		}
+		else {
+			alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
+		}
 	}
 	
 	/**
@@ -265,8 +274,8 @@ public class Alarm implements Serializable {
 			return this;
 		}
 		
-		public Builder setRingtone(String ringtone) {
-			mAlarm.mRingtone = ringtone;
+		public Builder setRingtoneUri(String ringtoneUri) {
+			mAlarm.mRingtoneUri = ringtoneUri;
 			return this;
 		}
 		
@@ -282,14 +291,6 @@ public class Alarm implements Serializable {
 		
 		/**
 		 * This only works if enableRepeat(true) set
-		 * @param sun
-		 * @param mon
-		 * @param tue
-		 * @param wed
-		 * @param thu
-		 * @param fri
-		 * @param sat
-		 * @return
 		 */
 		public Builder setWeekRepeat(boolean sun, boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat) {
 			mAlarm.mWeekRepeat[0] = sun;
@@ -304,7 +305,6 @@ public class Alarm implements Serializable {
 		
 		/**
 		 * This only works if enableRepeat(true) set
-		 * @return
 		 */
 		public Builder setRepeatEveryday() {
 			for(int i = 0; i < mAlarm.mWeekRepeat.length; i++) {

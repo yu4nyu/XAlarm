@@ -3,6 +3,11 @@ package com.yuanyu.upwardalarm.model;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 
@@ -105,4 +110,16 @@ public class Utils {
 		String html = "<b>" + hourZero + hour + "</b>" + ":" + minuteZero + minute;
 		return Html.fromHtml(html);
 	}
+	
+	/**
+     * Returns whether the SDK is KitKat or later
+     */
+    public static boolean isKitKatOrLater() {
+        return Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2;
+    }
+    
+    public static Ringtone getRingtoneByUriString(Context context, String uriString) {
+    	Uri uri = Uri.parse(uriString);
+    	return RingtoneManager.getRingtone(context, uri);
+    }
 }

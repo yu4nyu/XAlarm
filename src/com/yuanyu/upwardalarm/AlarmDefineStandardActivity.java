@@ -6,6 +6,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +45,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	private Button mDoneBtn;
 	
 	private String mLabel = "";
-	private String mRingtone = "";
+	private String mRingtoneUri = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +138,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			.setEnable(mSwitch.isChecked())
 			.setHour(mTimePicker.getCurrentHour())
 			.setMinute(mTimePicker.getCurrentMinute())
-			.setRingtone(mRingtone)
+			.setRingtoneUri(mRingtoneUri)
 			.setVibrateEnable(mVibrateCheck.isChecked())
 			.enableRepeat(true) // TODO attach to a checkbox
 			.setWeekRepeat(mSunday.isChecked(),
@@ -161,20 +162,22 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		if(requestCode == ACTIVITY_RINGTONE_PICKER && resultCode == Activity.RESULT_OK) {
 			Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
 			if(uri != null) {
+				mRingtoneUri = uri.toString();
+				
 				Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
-				mRingtone = ringtone.getTitle(this);
+				String title =  ringtone.getTitle(this);
 				
 				int start = 0;
-				int lastSlash = mRingtone.lastIndexOf("/");
+				int lastSlash = title.lastIndexOf("/");
 				if(lastSlash != -1) {
 					start = lastSlash + 1;
 				}
-				int end = mRingtone.length();
-				int lastPoint = mRingtone.lastIndexOf(".");
+				int end = title.length();
+				int lastPoint = title.lastIndexOf(".");
 				if(lastPoint != -1) {
 					end = lastPoint;
 				}
-				String fileName = mRingtone.substring(start, end);
+				String fileName = title.substring(start, end);
 				mRingtoneTxt.setText(fileName);
 			}
 		}
