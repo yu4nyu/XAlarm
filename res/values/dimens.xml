@@ -10,6 +10,7 @@
     <dimen name="item_top_margin">-2dp</dimen>
     <dimen name="item_top_icon_calibration">6dp</dimen>
     <dimen name="time_text_size">52sp</dimen>
+    <dimen name="button_width">100dp</dimen>
     
     <!-- not be used -->
     <dimen name="number_on_circle_inter_margin">-8dp</dimen>

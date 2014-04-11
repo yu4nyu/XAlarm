@@ -6,7 +6,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +33,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	private TextView mRingtoneTxt;
 	private CheckBox mVibrateCheck;
 	
+	private CheckBox mRepeatCheck;
 	private ToggleButton mSunday;
 	private ToggleButton mMonday;
 	private ToggleButton mTuesday;
@@ -66,12 +66,11 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 
 	private void initViews() {
 		mLabelTxt = (TextView) findViewById(R.id.activity_alarm_define_label);
-		mLabelTxt.setHint(getString(R.string.label));
 		mTimePicker = (TimePicker) findViewById(R.id.activity_alarm_define_time_picker);
 		mRingtoneTxt = (TextView) findViewById(R.id.activity_alarm_define_ringtone);
 		mVibrateCheck = (CheckBox) findViewById(R.id.activity_alarm_define_vibrate);
 		
-		// TODO add repeat checkbox
+		mRepeatCheck = (CheckBox) findViewById(R.id.activity_alarm_define_repeat);
 		mSunday = (ToggleButton) findViewById(R.id.activity_alarm_define_sunday_toggle);
 		mMonday = (ToggleButton) findViewById(R.id.activity_alarm_define_monday_toggle);
 		mTuesday = (ToggleButton) findViewById(R.id.activity_alarm_define_tuesday_toggle);
@@ -140,7 +139,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			.setMinute(mTimePicker.getCurrentMinute())
 			.setRingtoneUri(mRingtoneUri)
 			.setVibrateEnable(mVibrateCheck.isChecked())
-			.enableRepeat(true) // TODO attach to a checkbox
+			.enableRepeat(mRepeatCheck.isChecked())
 			.setWeekRepeat(mSunday.isChecked(),
 					mMonday.isChecked(),
 					mTuesday.isChecked(),
