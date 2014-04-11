@@ -3,6 +3,8 @@ package com.yuanyu.upwardalarm.model;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.yuanyu.upwardalarm.R;
+
 import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -98,6 +100,9 @@ public class Utils {
 		return calendar.getTimeInMillis();
 	}
 	
+	/**
+	 * Get the text of time displayed on items of alarm list
+	 */
 	public static Spanned getTimeText(int hour, int minute) {
 		String hourZero = "";
 		if(hour < 10) {
@@ -108,6 +113,54 @@ public class Utils {
 			minuteZero = "0";
 		}
 		String html = "<b>" + hourZero + hour + "</b>" + ":" + minuteZero + minute;
+		return Html.fromHtml(html);
+	}
+	
+	/**
+	 * Get the text of label and repetition displayed on items of alarm list
+	 */
+	public static Spanned getRepeatText(Context context, Alarm alarm) {
+		String html = "";
+		
+		// Set the label
+		String label = alarm.getLabel();
+		if(label != null && !label.trim().isEmpty()) {
+			html += "<b>" + label;
+			if(alarm.isRepeat()) {
+				html += ":";
+			}
+			html += "</b> ";
+		}
+		
+		// Set the repetition
+		if(alarm.isMondayRepeat()) {
+			html += context.getString(R.string.monday) + ",";
+		}
+		if(alarm.isTuesdayRepeat()) {
+			html += context.getString(R.string.tuesday) + ",";
+		}
+		if(alarm.isWednesdayRepeat()) {
+			html += context.getString(R.string.wednesday) + ",";
+		}
+		if(alarm.isThursdayRepeat()) {
+			html += context.getString(R.string.thursday) + ",";
+		}
+		if(alarm.isFridayRepeat()) {
+			html += context.getString(R.string.friday) + ",";
+		}
+		if(alarm.isSaturdayRepeat()) {
+			html += context.getString(R.string.saturday) + ",";
+		}
+		if(alarm.isSundayRepeat()) {
+			html += context.getString(R.string.sunday) + ",";
+		}
+		
+		// Remove last ',' if exists
+		int index = html.lastIndexOf(",");
+		if(index != -1 && index == html.length() - 1) {
+			html = html.substring(0, html.length() - 1);
+		}
+		
 		return Html.fromHtml(html);
 	}
 	

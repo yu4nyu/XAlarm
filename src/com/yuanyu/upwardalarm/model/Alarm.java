@@ -122,7 +122,7 @@ public class Alarm implements Serializable {
 		return mWeekRepeat[4];
 	}
 	
-	public boolean isFridatRepeat() {
+	public boolean isFridayRepeat() {
 		return mWeekRepeat[5];
 	}
 	

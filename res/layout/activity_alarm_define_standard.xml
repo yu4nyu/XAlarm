@@ -2,26 +2,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:animateLayoutChanges="true"
     tools:context=".AlarmDefineActivity" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/activity_alarm_define_label"
+        <ImageView
+            android:id="@+id/activity_alarm_define_label_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_label_pressed"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            style="@style/AlarmLabel"
+            android:id="@+id/activity_alarm_define_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/activity_alarm_define_label_icon"
+            android:layout_marginLeft="@dimen/item_side_margin"
             android:background="?android:attr/selectableItemBackground"
-            android:text="@string/label"
-            android:textSize="32sp" />
+            android:text="@string/label" />
     </RelativeLayout>
 
     <TimePicker
@@ -120,11 +129,12 @@
             android:textOff="@string/saturday"
             android:textOn="@string/saturday" />
     </LinearLayout>
-    
+
     <Button
         android:id="@+id/activity_alarm_define_done_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@android:string/ok" />
+
 </LinearLayout>
