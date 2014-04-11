@@ -7,6 +7,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -57,12 +58,14 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.alarm_define_standard, menu);
+		MenuItem item = menu.findItem(R.id.action_switch);
+		mSwitch = (Switch) item.getActionView().findViewById(R.id.alarm_define_action_bar_view_switch);
 		return true;
 	}
 
 	private void initViews() {
 		mLabelTxt = (TextView) findViewById(R.id.activity_alarm_define_label);
-		mSwitch = (Switch) findViewById(R.id.activity_alarm_define_switch);
+		mLabelTxt.setHint(getString(R.string.label));
 		mTimePicker = (TimePicker) findViewById(R.id.activity_alarm_define_time_picker);
 		mRingtoneTxt = (TextView) findViewById(R.id.activity_alarm_define_ringtone);
 		mVibrateCheck = (CheckBox) findViewById(R.id.activity_alarm_define_vibrate);

@@ -22,13 +22,6 @@
             android:background="?android:attr/selectableItemBackground"
             android:text="@string/label"
             android:textSize="32sp" />
-
-        <Switch
-            android:id="@+id/activity_alarm_define_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
     </RelativeLayout>
 
     <TimePicker

@@ -45,7 +45,9 @@ public class MainActivity extends ListActivity {
 		if(item.getItemId() == R.id.action_add) {
 			Intent intent = new Intent(MainActivity.this, AlarmDefineStandardActivity.class);
 			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
+			// TODO apply animation for starting activity
 		}
+		// For test only
 		else if(item.getItemId() == R.id.action_test) {
 			Intent intent = new Intent(MainActivity.this, TestActivity.class);
 			startActivity(intent);
