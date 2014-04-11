@@ -15,8 +15,10 @@
         tools:context=".AlarmDefineActivity" >
 
         <RelativeLayout
+            android:id="@+id/activity_alarm_define_label_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground" >
 
             <ImageView
                 android:id="@+id/activity_alarm_define_label_icon"
@@ -33,7 +35,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/item_side_margin"
                 android:layout_toRightOf="@id/activity_alarm_define_label_icon"
-                android:background="?android:attr/selectableItemBackground"
                 android:hint="@string/label" />
         </RelativeLayout>
 
@@ -53,19 +54,35 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:checked="true"
                 android:text="@string/vibrate" />
 
-            <TextView
-                android:id="@+id/activity_alarm_define_ringtone"
-                style="@style/AlarmRingtoneText"
+            <LinearLayout
+                android:id="@+id/activity_alarm_define_ringtone_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/activity_alarm_define_vibrate"
                 android:background="?android:attr/selectableItemBackground"
-                android:hint="@string/silent" />
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_ringtone" />
+
+                <TextView
+                    android:id="@+id/activity_alarm_define_ringtone"
+                    style="@style/AlarmRingtoneText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:hint="@string/silent" />
+            </LinearLayout>
         </RelativeLayout>
-        
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -76,35 +93,43 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <CheckBox
-                android:id="@+id/activity_alarm_define_repeat"
+            <ToggleButton
+                android:id="@+id/activity_alarm_define_saturday_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/repeat" />
+                android:layout_alignParentLeft="true"
+                android:checked="true"
+                android:textOff="@string/saturday"
+                android:textOn="@string/saturday"
+                android:visibility="gone" />
 
             <ToggleButton
                 android:id="@+id/activity_alarm_define_sunday_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@id/activity_alarm_define_saturday_toggle"
+                android:checked="true"
                 android:textOff="@string/sunday"
-                android:textOn="@string/sunday" />
+                android:textOn="@string/sunday"
+                android:visibility="gone" />
 
-            <ToggleButton
-                android:id="@+id/activity_alarm_define_saturday_toggle"
+            <CheckBox
+                android:id="@+id/activity_alarm_define_repeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/activity_alarm_define_sunday_toggle"
-                android:textOff="@string/saturday"
-                android:textOn="@string/saturday" />
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:checked="false"
+                android:text="@string/repeat" />
         </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/activity_alarm_define_repetition_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:baselineAligned="true"
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <FrameLayout
                 android:layout_width="0dp"
@@ -117,6 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:checked="true"
                     android:textOff="@string/monday"
                     android:textOn="@string/monday" />
             </FrameLayout>
@@ -132,6 +158,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:checked="true"
                     android:textOff="@string/tuesday"
                     android:textOn="@string/tuesday" />
             </FrameLayout>
@@ -147,6 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:checked="true"
                     android:textOff="@string/wednesday"
                     android:textOn="@string/wednesday" />
             </FrameLayout>
@@ -162,6 +190,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:checked="true"
                     android:textOff="@string/thursday"
                     android:textOn="@string/thursday" />
             </FrameLayout>
@@ -177,6 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:checked="true"
                     android:textOff="@string/friday"
                     android:textOn="@string/friday" />
             </FrameLayout>

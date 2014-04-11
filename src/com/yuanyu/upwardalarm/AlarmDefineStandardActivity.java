@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -21,19 +23,26 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-public class AlarmDefineStandardActivity extends Activity implements View.OnClickListener {
+public class AlarmDefineStandardActivity extends Activity implements View.OnClickListener,
+	OnCheckedChangeListener {
 	
 	private final static int ACTIVITY_RINGTONE_PICKER = 0;
 	
 	public final static String EXTRA_ALARM = "alarm";
 	
+	private View mLabelLayout;
 	private TextView mLabelTxt;
+	
 	private Switch mSwitch;
 	private TimePicker mTimePicker;
+	
+	private View mRingtoneLayout;
 	private TextView mRingtoneTxt;
+	
 	private CheckBox mVibrateCheck;
 	
 	private CheckBox mRepeatCheck;
+	private View mRepetitionLayout;
 	private ToggleButton mSunday;
 	private ToggleButton mMonday;
 	private ToggleButton mTuesday;
@@ -65,12 +74,18 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	}
 
 	private void initViews() {
+		mLabelLayout = findViewById(R.id.activity_alarm_define_label_layout);
 		mLabelTxt = (TextView) findViewById(R.id.activity_alarm_define_label);
+		
 		mTimePicker = (TimePicker) findViewById(R.id.activity_alarm_define_time_picker);
+		
+		mRingtoneLayout = findViewById(R.id.activity_alarm_define_ringtone_layout);
 		mRingtoneTxt = (TextView) findViewById(R.id.activity_alarm_define_ringtone);
+		
 		mVibrateCheck = (CheckBox) findViewById(R.id.activity_alarm_define_vibrate);
 		
 		mRepeatCheck = (CheckBox) findViewById(R.id.activity_alarm_define_repeat);
+		mRepetitionLayout = findViewById(R.id.activity_alarm_define_repetition_layout);
 		mSunday = (ToggleButton) findViewById(R.id.activity_alarm_define_sunday_toggle);
 		mMonday = (ToggleButton) findViewById(R.id.activity_alarm_define_monday_toggle);
 		mTuesday = (ToggleButton) findViewById(R.id.activity_alarm_define_tuesday_toggle);
@@ -83,9 +98,11 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	}
 	
 	private void setOnClickListeners() {
-		mLabelTxt.setOnClickListener(this);
-		mRingtoneTxt.setOnClickListener(this);
+		mLabelLayout.setOnClickListener(this);
+		mRingtoneLayout.setOnClickListener(this);
 		mDoneBtn.setOnClickListener(this);
+		
+		mRepeatCheck.setOnCheckedChangeListener(this);
 		
 		// TODO When deselect the whole week, enable toggle unchecked automatically
 	}
@@ -93,10 +110,10 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
-		case R.id.activity_alarm_define_label:
+		case R.id.activity_alarm_define_label_layout:
 			showTitleDefineDialog();
 			break;
-		case R.id.activity_alarm_define_ringtone:
+		case R.id.activity_alarm_define_ringtone_layout:
 			showRingtonePicker();
 			break;
 		case R.id.activity_alarm_define_done_btn:
@@ -178,6 +195,22 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 				}
 				String fileName = title.substring(start, end);
 				mRingtoneTxt.setText(fileName);
+			}
+		}
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if(buttonView.getId() == R.id.activity_alarm_define_repeat) {
+			if(isChecked) {
+				mRepetitionLayout.setVisibility(View.VISIBLE);
+				mSaturday.setVisibility(View.VISIBLE);
+				mSunday.setVisibility(View.VISIBLE);
+			}
+			else {
+				mRepetitionLayout.setVisibility(View.GONE);
+				mSaturday.setVisibility(View.GONE);
+				mSunday.setVisibility(View.GONE);
 			}
 		}
 	}
