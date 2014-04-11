@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -56,6 +57,9 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	private String mLabel = "";
 	private String mRingtoneUri = "";
 	
+	private int mEnabledColor;
+	private int mDisabledColor;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,6 +67,9 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		
 		initViews();
 		setOnClickListeners();
+		
+		mEnabledColor = getResources().getColor(R.color.black);
+		mDisabledColor = getResources().getColor(R.color.gray);
 	}
 
 	@Override
@@ -103,8 +110,14 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mDoneBtn.setOnClickListener(this);
 		
 		mRepeatCheck.setOnCheckedChangeListener(this);
-		
-		// TODO When deselect the whole week, enable toggle unchecked automatically
+		mVibrateCheck.setOnCheckedChangeListener(this);
+		mSunday.setOnCheckedChangeListener(this);
+		mMonday.setOnCheckedChangeListener(this);
+		mTuesday.setOnCheckedChangeListener(this);
+		mWednesday.setOnCheckedChangeListener(this);
+		mThursday.setOnCheckedChangeListener(this);
+		mFriday.setOnCheckedChangeListener(this);
+		mSaturday.setOnCheckedChangeListener(this);
 	}
 
 	@Override
@@ -132,10 +145,31 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					mLabel = edit.getEditableText().toString();
-					mLabelTxt.setText(mLabel);
+					mLabelTxt.setText(mLabel.trim());
+					if(mLabel.trim().isEmpty()) {
+						mLabelTxt.setTextColor(mDisabledColor);
+					}
+					else {
+						mLabelTxt.setTextColor(mEnabledColor);
+					}
 				}
 			});
-		builder.show();
+		
+		// Set the default text of edit text
+		edit.setText(mLabel);
+		edit.selectAll();
+		
+		// Make the keyboard show automatically when dialog opened
+		final AlertDialog dialog = builder.create();
+		edit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+		    @Override
+		    public void onFocusChange(View v, boolean hasFocus) {
+		        if (hasFocus) {
+		            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+		        }
+		    }
+		});
+		dialog.show();
 	}
 	
 	private void showRingtonePicker() {
@@ -195,23 +229,72 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 				}
 				String fileName = title.substring(start, end);
 				mRingtoneTxt.setText(fileName);
+				mRingtoneTxt.setTextColor(mEnabledColor);
+			}
+			else {
+				mRingtoneTxt.setText(""); // It will the default hint text
+				mRingtoneTxt.setTextColor(mDisabledColor);
 			}
 		}
 	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if(buttonView.getId() == R.id.activity_alarm_define_repeat) {
+		switch(buttonView.getId()) {
+		case R.id.activity_alarm_define_repeat:
 			if(isChecked) {
 				mRepetitionLayout.setVisibility(View.VISIBLE);
 				mSaturday.setVisibility(View.VISIBLE);
 				mSunday.setVisibility(View.VISIBLE);
+				checkEveryday();
 			}
 			else {
 				mRepetitionLayout.setVisibility(View.GONE);
 				mSaturday.setVisibility(View.GONE);
 				mSunday.setVisibility(View.GONE);
 			}
+			break;
+		case R.id.activity_alarm_define_vibrate:
+			if(isChecked) {
+				mVibrateCheck.setTextColor(mEnabledColor);
+			}
+			else {
+				mVibrateCheck.setTextColor(mDisabledColor);
+			}
+			break;
+		case R.id.activity_alarm_define_sunday_toggle:
+		case R.id.activity_alarm_define_monday_toggle:
+		case R.id.activity_alarm_define_tuesday_toggle:
+		case R.id.activity_alarm_define_wednesday_toggle:
+		case R.id.activity_alarm_define_thursday_toggle:
+		case R.id.activity_alarm_define_friday_toggle:
+		case R.id.activity_alarm_define_saturday_toggle:
+			if(isAllWeekToggleUnchecked()) {
+				mRepeatCheck.setChecked(false);
+			}
+			break;
 		}
+	}
+	
+	private boolean isAllWeekToggleUnchecked() {
+		boolean result = true;
+		result &= !mSunday.isChecked();
+		result &= !mMonday.isChecked();
+		result &= !mTuesday.isChecked();
+		result &= !mWednesday.isChecked();
+		result &= !mThursday.isChecked();
+		result &= !mFriday.isChecked();
+		result &= !mSaturday.isChecked();
+		return result;
+	}
+	
+	private void checkEveryday () {
+		mSunday.setChecked(true);
+		mMonday.setChecked(true);
+		mTuesday.setChecked(true);
+		mWednesday.setChecked(true);
+		mThursday.setChecked(true);
+		mFriday.setChecked(true);
+		mSaturday.setChecked(true);
 	}
 }

@@ -133,26 +133,31 @@ public class Utils {
 		}
 		
 		// Set the repetition
-		if(alarm.isMondayRepeat()) {
-			html += context.getString(R.string.monday) + ",";
+		if(alarm.isRepeatWholeWeek()) {
+			html += context.getString(R.string.every_day);
 		}
-		if(alarm.isTuesdayRepeat()) {
-			html += context.getString(R.string.tuesday) + ",";
-		}
-		if(alarm.isWednesdayRepeat()) {
-			html += context.getString(R.string.wednesday) + ",";
-		}
-		if(alarm.isThursdayRepeat()) {
-			html += context.getString(R.string.thursday) + ",";
-		}
-		if(alarm.isFridayRepeat()) {
-			html += context.getString(R.string.friday) + ",";
-		}
-		if(alarm.isSaturdayRepeat()) {
-			html += context.getString(R.string.saturday) + ",";
-		}
-		if(alarm.isSundayRepeat()) {
-			html += context.getString(R.string.sunday) + ",";
+		else {
+			if(alarm.isMondayRepeat()) {
+				html += context.getString(R.string.monday) + ",";
+			}
+			if(alarm.isTuesdayRepeat()) {
+				html += context.getString(R.string.tuesday) + ",";
+			}
+			if(alarm.isWednesdayRepeat()) {
+				html += context.getString(R.string.wednesday) + ",";
+			}
+			if(alarm.isThursdayRepeat()) {
+				html += context.getString(R.string.thursday) + ",";
+			}
+			if(alarm.isFridayRepeat()) {
+				html += context.getString(R.string.friday) + ",";
+			}
+			if(alarm.isSaturdayRepeat()) {
+				html += context.getString(R.string.saturday) + ",";
+			}
+			if(alarm.isSundayRepeat()) {
+				html += context.getString(R.string.sunday) + ",";
+			}
 		}
 		
 		// Remove last ',' if exists

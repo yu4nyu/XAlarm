@@ -12,6 +12,8 @@
     <string name="thursday">Thu</string>
     <string name="friday">Fri</string>
     <string name="saturday">Sat</string>
+    <string name="every_day">Every day</string>
+    
     <string name="label">Label</string>
     <string name="time_separator">:</string>
     <string name="silent">Silent</string>
