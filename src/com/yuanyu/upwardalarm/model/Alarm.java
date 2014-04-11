@@ -163,10 +163,11 @@ public class Alarm implements Serializable {
 		Manager.INSTANCE.saveAlarm(context, this);
 	}
 	
-	@TargetApi(Build.VERSION_CODES.KITKAT)
+	// TODO
+	/*@TargetApi(Build.VERSION_CODES.KITKAT)
 	private void registerForKitKatOrLater(AlarmManager alarmManager, long timeInMillis, PendingIntent alarmPending) {
 		alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
-	}
+	}*/
 	
 	/**
 	 * Register the alarm to android system with the given time
@@ -179,12 +180,12 @@ public class Alarm implements Serializable {
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, mRingtoneUri);
 		PendingIntent alarmPending = PendingIntent.getBroadcast(context, mId, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
-		if(Utils.isKitKatOrLater()) {
+		/*if(Utils.isKitKatOrLater()) {
 			registerForKitKatOrLater(alarmManager, timeInMillis, alarmPending);
 		}
-		else {
+		else {*/
 			alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
-		}
+		//}
 	}
 	
 	/**

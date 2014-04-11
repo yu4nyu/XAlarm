@@ -32,7 +32,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@id/alarm_list_top_right_icon" />
+            android:layout_toLeftOf="@id/alarm_list_top_right_icon"
+            android:layout_marginTop="@dimen/item_top_icon_calibration"
+            android:src="@drawable/ic_vibrate" />
 
         <TextView
             android:id="@+id/alarm_list_item_time"
