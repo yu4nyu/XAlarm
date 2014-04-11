@@ -61,7 +61,7 @@ public class AlarmListAdapter extends BaseAdapter {
 		// Set ringtone and vibrate icons
 		Alarm alarm = mData.get(position);
 		if(alarm.getVibrateEnable()) {
-			if(alarm.getRingtone() != null) {
+			if(alarm.getRingtone(mContext) != null) {
 				// TODO
 			}
 			else {
@@ -69,7 +69,7 @@ public class AlarmListAdapter extends BaseAdapter {
 			}
 		}
 		else {
-			if(alarm.getRingtone() != null) {
+			if(alarm.getRingtone(mContext) != null) {
 				// TODO
 			}
 			else {
