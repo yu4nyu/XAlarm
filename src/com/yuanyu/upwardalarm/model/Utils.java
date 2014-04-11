@@ -70,7 +70,6 @@ public class Utils {
 	 * Get the next time in millisecond with the given hour and minute
 	 * @param hour
 	 * @param minute
-	 * @param daysAfter must be > 0
 	 * @return The time of today if not passed yet or tomorrow otherwise
 	 */
 	static long getNextTimeMillis(int hour, int minute) {

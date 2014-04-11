@@ -18,8 +18,6 @@ public enum Manager {
 
 	INSTANCE;
 
-	public final static int GET_UNIQUE_ID_ERROR = -1;
-
 	private final static String PREFS_KEY = "prefs";
 	private final static String PREFS_UNIQUE_ID_KEY = "unique_id";
 
