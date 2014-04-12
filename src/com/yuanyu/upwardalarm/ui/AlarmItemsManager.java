@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.yuanyu.upwardalarm.AlarmDefineStandardActivity;
+import com.yuanyu.upwardalarm.MainActivity;
 import com.yuanyu.upwardalarm.R;
 import com.yuanyu.upwardalarm.model.Alarm;
 import com.yuanyu.upwardalarm.model.Utils;
@@ -34,14 +36,8 @@ public class AlarmItemsManager implements View.OnTouchListener {
 	GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
 		@Override
-		public boolean onDown(MotionEvent e) {
-			Log.d("YY", "onDown");
-			return super.onDown(e);
-		}
-
-		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			Log.d("YY", "onScroll");
+			// TODO scroll to delete
 			return super.onScroll(e1, e2, distanceX, distanceY);
 		}
 		
@@ -49,6 +45,7 @@ public class AlarmItemsManager implements View.OnTouchListener {
 		public boolean onSingleTapUp(MotionEvent e) {
 			if(mTouchedView != null) {
 				mTouchedView.setAlpha(ALPHA_PRESSED);
+				editAlarm((Integer)mTouchedView.getTag());
 			}
 			return false;
 		}
@@ -97,11 +94,12 @@ public class AlarmItemsManager implements View.OnTouchListener {
 	 * @param position
 	 * @return true if updated, false means error
 	 */
-	public boolean update(int position) {
+	public boolean update(int position, Alarm alarm) {
 		if(position < 0 || position >= mItems.size()) {
 			return false;
 		}
-
+		mData.remove(position);
+		mData.add(position, alarm);
 		ViewHolder holder = mItems.get(position);
 		updateView(holder, position);
 
@@ -196,7 +194,10 @@ public class AlarmItemsManager implements View.OnTouchListener {
 		return true;
 	}
 	
-	private void editAlarm() {
-		
+	private void editAlarm(int position) {
+		Intent intent = new Intent(mContext, AlarmDefineStandardActivity.class);
+		intent.putExtra(AlarmDefineStandardActivity.EXTRA_ALARM, mData.get(position));
+		intent.putExtra(AlarmDefineStandardActivity.EXTRA_POSITION, position);
+		((MainActivity)mContext).startActivityForResult(intent, MainActivity.ACTIVITY_ALARM_EDIT);
 	}
 }

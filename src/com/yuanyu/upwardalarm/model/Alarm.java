@@ -98,6 +98,10 @@ public class Alarm implements Serializable {
 		return RingtoneManager.getRingtone(context, uri);
 	}
 	
+	public String getRingtoneUri() {
+		return mRingtoneUri;
+	}
+	
 	public boolean getVibrateEnable() {
 		return mVibrate;
 	}

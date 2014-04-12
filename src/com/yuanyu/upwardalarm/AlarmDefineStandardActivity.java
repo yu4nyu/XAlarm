@@ -30,6 +30,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	private final static int ACTIVITY_RINGTONE_PICKER = 0;
 	
 	public final static String EXTRA_ALARM = "alarm";
+	public final static String EXTRA_POSITION = "position";
 	
 	private View mLabelLayout;
 	private TextView mLabelTxt;
@@ -54,22 +55,31 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	
 	private Button mDoneBtn;
 	
-	private String mLabel = "";
 	private String mRingtoneUri = "";
 	
 	private int mEnabledColor;
 	private int mDisabledColor;
+	
+	// Used for edition mode
+	private int mPosition; // Just keep the position and return it to MainActivity
+	private boolean mInitEnabled = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_alarm_define_standard);
 		
+		mEnabledColor = getResources().getColor(R.color.black);
+		mDisabledColor = getResources().getColor(R.color.gray);
+		
 		initViews();
 		setOnClickListeners();
 		
-		mEnabledColor = getResources().getColor(R.color.black);
-		mDisabledColor = getResources().getColor(R.color.gray);
+		Object extra = getIntent().getSerializableExtra(EXTRA_ALARM);
+		if(extra != null) {
+			initStatus((Alarm)extra);
+			mPosition =  getIntent().getIntExtra(EXTRA_POSITION, -1);
+		}
 	}
 
 	@Override
@@ -77,6 +87,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		getMenuInflater().inflate(R.menu.alarm_define_standard, menu);
 		MenuItem item = menu.findItem(R.id.action_switch);
 		mSwitch = (Switch) item.getActionView().findViewById(R.id.alarm_define_action_bar_view_switch);
+		mSwitch.setChecked(mInitEnabled);
 		return true;
 	}
 
@@ -84,7 +95,10 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mLabelLayout = findViewById(R.id.activity_alarm_define_label_layout);
 		mLabelTxt = (TextView) findViewById(R.id.activity_alarm_define_label);
 		
+		// TODO make the default time more intelligent ?
 		mTimePicker = (TimePicker) findViewById(R.id.activity_alarm_define_time_picker);
+		mTimePicker.setCurrentHour(8);
+		mTimePicker.setCurrentMinute(0);
 		
 		mRingtoneLayout = findViewById(R.id.activity_alarm_define_ringtone_layout);
 		mRingtoneTxt = (TextView) findViewById(R.id.activity_alarm_define_ringtone);
@@ -119,6 +133,49 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mFriday.setOnCheckedChangeListener(this);
 		mSaturday.setOnCheckedChangeListener(this);
 	}
+	
+	private void initStatus(Alarm alarm) {
+		mInitEnabled = alarm.getEnable(); // Record here, will be used in onCreateOptionsMenu()
+		setLabelText(alarm.getLabel());
+		mTimePicker.setCurrentHour(alarm.getHour());
+		mTimePicker.setCurrentMinute(alarm.getMinute());
+		Ringtone ringtone = alarm.getRingtone(this);
+		if(ringtone != null) {
+			mRingtoneTxt.setText(ringtone.getTitle(this));
+			mRingtoneTxt.setTextColor(mEnabledColor);
+			mRingtoneUri = alarm.getRingtoneUri();
+		}
+		else {
+			mRingtoneTxt.setText(""); // It will the default hint text
+			mRingtoneTxt.setTextColor(mDisabledColor);
+		}
+		mVibrateCheck.setChecked(alarm.getVibrateEnable());
+		updateVibrateTextColor(alarm.getVibrateEnable());
+		mRepeatCheck.setChecked(alarm.isRepeat());
+		if(alarm.isRepeat()) {
+			boolean isCheck = alarm.isSundayRepeat();
+			mSunday.setChecked(isCheck);
+			mSunday.setTextColor(isCheck ? mEnabledColor : mDisabledColor);
+			isCheck = alarm.isMondayRepeat();
+			mMonday.setChecked(isCheck);
+			mMonday.setTextColor(isCheck ? mEnabledColor : mDisabledColor);
+			isCheck = alarm.isTuesdayRepeat();
+			mTuesday.setChecked(isCheck);
+			mTuesday.setTextColor(isCheck ? mEnabledColor : mDisabledColor);
+			isCheck = alarm.isWednesdayRepeat();
+			mWednesday.setChecked(isCheck);
+			mWednesday.setTextColor(isCheck ? mEnabledColor : mDisabledColor);
+			isCheck = alarm.isThursdayRepeat();
+			mThursday.setChecked(isCheck);
+			mThursday.setTextColor(isCheck ? mEnabledColor : mDisabledColor);
+			isCheck = alarm.isFridayRepeat();
+			mFriday.setChecked(isCheck);
+			mFriday.setTextColor(isCheck ? mEnabledColor : mDisabledColor);
+			isCheck = alarm.isSaturdayRepeat();
+			mSaturday.setChecked(isCheck);
+			mSaturday.setTextColor(isCheck ? mEnabledColor : mDisabledColor);
+		}
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -144,19 +201,12 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					mLabel = edit.getEditableText().toString();
-					mLabelTxt.setText(mLabel.trim());
-					if(mLabel.trim().isEmpty()) {
-						mLabelTxt.setTextColor(mDisabledColor);
-					}
-					else {
-						mLabelTxt.setTextColor(mEnabledColor);
-					}
+					setLabelText(edit.getEditableText().toString());
 				}
 			});
 		
 		// Set the default text of edit text
-		edit.setText(mLabel);
+		edit.setText(mLabelTxt.getText());
 		edit.selectAll();
 		
 		// Make the keyboard show automatically when dialog opened
@@ -182,9 +232,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	}
 	
 	private void done() {
-		
 		Alarm.Builder builder = new Alarm.Builder(this);
-		builder.setLable(mLabel)
+		builder.setLable(mLabelTxt.getText().toString())
 			.setEnable(mSwitch.isChecked())
 			.setHour(mTimePicker.getCurrentHour())
 			.setMinute(mTimePicker.getCurrentMinute())
@@ -203,6 +252,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		
 		Intent intent = new Intent();
 		intent.putExtra(EXTRA_ALARM, alarm);
+		intent.putExtra(EXTRA_POSITION, mPosition);
 		setResult(Activity.RESULT_OK, intent);
 		finish();
 	}
@@ -213,22 +263,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
 			if(uri != null) {
 				mRingtoneUri = uri.toString();
-				
 				Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
-				String title =  ringtone.getTitle(this);
-				
-				int start = 0;
-				int lastSlash = title.lastIndexOf("/");
-				if(lastSlash != -1) {
-					start = lastSlash + 1;
-				}
-				int end = title.length();
-				int lastPoint = title.lastIndexOf(".");
-				if(lastPoint != -1) {
-					end = lastPoint;
-				}
-				String fileName = title.substring(start, end);
-				mRingtoneTxt.setText(fileName);
+				mRingtoneTxt.setText(ringtone.getTitle(this));
 				mRingtoneTxt.setTextColor(mEnabledColor);
 			}
 			else {
@@ -255,23 +291,28 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			}
 			break;
 		case R.id.activity_alarm_define_vibrate:
-			if(isChecked) {
-				mVibrateCheck.setTextColor(mEnabledColor);
-			}
-			else {
-				mVibrateCheck.setTextColor(mDisabledColor);
-			}
+				updateVibrateTextColor(isChecked);
 			break;
 		case R.id.activity_alarm_define_sunday_toggle:
+			updateToggleTextColor(mSunday, isChecked);
+			break;
 		case R.id.activity_alarm_define_monday_toggle:
+			updateToggleTextColor(mMonday, isChecked);
+			break;
 		case R.id.activity_alarm_define_tuesday_toggle:
+			updateToggleTextColor(mTuesday, isChecked);
+			break;
 		case R.id.activity_alarm_define_wednesday_toggle:
+			updateToggleTextColor(mWednesday, isChecked);
+			break;
 		case R.id.activity_alarm_define_thursday_toggle:
+			updateToggleTextColor(mThursday, isChecked);
+			break;
 		case R.id.activity_alarm_define_friday_toggle:
+			updateToggleTextColor(mFriday, isChecked);
+			break;
 		case R.id.activity_alarm_define_saturday_toggle:
-			if(isAllWeekToggleUnchecked()) {
-				mRepeatCheck.setChecked(false);
-			}
+			updateToggleTextColor(mSaturday, isChecked);
 			break;
 		}
 	}
@@ -296,5 +337,26 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mThursday.setChecked(true);
 		mFriday.setChecked(true);
 		mSaturday.setChecked(true);
+	}
+	
+	private void setLabelText(String label) {
+		mLabelTxt.setText(label.trim());
+		if(label.trim().isEmpty()) {
+			mLabelTxt.setTextColor(mDisabledColor);
+		}
+		else {
+			mLabelTxt.setTextColor(mEnabledColor);
+		}
+	}
+	
+	private void updateVibrateTextColor(boolean checked) {
+		mVibrateCheck.setTextColor(checked ? mEnabledColor : mDisabledColor);
+	}
+	
+	private void updateToggleTextColor(ToggleButton toggle, boolean checked) {
+		toggle.setTextColor(checked ? mEnabledColor : mDisabledColor);
+		if(isAllWeekToggleUnchecked()) {
+			mRepeatCheck.setChecked(false);
+		}
 	}
 }

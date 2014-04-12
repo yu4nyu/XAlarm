@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 public class MainActivity extends Activity {
 
 	private final static int ACTIVITY_ALARM_DEFINE = 0;
+	public final static int ACTIVITY_ALARM_EDIT = 1;
 	
 	private AlarmItemsManager mManager;
 	
@@ -59,11 +60,25 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == ACTIVITY_ALARM_DEFINE) {
+			
+		}
+		switch(requestCode) {
+		case ACTIVITY_ALARM_DEFINE:
 			if(resultCode == Activity.RESULT_OK) {
 				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineStandardActivity.EXTRA_ALARM);
 				mManager.add(alarm);
 				registerAlarm(alarm);
 			}
+			break;
+		case ACTIVITY_ALARM_EDIT:
+			if(resultCode == Activity.RESULT_OK) {
+				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineStandardActivity.EXTRA_ALARM);
+				int position = data.getIntExtra(AlarmDefineStandardActivity.EXTRA_POSITION, -1);
+				if(mManager.update(position, alarm)) { // Update succeeded
+					registerAlarm(alarm); // The existed alarm will be replaced
+				}
+			}
+			break;
 		}
 	}
 	
