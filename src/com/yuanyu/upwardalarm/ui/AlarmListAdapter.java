@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+// TODO delete this
 public class AlarmListAdapter extends BaseAdapter {
 
 	private Context mContext;

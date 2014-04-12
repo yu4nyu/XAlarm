@@ -34,6 +34,9 @@
             android:screenOrientation="portrait" />
 
         <receiver android:name="com.yuanyu.upwardalarm.AlarmBroadcastReceiver" />
+        
+        <activity android:name="com.yuanyu.upwardalarm.test.TestActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -6,31 +6,32 @@ import java.util.List;
 import com.yuanyu.upwardalarm.model.Alarm;
 import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.test.TestActivity;
-import com.yuanyu.upwardalarm.ui.AlarmListAdapter;
+import com.yuanyu.upwardalarm.ui.AlarmItemsManager;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends Activity {
 
 	private final static int ACTIVITY_ALARM_DEFINE = 0;
 	
-	
-	private List<Alarm> mData = new ArrayList<Alarm>();
-	private AlarmListAdapter mAdapter;
+	private AlarmItemsManager mManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		mData.addAll(Manager.INSTANCE.getSavedAlarms(this));
-		mAdapter = new AlarmListAdapter(this, mData);
-		setListAdapter(mAdapter);
+		List<Alarm> data = new ArrayList<Alarm>();
+		data.addAll(Manager.INSTANCE.getSavedAlarms(this));
+		mManager = new AlarmItemsManager(this, data);
+		
+		ViewGroup scrollable = (ViewGroup) findViewById(R.id.activity_main_scroll_view);
+		mManager.fillAlarmList(scrollable);
 	}
 
 	@Override
@@ -60,8 +61,7 @@ public class MainActivity extends ListActivity {
 		if(requestCode == ACTIVITY_ALARM_DEFINE) {
 			if(resultCode == Activity.RESULT_OK) {
 				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineStandardActivity.EXTRA_ALARM);
-				mData.add(alarm);
-				mAdapter.notifyDataSetChanged();
+				mManager.add(alarm);
 				registerAlarm(alarm);
 			}
 		}
