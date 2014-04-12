@@ -3,5 +3,9 @@
 
     <color name="gray">#888888</color>
     <color name="black">#000000</color>
+    
+    <color name="theme_default">#888888</color>
+    
+    <drawable name="tab_indicator_text">@android:color/tab_indicator_text</drawable>
 
 </resources>

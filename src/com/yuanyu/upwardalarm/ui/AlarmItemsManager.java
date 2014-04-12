@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
@@ -16,12 +19,48 @@ import com.yuanyu.upwardalarm.R;
 import com.yuanyu.upwardalarm.model.Alarm;
 import com.yuanyu.upwardalarm.model.Utils;
 
-public class AlarmItemsManager {
+public class AlarmItemsManager implements View.OnTouchListener {
+
+	private final static float ALPHA_PRESSED = 0.5f;
+	private final static float ALPHA_NORMAL = 1.0f;
 
 	private final Context mContext;
 	private final List<Alarm> mData;
 	private final List<ViewHolder> mItems;
 	private ViewGroup mContainer;
+	
+	private View mTouchedView;
+	private final GestureDetector mGestureDetector;
+	GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+
+		@Override
+		public boolean onDown(MotionEvent e) {
+			Log.d("YY", "onDown");
+			return super.onDown(e);
+		}
+
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+			Log.d("YY", "onScroll");
+			return super.onScroll(e1, e2, distanceX, distanceY);
+		}
+		
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			if(mTouchedView != null) {
+				mTouchedView.setAlpha(ALPHA_PRESSED);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean onSingleTapConfirmed(MotionEvent e) {
+			if(mTouchedView != null) {
+				mTouchedView.setAlpha(ALPHA_NORMAL);
+			}
+			return false;
+		}
+	};
 
 	class ViewHolder {
 		public View layout;
@@ -37,6 +76,8 @@ public class AlarmItemsManager {
 		mContext = context;
 		mData = data;
 		mItems = new ArrayList<ViewHolder>();
+		
+		mGestureDetector = new GestureDetector(context, mGestureListener);
 	}
 
 	public void fillAlarmList(ViewGroup container) {
@@ -47,10 +88,11 @@ public class AlarmItemsManager {
 			mItems.add(holder);
 			updateView(holder, i);
 			container.addView(holder.layout);
+			holder.layout.setOnTouchListener(this);
 			// TODO apply animation
 		}
 	}
-	
+
 	/**
 	 * @param position
 	 * @return true if updated, false means error
@@ -65,7 +107,7 @@ public class AlarmItemsManager {
 
 		return true;
 	}
-	
+
 	/**
 	 * Add alarm at the front of list
 	 */
@@ -76,7 +118,7 @@ public class AlarmItemsManager {
 		updateView(holder, 0);
 		mContainer.addView(holder.layout, 0);
 	}
-	
+
 	public void remove(int position) {
 		mData.remove(position);
 		mItems.remove(position);
@@ -145,5 +187,16 @@ public class AlarmItemsManager {
 		MarginLayoutParams params = (MarginLayoutParams ) imageView.getLayoutParams();
 		params.topMargin = 0;
 		imageView.setLayoutParams(params);
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		mTouchedView = v;
+		mGestureDetector.onTouchEvent(event);
+		return true;
+	}
+	
+	private void editAlarm() {
+		
 	}
 }
