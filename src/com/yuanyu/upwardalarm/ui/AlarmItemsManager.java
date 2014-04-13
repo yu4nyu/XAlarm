@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.GestureDetector;
@@ -78,7 +79,12 @@ public class AlarmItemsManager implements View.OnTouchListener{
 		@Override
 		public void onLongPress(MotionEvent e) {
 			if(mTouchedView != null) {
-				deleteMode((Integer)mTouchedView.getTag());
+				if(mActionMode == null) {
+					deleteMode((Integer)mTouchedView.getTag());
+				}
+				else {
+					reverseItemSelection(mTouchedView);
+				}
 			}
 		}
 	};
@@ -144,7 +150,7 @@ public class AlarmItemsManager implements View.OnTouchListener{
 		updateIndexTags();
 	}
 
-	private void remove(int position) {
+	public void remove(int position) {
 		mData.remove(position);
 		mItems.remove(position);
 		mContainer.removeViewAt(position);
@@ -334,12 +340,17 @@ public class AlarmItemsManager implements View.OnTouchListener{
 	}
 	
 	private void deleteSelectedItems() {
-		for(int i = 0; i < mData.size(); i++) {
+		for(int i = mData.size() - 1; i >= 0; i--) {
 			if(mSelectedItems.get(i)) {
 				// TODO delete alarm file
-				remove(i);
+				
+				// Must not call remove(int) here, because it calls updateIndexTags().
+				mData.remove(i);
+				mItems.remove(i);
+				mContainer.removeViewAt(i);
 			}
 		}
+		updateIndexTags(); // This must not be called in the for loop above.
 		mActionMode.finish();
 	}
 }
