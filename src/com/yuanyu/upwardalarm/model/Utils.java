@@ -14,7 +14,7 @@ import android.text.Html;
 import android.text.Spanned;
 
 public class Utils {
-	
+
 	/**
 	 * Determine if today's given hour and minute has passed or not
 	 * @return
@@ -31,7 +31,7 @@ public class Utils {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get the next time after certain days in millisecond with the given hour and minute
 	 * @param hour
@@ -47,9 +47,9 @@ public class Utils {
 		calendar.set(Calendar.MILLISECOND, 0);
 
 		//if(calendar.getTimeInMillis() > System.currentTimeMillis()) { // Next time is in today
-			//return calendar.getTimeInMillis();
+		//return calendar.getTimeInMillis();
 		//}
-		
+
 		// Otherwise the next time is in tomorrow
 		GregorianCalendar cal = new GregorianCalendar();
 		int year = calendar.get(Calendar.YEAR);
@@ -65,7 +65,7 @@ public class Utils {
 		}
 		return calendar.getTimeInMillis();
 	}
-	
+
 	/**
 	 * Get the next time in millisecond with the given hour and minute
 	 * @param hour
@@ -82,7 +82,7 @@ public class Utils {
 		if(calendar.getTimeInMillis() > System.currentTimeMillis()) { // Next time is in today
 			return calendar.getTimeInMillis();
 		}
-		
+
 		// Otherwise the next time is in tomorrow
 		GregorianCalendar cal = new GregorianCalendar();
 		int year = calendar.get(Calendar.YEAR);
@@ -98,7 +98,7 @@ public class Utils {
 		}
 		return calendar.getTimeInMillis();
 	}
-	
+
 	/**
 	 * Get the text of time displayed on items of alarm list
 	 */
@@ -114,13 +114,14 @@ public class Utils {
 		String html = "<b>" + hourZero + hour + "</b>" + ":" + minuteZero + minute;
 		return Html.fromHtml(html);
 	}
-	
+
 	/**
 	 * Get the text of label and repetition displayed on items of alarm list
 	 */
 	public static Spanned getRepeatText(Context context, Alarm alarm) {
+
 		String html = "";
-		
+
 		// Set the label
 		String label = alarm.getLabel();
 		if(label != null && !label.trim().isEmpty()) {
@@ -130,53 +131,55 @@ public class Utils {
 			}
 			html += "</b> ";
 		}
-		
-		// Set the repetition
-		if(alarm.isRepeatWholeWeek()) {
-			html += context.getString(R.string.every_day);
+
+		if(alarm.isRepeat()) {
+			// Set the repetition
+			if(alarm.isRepeatWholeWeek()) {
+				html += context.getString(R.string.every_day);
+			}
+			else {
+				if(alarm.isMondayRepeat()) {
+					html += context.getString(R.string.monday) + ",";
+				}
+				if(alarm.isTuesdayRepeat()) {
+					html += context.getString(R.string.tuesday) + ",";
+				}
+				if(alarm.isWednesdayRepeat()) {
+					html += context.getString(R.string.wednesday) + ",";
+				}
+				if(alarm.isThursdayRepeat()) {
+					html += context.getString(R.string.thursday) + ",";
+				}
+				if(alarm.isFridayRepeat()) {
+					html += context.getString(R.string.friday) + ",";
+				}
+				if(alarm.isSaturdayRepeat()) {
+					html += context.getString(R.string.saturday) + ",";
+				}
+				if(alarm.isSundayRepeat()) {
+					html += context.getString(R.string.sunday) + ",";
+				}
+			}
+
+			// Remove last ',' if exists
+			int index = html.lastIndexOf(",");
+			if(index != -1 && index == html.length() - 1) {
+				html = html.substring(0, html.length() - 1);
+			}
 		}
-		else {
-			if(alarm.isMondayRepeat()) {
-				html += context.getString(R.string.monday) + ",";
-			}
-			if(alarm.isTuesdayRepeat()) {
-				html += context.getString(R.string.tuesday) + ",";
-			}
-			if(alarm.isWednesdayRepeat()) {
-				html += context.getString(R.string.wednesday) + ",";
-			}
-			if(alarm.isThursdayRepeat()) {
-				html += context.getString(R.string.thursday) + ",";
-			}
-			if(alarm.isFridayRepeat()) {
-				html += context.getString(R.string.friday) + ",";
-			}
-			if(alarm.isSaturdayRepeat()) {
-				html += context.getString(R.string.saturday) + ",";
-			}
-			if(alarm.isSundayRepeat()) {
-				html += context.getString(R.string.sunday) + ",";
-			}
-		}
-		
-		// Remove last ',' if exists
-		int index = html.lastIndexOf(",");
-		if(index != -1 && index == html.length() - 1) {
-			html = html.substring(0, html.length() - 1);
-		}
-		
+
 		return Html.fromHtml(html);
 	}
-	
+
 	/**
-     * Returns whether the SDK is KitKat or later
-     */
-    public static boolean isKitKatOrLater() {
-        return Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2;
-    }
-    
-    public static Ringtone getRingtoneByUriString(Context context, String uriString) {
-    	Uri uri = Uri.parse(uriString);
-    	return RingtoneManager.getRingtone(context, uri);
-    }
+	 * Returns whether the SDK is KitKat or later
+	 */
+	public static boolean isKitKatOrLater() {
+		return Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2;
+	}
+
+	public static Ringtone getRingtoneByUriString(Context context, String uriString) {
+		Uri uri = Uri.parse(uriString);
+		return RingtoneManager.getRingtone(context, uri);
+	}
 }
