@@ -111,7 +111,7 @@ public class Utils {
 		}
 		
 		Calendar todayCal = Calendar.getInstance();
-		int today = todayCal.get(Calendar.DAY_OF_WEEK);
+		int today = todayCal.get(Calendar.DAY_OF_WEEK) - 1;
 
 		Calendar alarmCal = Calendar.getInstance();
 		alarmCal.set(Calendar.HOUR_OF_DAY, alarm.getHour());
@@ -130,11 +130,10 @@ public class Utils {
 		for(int i = today + 1; i < 7; i++) {
 			dayAfter++;
 			if(weekRepeat[i]) {
-				todayCal.set(Calendar.DAY_OF_WEEK, i);
-				return todayCal.getTimeInMillis();
+				return getNextTimeMillisDaysAfter(alarm.getHour(), alarm.getMinute(), dayAfter);
 			}
 		}
-		for(int i = 0; i < today; i++) {
+		for(int i = 0; i <= today; i++) {
 			dayAfter++;
 			if(weekRepeat[i]) {
 				return getNextTimeMillisDaysAfter(alarm.getHour(), alarm.getMinute(), dayAfter);
@@ -219,6 +218,9 @@ public class Utils {
 	public static String getTextTimeBeforeGoOff(Context context, Alarm alarm) {
 		String result = context.getString(R.string.time_before_go_off_text) + " ";
 		long time = getGoOffTimeMillis(alarm);
+		if(time == 0) {
+			return "";
+		}
 		long timeBefore = time - System.currentTimeMillis();
 		long minuteCount = TimeUnit.MILLISECONDS.toMinutes(timeBefore);
 		int hour = (int) minuteCount / 60;

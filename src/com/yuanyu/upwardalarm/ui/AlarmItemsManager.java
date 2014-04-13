@@ -247,7 +247,9 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		if(isChecked) {
 			Manager.INSTANCE.register(mContext, alarm);
 			String message = Utils.getTextTimeBeforeGoOff(mContext, alarm);
-			Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+			if(!message.isEmpty()) {
+				Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+			}
 		}
 		else {
 			Manager.INSTANCE.unregister(mContext, alarm.getId());
