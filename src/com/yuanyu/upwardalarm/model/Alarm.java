@@ -1,24 +1,11 @@
 package com.yuanyu.upwardalarm.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
 
-import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
-
-import android.annotation.TargetApi;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 
 public class Alarm implements Serializable {
 
-	private static final String INTENT_DATA_PREFIX = "com.yuanyu.upwardalarm:";
 	private static final long serialVersionUID = 1L;
 
 	private int mId;
@@ -94,26 +81,16 @@ public class Alarm implements Serializable {
 		return mMinute;
 	}
 
-	/**
-	 * @return null if can't get the valid Ringtone object
-	 */
-	public Ringtone getRingtone(Context context) {
-		if(mRingtoneUri == null || mRingtoneUri.isEmpty()) {
-			return null;
-		}
-		Uri uri = Uri.parse(mRingtoneUri);
-		if(uri == null) {
-			return null;
-		}
-		return RingtoneManager.getRingtone(context, uri);
-	}
-
 	public String getRingtoneUri() {
 		return mRingtoneUri;
 	}
 
 	public boolean getVibrateEnable() {
 		return mVibrate;
+	}
+	
+	public boolean[] getWeekRepeat() {
+		return mWeekRepeat;
 	}
 
 	public boolean isSundayRepeat() {
@@ -160,104 +137,6 @@ public class Alarm implements Serializable {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Get the next time in millisecond with the hour and minute of the alarm
-	 * @return
-	 */
-	private long getNextTimeMillis() {
-		return Utils.getNextTimeMillis(mHour, mMinute);
-	}
-
-	/**
-	 * Write the alarm object to file system
-	 */
-	public void saveToFile(Context context) {
-		Manager.INSTANCE.saveAlarm(context, this);
-	}
-
-	// TODO
-	/*@TargetApi(Build.VERSION_CODES.KITKAT)
-	private void registerForKitKatOrLater(AlarmManager alarmManager, long timeInMillis, PendingIntent alarmPending) {
-		alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
-	}*/
-
-	/**
-	 * Register the alarm to android system with the given time
-	 */
-	private void register(Context context, long timeInMillis) {
-		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-		intent.setData(Uri.parse(INTENT_DATA_PREFIX + mId));
-		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, mId);
-		intent.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, mVibrate);
-		intent.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, mRingtoneUri);
-		PendingIntent alarmPending = PendingIntent.getBroadcast(context, mId, intent, 0);
-		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
-		/*if(Utils.isKitKatOrLater()) {
-			registerForKitKatOrLater(alarmManager, timeInMillis, alarmPending);
-		}
-		else {*/
-		alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
-		//}
-	}
-
-	/**
-	 * Register the alarm to android system
-	 */
-	public void register(Context context) {
-		register(context, getNextTimeMillis());
-	}
-
-	/**
-	 * Unregister the alarm to android system
-	 */
-	public void unregister(Context context) {
-		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-		intent.setData(Uri.parse(INTENT_DATA_PREFIX + mId));
-		PendingIntent alarmPending = PendingIntent.getBroadcast(context, mId, intent, 0);
-		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
-		alarmManager.cancel(alarmPending);
-	}
-
-	/**
-	 * Register the alarm to android system for the next time.
-	 */
-	public void resetIfRepeat(Context context) {
-		if(isRepeat()) {
-			if(isRepeatWholeWeek()) {
-				register(context);
-			}
-			else {
-				Calendar calendar = Calendar.getInstance();
-				int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // Sunday is 1
-				int daysAfter = 0;
-				boolean isFound = false;
-				for(int i = dayOfWeek; i < mWeekRepeat.length; i++) {
-					if(!mWeekRepeat[i]) {
-						daysAfter++;
-					}
-					else {
-						isFound = true;
-						break;
-					}
-				}
-				if(!isFound) {
-					for(int i = 0; i < dayOfWeek; i++) {
-						if(!mWeekRepeat[i]) {
-							daysAfter++;
-						}
-						else {
-							isFound = true;
-							break;
-						}
-					}
-				}
-				if(isFound) {
-					register(context, Utils.getNextTimeMillisDaysAfter(mHour, mMinute, daysAfter));
-				}
-			}
-		}
 	}
 
 	public static class Builder {

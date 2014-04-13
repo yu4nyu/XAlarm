@@ -9,15 +9,26 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 
 public enum Manager {
 
 	INSTANCE;
 
+	private final static String INTENT_DATA_PREFIX = "com.yuanyu.upwardalarm:";
 	private final static String PREFS_KEY = "prefs";
 	private final static String PREFS_UNIQUE_ID_KEY = "unique_id";
 
@@ -38,11 +49,96 @@ public enum Manager {
 		return result;
 	}
 
+	// TODO
+	/*@TargetApi(Build.VERSION_CODES.KITKAT)
+	private void registerForKitKatOrLater(AlarmManager alarmManager, long timeInMillis, PendingIntent alarmPending) {
+		alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
+	}*/
+
+	/**
+	 * Register the alarm to android system with given time
+	 */
+	public void register(Context context, Alarm alarm, long timeInMillis) {
+		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+		intent.setData(Uri.parse(INTENT_DATA_PREFIX + alarm.getId()));
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, alarm.getId());
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, alarm.getVibrateEnable());
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, alarm.getRingtoneUri());
+		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarm.getId(), intent, 0);
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
+		/*if(Utils.isKitKatOrLater()) {
+				registerForKitKatOrLater(alarmManager, timeInMillis, alarmPending);
+			}
+			else {*/
+		alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
+		//}
+	}
+	
+	/**
+	 * Register the alarm to android system
+	 */
+	public void register(Context context, Alarm alarm) {
+		register(context, alarm, Utils.getNextTimeMillis(alarm.getHour(), alarm.getMinute()));
+	}
+	
+	/**
+	 * Unregister the alarm to android system
+	 */
+	public void unregister(Context context, int alarmId) {
+		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+		intent.setData(Uri.parse(INTENT_DATA_PREFIX + alarmId));
+		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarmId, intent, 0);
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
+		alarmManager.cancel(alarmPending);
+	}
+	
+	/**
+	 * Register the alarm to android system for the next time.
+	 */
+	public void resetIfRepeat(Context context, Alarm alarm) {
+		if(alarm.isRepeat()) {
+			if(alarm.isRepeatWholeWeek()) {
+				register(context, alarm);
+			}
+			else {
+				Calendar calendar = Calendar.getInstance();
+				int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // Sunday is 1
+				int daysAfter = 0;
+				boolean isFound = false;
+				boolean[] weekRepeat = alarm.getWeekRepeat();
+				for(int i = dayOfWeek; i < weekRepeat.length; i++) {
+					if(!weekRepeat[i]) {
+						daysAfter++;
+					}
+					else {
+						isFound = true;
+						break;
+					}
+				}
+				if(!isFound) {
+					for(int i = 0; i < dayOfWeek; i++) {
+						if(!weekRepeat[i]) {
+							daysAfter++;
+						}
+						else {
+							isFound = true;
+							break;
+						}
+					}
+				}
+				if(isFound) {
+					long time = Utils.getNextTimeMillisDaysAfter(alarm.getHour(), alarm.getMinute(), daysAfter);
+					Manager.INSTANCE.register(context, alarm, time);
+				}
+			}
+		}
+	}
+
 	/**
 	 * Save alarm to file system
 	 */
 	// TODO maybe use a AsyncTask ?
-	void saveAlarm(Context context, Alarm alarm) {
+	public void saveAlarm(Context context, Alarm alarm) {
 		try {
 			FileOutputStream fos;
 			fos = context.openFileOutput(ALARM_DATA_FILE_PREFIX + alarm.getId(), Context.MODE_PRIVATE);
@@ -54,6 +150,20 @@ public enum Manager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @return null if can't get the valid Ringtone object
+	 */
+	public Ringtone getRingtone(Context context, String ringtoneUri) {
+		if(ringtoneUri == null || ringtoneUri.isEmpty()) {
+			return null;
+		}
+		Uri uri = Uri.parse(ringtoneUri);
+		if(uri == null) {
+			return null;
+		}
+		return RingtoneManager.getRingtone(context, uri);
 	}
 
 	// TODO maybe use a AsyncTask ?

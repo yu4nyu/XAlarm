@@ -59,9 +59,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(requestCode == ACTIVITY_ALARM_DEFINE) {
-			
-		}
 		switch(requestCode) {
 		case ACTIVITY_ALARM_DEFINE:
 			if(resultCode == Activity.RESULT_OK) {
@@ -87,15 +84,15 @@ public class MainActivity extends Activity {
 	 */
 	private void registerAlarm(Alarm alarm) {
 		if(alarm.getEnable()) {
-			alarm.register(this);
+			Manager.INSTANCE.register(this, alarm);
 		}
-		alarm.saveToFile(this);
+		Manager.INSTANCE.saveAlarm(this, alarm);
 	}
 	
 	/**
 	 * Unregister the alarm from android system
 	 */
 	private void unregisterAlarm(Alarm alarm) {
-		alarm.unregister(this);
+		Manager.INSTANCE.unregister(this, alarm.getId());
 	}
 }

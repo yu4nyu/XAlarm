@@ -1,6 +1,7 @@
 package com.yuanyu.upwardalarm;
 
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.model.Manager;
 
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -141,7 +142,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		setLabelText(alarm.getLabel());
 		mTimePicker.setCurrentHour(alarm.getHour());
 		mTimePicker.setCurrentMinute(alarm.getMinute());
-		Ringtone ringtone = alarm.getRingtone(this);
+		Ringtone ringtone = Manager.INSTANCE.getRingtone(this, alarm.getRingtoneUri());
 		if(ringtone != null) {
 			mRingtoneTxt.setText(ringtone.getTitle(this));
 			mRingtoneTxt.setTextColor(mEnabledColor);

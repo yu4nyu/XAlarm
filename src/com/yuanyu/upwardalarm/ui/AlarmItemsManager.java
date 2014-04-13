@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,6 +20,7 @@ import com.yuanyu.upwardalarm.AlarmDefineStandardActivity;
 import com.yuanyu.upwardalarm.MainActivity;
 import com.yuanyu.upwardalarm.R;
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
 
 public class AlarmItemsManager implements View.OnTouchListener {
@@ -147,8 +149,9 @@ public class AlarmItemsManager implements View.OnTouchListener {
 	private void updateView(ViewHolder holder, int position) {
 		// Set ringtone and vibrate icons
 		Alarm alarm = mData.get(position);
+		Ringtone ringtone = Manager.INSTANCE.getRingtone(mContext, alarm.getRingtoneUri());
 		if(alarm.getVibrateEnable()) {
-			if(alarm.getRingtone(mContext) != null) {
+			if(ringtone != null) {
 				setRingtoneIcon(holder.image1);
 				setVibrateIcon(holder.image2);
 			}
@@ -158,7 +161,7 @@ public class AlarmItemsManager implements View.OnTouchListener {
 			}
 		}
 		else {
-			if(alarm.getRingtone(mContext) != null) {
+			if(ringtone != null) {
 				setRingtoneIcon(holder.image1);
 				holder.image2.setVisibility(View.INVISIBLE);
 			}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yuanyu.upwardalarm.R;
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
 
 import android.content.Context;
@@ -62,7 +63,7 @@ public class AlarmListAdapter extends BaseAdapter {
 		// Set ringtone and vibrate icons
 		Alarm alarm = mData.get(position);
 		if(alarm.getVibrateEnable()) {
-			if(alarm.getRingtone(mContext) != null) {
+			if(Manager.INSTANCE.getRingtone(mContext, alarm.getRingtoneUri()) != null) {
 				// TODO
 			}
 			else {
@@ -70,7 +71,7 @@ public class AlarmListAdapter extends BaseAdapter {
 			}
 		}
 		else {
-			if(alarm.getRingtone(mContext) != null) {
+			if(Manager.INSTANCE.getRingtone(mContext, alarm.getRingtoneUri()) != null) {
 				// TODO
 			}
 			else {
