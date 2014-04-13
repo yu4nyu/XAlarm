@@ -63,9 +63,9 @@ public enum Manager {
 		String[] files = dir.list();
 		List<Alarm> result = new ArrayList<Alarm>();
 
-		for(String str : files) {
+		for(int i = files.length - 1; i >= 0; i--) {
 			try {
-				FileInputStream fis = context.openFileInput(str);
+				FileInputStream fis = context.openFileInput(files[i]);
 				ObjectInputStream is = new ObjectInputStream(fis);
 				Alarm alarm = (Alarm) is.readObject();
 				result.add(alarm);
