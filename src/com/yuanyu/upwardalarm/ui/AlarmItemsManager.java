@@ -151,13 +151,13 @@ public class AlarmItemsManager implements View.OnTouchListener {
 				setVibrateIcon(holder.image2);
 			}
 			else {
-				setRingtoneIcon(holder.image1);
+				setVibrateIcon(holder.image1);
 				holder.image2.setVisibility(View.INVISIBLE);
 			}
 		}
 		else {
 			if(alarm.getRingtone(mContext) != null) {
-				setVibrateIcon(holder.image1);
+				setRingtoneIcon(holder.image1);
 				holder.image2.setVisibility(View.INVISIBLE);
 			}
 			else {
