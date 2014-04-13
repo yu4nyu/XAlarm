@@ -3,15 +3,22 @@ package com.yuanyu.upwardalarm.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,7 +30,7 @@ import com.yuanyu.upwardalarm.model.Alarm;
 import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
 
-public class AlarmItemsManager implements View.OnTouchListener {
+public class AlarmItemsManager implements View.OnTouchListener{
 
 	private final static float ALPHA_PRESSED = 0.5f;
 	private final static float ALPHA_NORMAL = 1.0f;
@@ -33,7 +40,10 @@ public class AlarmItemsManager implements View.OnTouchListener {
 	private final List<ViewHolder> mItems;
 	private ViewGroup mContainer;
 	
-	private View mTouchedView;
+	ActionMode mActionMode = null;
+	SparseBooleanArray mSelectedItems;
+	
+	private FrameLayout mTouchedView;
 	private final GestureDetector mGestureDetector;
 	GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
@@ -46,8 +56,13 @@ public class AlarmItemsManager implements View.OnTouchListener {
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
 			if(mTouchedView != null) {
-				mTouchedView.setAlpha(ALPHA_PRESSED);
-				editAlarm((Integer)mTouchedView.getTag());
+				if(mActionMode == null) {
+					mTouchedView.setAlpha(ALPHA_PRESSED);
+					editMode((Integer)mTouchedView.getTag());
+				}
+				else {
+					reverseItemSelection(mTouchedView);
+				}
 			}
 			return false;
 		}
@@ -59,10 +74,17 @@ public class AlarmItemsManager implements View.OnTouchListener {
 			}
 			return false;
 		}
+
+		@Override
+		public void onLongPress(MotionEvent e) {
+			if(mTouchedView != null) {
+				deleteMode((Integer)mTouchedView.getTag());
+			}
+		}
 	};
 
 	class ViewHolder {
-		public View layout;
+		public FrameLayout layout;
 
 		public ImageView image1; // image view at the right top corner
 		public ImageView image2; // image view at the left side of image1
@@ -77,6 +99,7 @@ public class AlarmItemsManager implements View.OnTouchListener {
 		mItems = new ArrayList<ViewHolder>();
 		
 		mGestureDetector = new GestureDetector(context, mGestureListener);
+		mSelectedItems = new SparseBooleanArray();
 	}
 
 	public void fillAlarmList(ViewGroup container) {
@@ -121,7 +144,7 @@ public class AlarmItemsManager implements View.OnTouchListener {
 		updateIndexTags();
 	}
 
-	public void remove(int position) {
+	private void remove(int position) {
 		mData.remove(position);
 		mItems.remove(position);
 		mContainer.removeViewAt(position);
@@ -131,7 +154,7 @@ public class AlarmItemsManager implements View.OnTouchListener {
 	private ViewHolder createView(int position) {
 		// Inflate and find views
 		LayoutInflater inflater = LayoutInflater.from(mContext);
-		View layout = inflater.inflate(R.layout.alarm_list_item, null);
+		FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.alarm_list_item, null);
 
 		// Create view holder
 		ViewHolder holder = new ViewHolder();
@@ -203,15 +226,120 @@ public class AlarmItemsManager implements View.OnTouchListener {
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		mTouchedView = v;
+		mTouchedView = (FrameLayout) v;
 		mGestureDetector.onTouchEvent(event);
 		return true;
 	}
 	
-	private void editAlarm(int position) {
+	private void editMode(int position) {
 		Intent intent = new Intent(mContext, AlarmDefineStandardActivity.class);
 		intent.putExtra(AlarmDefineStandardActivity.EXTRA_ALARM, mData.get(position));
 		intent.putExtra(AlarmDefineStandardActivity.EXTRA_POSITION, position);
 		((MainActivity)mContext).startActivityForResult(intent, MainActivity.ACTIVITY_ALARM_EDIT);
+	}
+	
+	private void deleteMode(int clickedPosition) {
+		selectItem(mTouchedView);
+		mSelectedItems.clear();
+		for(int i = 0; i < mData.size(); i++) {
+			mSelectedItems.put(i, false);
+		}
+		mSelectedItems.put(clickedPosition, true);
+		
+		((MainActivity)mContext).startActionMode(new ActionMode.Callback() {
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				return false;
+			}
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				deselecteAll();
+				mActionMode = null;
+			}
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				mode.getMenuInflater().inflate(R.menu.action_mode_menu, menu);
+				mActionMode = mode;
+				return true;
+			}
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+				builder.setMessage(R.string.delete_dialog_message)
+					.setNegativeButton(android.R.string.cancel, null)
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							deleteSelectedItems();
+						}
+					});
+				builder.show();
+				return false;
+			}
+		});
+		
+		updateActionModeTitle();
+	}
+	
+	private void selectItem(FrameLayout item) {
+		item.setForeground(mContext.getResources().getDrawable(R.drawable.item_highlight_foreground));
+	}
+	
+	private void deselectedItem(FrameLayout item) {
+		item.setForeground(null);
+	}
+	
+	private void reverseItemSelection(FrameLayout item) {
+		int position = (Integer) item.getTag();
+		boolean checked = mSelectedItems.get(position);
+		if(checked) {
+			deselectedItem(item);
+		}
+		else {
+			selectItem(item);
+		}
+		mSelectedItems.put(position, !checked);
+		
+		updateActionModeTitle();
+	}
+	
+	private void deselecteAll() {
+		int length = mData.size();
+		for(int i = 0; i < length; i++) {
+			if(mSelectedItems.get(i)) {
+				deselectedItem(mItems.get(i).layout);
+			}
+		}
+	}
+	
+	/**
+	 * Indicate the number of selected item.
+	 * If count == 0, finish the action mode automatically.
+	 */
+	private void updateActionModeTitle() {
+		if(mActionMode == null) return;
+		int count = 0;
+		for(int i = 0; i < mData.size(); i++) {
+			if(mSelectedItems.get(i)) {
+				count++;
+			}
+		}
+		if(count != 0) {
+			String title = count + " " + mContext.getString(R.string.selected);
+			mActionMode.setTitle(title);
+		}
+		else {
+			mActionMode.finish();
+		}
+	}
+	
+	private void deleteSelectedItems() {
+		for(int i = 0; i < mData.size(); i++) {
+			if(mSelectedItems.get(i)) {
+				// TODO delete alarm file
+				remove(i);
+			}
+		}
+		mActionMode.finish();
 	}
 }

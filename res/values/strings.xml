@@ -3,6 +3,7 @@
 
     <string name="app_name">Upward Alarm</string>
     <string name="action_add">Add</string>
+    <string name="action_delete">Delete</string>
 
     <!-- Alarm Define Activity -->
     <string name="sunday">Sun</string>
@@ -22,4 +23,6 @@
     <string name="label_define_dialog_title">Label of alarm</string>
     <string name="ringtone_picker_title">Select ringtone for alarm</string>
 
+    <string name="selected">Selected</string>
+    <string name="delete_dialog_message">Delete selected alarm ?</string>
 </resources>
