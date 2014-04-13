@@ -18,10 +18,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yuanyu.upwardalarm.AlarmDefineStandardActivity;
 import com.yuanyu.upwardalarm.MainActivity;
@@ -30,7 +32,7 @@ import com.yuanyu.upwardalarm.model.Alarm;
 import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
 
-public class AlarmItemsManager implements View.OnTouchListener{
+public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.OnCheckedChangeListener {
 
 	private final static float ALPHA_PRESSED = 0.5f;
 	private final static float ALPHA_NORMAL = 1.0f;
@@ -116,6 +118,7 @@ public class AlarmItemsManager implements View.OnTouchListener{
 			updateView(holder, i);
 			container.addView(holder.layout);
 			holder.layout.setOnTouchListener(this);
+			holder.enable.setOnCheckedChangeListener(this);
 			// TODO apply animation
 		}
 	}
@@ -170,6 +173,7 @@ public class AlarmItemsManager implements View.OnTouchListener{
 		holder.repeat = (TextView) layout.findViewById(R.id.alarm_list_item_repeat_text);
 		holder.time = (TextView) layout.findViewById(R.id.alarm_list_item_time);
 		holder.enable = (Switch) layout.findViewById(R.id.alarm_list_item_switch);
+		holder.enable.setTag(position);
 
 		return holder;
 	}
@@ -234,6 +238,20 @@ public class AlarmItemsManager implements View.OnTouchListener{
 		mTouchedView = (FrameLayout) v;
 		mGestureDetector.onTouchEvent(event);
 		return true;
+	}
+	
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		int position = (Integer) buttonView.getTag();
+		Alarm alarm = mData.get(position);
+		if(isChecked) {
+			Manager.INSTANCE.register(mContext, alarm);
+			String message = Utils.getTextTimeBeforeGoOff(mContext, alarm);
+			Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+		}
+		else {
+			Manager.INSTANCE.unregister(mContext, alarm.getId());
+		}
 	}
 	
 	private void editMode(int position) {

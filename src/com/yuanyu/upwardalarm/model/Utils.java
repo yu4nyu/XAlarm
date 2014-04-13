@@ -2,6 +2,7 @@ package com.yuanyu.upwardalarm.model;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 import com.yuanyu.upwardalarm.R;
 
@@ -98,6 +99,50 @@ public class Utils {
 		}
 		return calendar.getTimeInMillis();
 	}
+	
+	/**
+	 * Get the next time when the alarm goes off by taking account the week repetition
+	 * @return 0 if can't get the time
+	 */
+	// TODO use this in Manager ?
+	static long getGoOffTimeMillis(Alarm alarm) {		
+		if(!alarm.isRepeat()) {
+			return getNextTimeMillis(alarm.getHour(), alarm.getMinute());
+		}
+		
+		Calendar todayCal = Calendar.getInstance();
+		int today = todayCal.get(Calendar.DAY_OF_WEEK);
+
+		Calendar alarmCal = Calendar.getInstance();
+		alarmCal.set(Calendar.HOUR_OF_DAY, alarm.getHour());
+		alarmCal.set(Calendar.MINUTE, alarm.getMinute());
+		alarmCal.set(Calendar.SECOND, 0);
+		alarmCal.set(Calendar.MILLISECOND, 0);
+		
+		boolean[] weekRepeat = alarm.getWeekRepeat();
+		if(weekRepeat[today]) {
+			if(alarmCal.after(todayCal)) {
+				return alarmCal.getTimeInMillis();
+			}
+		}
+		
+		int dayAfter = 0;
+		for(int i = today + 1; i < 7; i++) {
+			dayAfter++;
+			if(weekRepeat[i]) {
+				todayCal.set(Calendar.DAY_OF_WEEK, i);
+				return todayCal.getTimeInMillis();
+			}
+		}
+		for(int i = 0; i < today; i++) {
+			dayAfter++;
+			if(weekRepeat[i]) {
+				return getNextTimeMillisDaysAfter(alarm.getHour(), alarm.getMinute(), dayAfter);
+			}
+		}
+		
+		return 0;
+	}
 
 	/**
 	 * Get the text of time displayed on items of alarm list
@@ -169,6 +214,31 @@ public class Utils {
 		}
 
 		return Html.fromHtml(html);
+	}
+	
+	public static String getTextTimeBeforeGoOff(Context context, Alarm alarm) {
+		String result = context.getString(R.string.time_before_go_off_text) + " ";
+		long time = getGoOffTimeMillis(alarm);
+		long timeBefore = time - System.currentTimeMillis();
+		long minuteCount = TimeUnit.MILLISECONDS.toMinutes(timeBefore);
+		int hour = (int) minuteCount / 60;
+		int minute = (int) minuteCount % 60;
+		
+		if(hour >= 1) {
+			result += hour + " " + context.getString(R.string.hour);
+			if(hour > 1) {
+				result += "s";
+			}
+		}
+		
+		if(minute >= 1) {
+			result += " " + minute + " " + context.getString(R.string.minute);
+			if(minute > 1) {
+				result += "s";
+			}
+		}
+		
+		return result;
 	}
 
 	/**

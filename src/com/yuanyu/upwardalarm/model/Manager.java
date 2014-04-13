@@ -58,7 +58,7 @@ public enum Manager {
 	/**
 	 * Register the alarm to android system with given time
 	 */
-	public void register(Context context, Alarm alarm, long timeInMillis) {
+	void register(Context context, Alarm alarm, long timeInMillis) {
 		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
 		intent.setData(Uri.parse(INTENT_DATA_PREFIX + alarm.getId()));
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, alarm.getId());
