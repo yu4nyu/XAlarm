@@ -277,6 +277,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 				mRingtoneTxt.setTextColor(mEnabledColor);
 			}
 			else {
+				mRingtoneUri = "";
 				mRingtoneTxt.setText(""); // It will the default hint text
 				mRingtoneTxt.setTextColor(mDisabledColor);
 			}
