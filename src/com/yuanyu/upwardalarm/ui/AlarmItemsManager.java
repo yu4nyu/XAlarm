@@ -115,6 +115,7 @@ public class AlarmItemsManager implements View.OnTouchListener {
 		mItems.add(holder);
 		updateView(holder, 0);
 		mContainer.addView(holder.layout, 0);
+		holder.layout.setOnTouchListener(this);
 	}
 
 	public void remove(int position) {
