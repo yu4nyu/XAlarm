@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.GestureDetector;
@@ -342,7 +341,9 @@ public class AlarmItemsManager implements View.OnTouchListener{
 	private void deleteSelectedItems() {
 		for(int i = mData.size() - 1; i >= 0; i--) {
 			if(mSelectedItems.get(i)) {
-				// TODO delete alarm file
+				Alarm alarm = mData.get(i);
+				Manager.INSTANCE.deleteAlarmFile(mContext, alarm);
+				Manager.INSTANCE.unregister(mContext, alarm.getId());
 				
 				// Must not call remove(int) here, because it calls updateIndexTags().
 				mData.remove(i);

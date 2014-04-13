@@ -152,6 +152,12 @@ public enum Manager {
 		}
 	}
 	
+	// TODO maybe use a AsyncTask ?
+	public void deleteAlarmFile(Context context, Alarm alarm) {
+		File file = new File(context.getFilesDir(), ALARM_DATA_FILE_PREFIX + alarm.getId());
+		file.delete(); // TODO take account the return value ?
+	}
+	
 	/**
 	 * @return null if can't get the valid Ringtone object
 	 */
