@@ -112,16 +112,18 @@ public class AlarmItemsManager implements View.OnTouchListener {
 	public void add(Alarm alarm) {
 		mData.add(0, alarm);
 		ViewHolder holder = createView(0);
-		mItems.add(holder);
+		mItems.add(0, holder);
 		updateView(holder, 0);
 		mContainer.addView(holder.layout, 0);
 		holder.layout.setOnTouchListener(this);
+		updateIndexTags();
 	}
 
 	public void remove(int position) {
 		mData.remove(position);
 		mItems.remove(position);
 		mContainer.removeViewAt(position);
+		updateIndexTags();
 	}
 
 	private ViewHolder createView(int position) {
@@ -171,8 +173,15 @@ public class AlarmItemsManager implements View.OnTouchListener {
 		holder.time.setText(Utils.getTimeText(alarm.getHour(), alarm.getMinute()));
 		holder.enable.setChecked(alarm.getEnable());
 	}
+	
+	private void updateIndexTags() {
+		for(int i = 0; i < mItems.size(); i++) {
+			mItems.get(i).layout.setTag(i);
+		}		
+	}
 
 	private void setVibrateIcon(ImageView imageView) {
+		imageView.setVisibility(View.VISIBLE);
 		imageView.setImageResource(R.drawable.ic_vibrate);
 		int margin = mContext.getResources().getDimensionPixelSize(R.dimen.item_top_icon_calibration);
 		MarginLayoutParams params = (MarginLayoutParams ) imageView.getLayoutParams();
@@ -182,6 +191,7 @@ public class AlarmItemsManager implements View.OnTouchListener {
 	}
 
 	private void setRingtoneIcon(ImageView imageView) {
+		imageView.setVisibility(View.VISIBLE);
 		imageView.setImageResource(R.drawable.ic_ringtone);
 		MarginLayoutParams params = (MarginLayoutParams ) imageView.getLayoutParams();
 		params.topMargin = 0;
