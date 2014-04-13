@@ -63,6 +63,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	// Used for edition mode
 	private int mPosition; // Just keep the position and return it to MainActivity
 	private boolean mInitEnabled = false;
+	Alarm mAlarm = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		
 		Object extra = getIntent().getSerializableExtra(EXTRA_ALARM);
 		if(extra != null) {
-			initStatus((Alarm)extra);
+			mAlarm = (Alarm)extra;
+			initStatus(mAlarm);
 			mPosition =  getIntent().getIntExtra(EXTRA_POSITION, -1);
 		}
 	}
@@ -232,22 +234,29 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	}
 	
 	private void done() {
-		Alarm.Builder builder = new Alarm.Builder(this);
+		Alarm.Builder builder;
+		if(mAlarm == null) {
+			builder = Alarm.newBuilder(this);
+		}
+		else {
+			builder = Alarm.getBuilder(mAlarm);
+		}
+		
 		builder.setLable(mLabelTxt.getText().toString())
-			.setEnable(mSwitch.isChecked())
-			.setHour(mTimePicker.getCurrentHour())
-			.setMinute(mTimePicker.getCurrentMinute())
-			.setRingtoneUri(mRingtoneUri)
-			.setVibrateEnable(mVibrateCheck.isChecked())
-			.enableRepeat(mRepeatCheck.isChecked())
-			.setWeekRepeat(mSunday.isChecked(),
-					mMonday.isChecked(),
-					mTuesday.isChecked(),
-					mWednesday.isChecked(),
-					mThursday.isChecked(),
-					mFriday.isChecked(),
-					mSaturday.isChecked())
-			;
+		.setEnable(mSwitch.isChecked())
+		.setHour(mTimePicker.getCurrentHour())
+		.setMinute(mTimePicker.getCurrentMinute())
+		.setRingtoneUri(mRingtoneUri)
+		.setVibrateEnable(mVibrateCheck.isChecked())
+		.enableRepeat(mRepeatCheck.isChecked())
+		.setWeekRepeat(mSunday.isChecked(),
+				mMonday.isChecked(),
+				mTuesday.isChecked(),
+				mWednesday.isChecked(),
+				mThursday.isChecked(),
+				mFriday.isChecked(),
+				mSaturday.isChecked())
+		;
 		Alarm alarm = builder.build();
 		
 		Intent intent = new Intent();
