@@ -31,8 +31,8 @@
         <activity android:name="com.yuanyu.upwardalarm.AlarmDefineStandardActivity" />
         <activity
             android:name="com.yuanyu.upwardalarm.AlarmGoOffActivity"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent" />
         <receiver android:name="com.yuanyu.upwardalarm.AlarmBroadcastReceiver" />
         
         <activity android:name="com.yuanyu.upwardalarm.test.TestActivity"

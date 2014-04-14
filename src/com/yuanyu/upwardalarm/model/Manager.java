@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -23,6 +24,7 @@ import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 
 public enum Manager {
 
@@ -49,11 +51,10 @@ public enum Manager {
 		return result;
 	}
 
-	// TODO
-	/*@TargetApi(Build.VERSION_CODES.KITKAT)
+	@TargetApi(Build.VERSION_CODES.KITKAT)
 	private void registerForKitKatOrLater(AlarmManager alarmManager, long timeInMillis, PendingIntent alarmPending) {
 		alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
-	}*/
+	}
 
 	/**
 	 * Register the alarm to android system with given time
@@ -62,25 +63,26 @@ public enum Manager {
 		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
 		intent.setData(Uri.parse(INTENT_DATA_PREFIX + alarm.getId()));
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, alarm.getId());
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, alarm.getLabel());
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, alarm.getVibrateEnable());
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, alarm.getRingtoneUri());
 		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarm.getId(), intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
-		/*if(Utils.isKitKatOrLater()) {
-				registerForKitKatOrLater(alarmManager, timeInMillis, alarmPending);
-			}
-			else {*/
-		alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
-		//}
+		if(Utils.isKitKatOrLater()) {
+			registerForKitKatOrLater(alarmManager, timeInMillis, alarmPending);
+		}
+		else {
+			alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
+		}
 	}
-	
+
 	/**
 	 * Register the alarm to android system
 	 */
 	public void register(Context context, Alarm alarm) {
 		register(context, alarm, Utils.getNextTimeMillis(alarm.getHour(), alarm.getMinute()));
 	}
-	
+
 	/**
 	 * Unregister the alarm to android system
 	 */
@@ -91,7 +93,7 @@ public enum Manager {
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
 		alarmManager.cancel(alarmPending);
 	}
-	
+
 	/**
 	 * Register the alarm to android system for the next time.
 	 */
@@ -151,13 +153,13 @@ public enum Manager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// TODO maybe use a AsyncTask ?
 	public void deleteAlarmFile(Context context, Alarm alarm) {
 		File file = new File(context.getFilesDir(), ALARM_DATA_FILE_PREFIX + alarm.getId());
 		file.delete(); // TODO take account the return value ?
 	}
-	
+
 	/**
 	 * @return null if can't get the valid Ringtone object
 	 */
@@ -222,6 +224,6 @@ public enum Manager {
 	}
 
 	public void onApplicationExit() {
-		// TODO Delete the deleted alarm files
+		
 	}
 }

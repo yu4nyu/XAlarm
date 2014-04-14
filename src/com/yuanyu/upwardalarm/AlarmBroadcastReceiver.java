@@ -10,6 +10,7 @@ import android.content.Intent;
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
 	public final static String EXTRA_ALARM_ID = "alarm_id"; // int extra
+	public final static String EXTRA_ALARM_LABEL = "alarm_label"; // String extra
 	public final static String EXTRA_IS_VIBRATE = "is_vibrate"; // boolean extra
 	public final static String EXTRA_RINGTONE_URI = "ringtone"; // String extra
 	
@@ -23,6 +24,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 		}
 		
 		Intent i = new Intent(context, AlarmGoOffActivity.class);
+		i.putExtra(EXTRA_ALARM_LABEL, intent.getStringExtra(EXTRA_ALARM_LABEL));
 		i.putExtra(EXTRA_IS_VIBRATE, intent.getBooleanExtra(EXTRA_IS_VIBRATE, false));
 		i.putExtra(EXTRA_RINGTONE_URI, intent.getStringExtra(EXTRA_RINGTONE_URI));
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

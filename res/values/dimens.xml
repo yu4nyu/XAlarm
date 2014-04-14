@@ -12,6 +12,8 @@
     <dimen name="time_text_size">52sp</dimen>
     <dimen name="button_width">100dp</dimen>
     
+    <dimen name="go_off_image_size">200dp</dimen>
+    
     <!-- not be used -->
     <dimen name="number_on_circle_inter_margin">-8dp</dimen>
     <dimen name="number_on_circle_parent_margin">32dp</dimen>

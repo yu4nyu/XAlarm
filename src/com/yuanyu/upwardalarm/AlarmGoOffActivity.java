@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,9 +18,11 @@ import android.content.Intent;
 
 public class AlarmGoOffActivity extends Activity {
 
+	private static final String ARGS_KEY_LABEL = "label";
 	private static final String ARGS_KEY_VIBRATE = "vibrate";
 	private static final String ARGS_KEY_RINGTONE_URI = "ringtone";
 	
+	private String mLabel;
 	private boolean mIsVibrate;
 	private String mRingtoneUri; // Absolute path of ringtone file, may be null
 	
@@ -26,37 +30,45 @@ public class AlarmGoOffActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD); // Disable home key TODO make it work
 		setContentView(R.layout.activity_test);
 		
+		// TODO savedInstanceState
+		
 		Intent intent = getIntent();
+		mLabel = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL);
 		mIsVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
 		mRingtoneUri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
 		
 		AlarmGoOffDialog dialog = new AlarmGoOffDialog();
 		Bundle args = new Bundle();
+		args.putString(ARGS_KEY_LABEL, mLabel);
 		args.putBoolean(ARGS_KEY_VIBRATE, mIsVibrate);
 		args.putString(ARGS_KEY_RINGTONE_URI, mRingtoneUri);
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "alarmGoOff");
 	}
-	
+
 	public static class AlarmGoOffDialog extends DialogFragment {
 		
 		private MovementTracker mTracker;
+		private String mLable;
+		private Ringtone mRingtone;
 		
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setCancelable(false);
+			
 			Bundle args = getArguments();
 			boolean isVibrate = args.getBoolean(ARGS_KEY_VIBRATE, false);
 			if(isVibrate) {
 				startVibration();
 			}
 			String ringtoneUri = args.getString(ARGS_KEY_RINGTONE_URI);
-			Ringtone ringtone = Utils.getRingtoneByUriString(getActivity(), ringtoneUri);
-			if(ringtone != null) {
-				startRingtone(ringtone);
+			mRingtone = Utils.getRingtoneByUriString(getActivity(), ringtoneUri);
+			if(mRingtone != null) {
+				startRingtone();
 			}
 			
 			mTracker = new MovementTracker(getActivity());
@@ -67,6 +79,11 @@ public class AlarmGoOffActivity extends Activity {
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			LayoutInflater inflater = LayoutInflater.from(getActivity());
 			View view = inflater.inflate(R.layout.dialog_alarm_go_off, null);
+			TextView labelView = (TextView) view.findViewById(R.id.dialog_alarm_go_off_label);
+			labelView.setText(mLable);
+			
+			// TODO show animation
+			
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setView(view);
 			return builder.create();
@@ -84,7 +101,7 @@ public class AlarmGoOffActivity extends Activity {
 			super.onDestroy();
 		}
 
-		private void startRingtone(Ringtone ringtone) {
+		private void startRingtone() {
 			// TODO
 		}
 		
