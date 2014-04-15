@@ -181,21 +181,23 @@ public enum Manager {
 		String[] files = dir.list();
 		List<Alarm> result = new ArrayList<Alarm>();
 
-		for(int i = files.length - 1; i >= 0; i--) {
-			try {
-				FileInputStream fis = context.openFileInput(files[i]);
-				ObjectInputStream is = new ObjectInputStream(fis);
-				Alarm alarm = (Alarm) is.readObject();
-				result.add(alarm);
-				is.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (StreamCorruptedException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		if(files != null) {
+			for(int i = files.length - 1; i >= 0; i--) {
+				try {
+					FileInputStream fis = context.openFileInput(files[i]);
+					ObjectInputStream is = new ObjectInputStream(fis);
+					Alarm alarm = (Alarm) is.readObject();
+					result.add(alarm);
+					is.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (StreamCorruptedException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 

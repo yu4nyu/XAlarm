@@ -18,10 +18,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		
 		int id = intent.getIntExtra(EXTRA_ALARM_ID, -1);
-		if(id >= 0) {
-			Alarm alarm = Manager.INSTANCE.getSavedAlarmById(context, id);
-			resetAlarmIfRepeat(context, alarm);
+		if(id < 0) {
+			return;
 		}
+		
+		Alarm alarm = Manager.INSTANCE.getSavedAlarmById(context, id);
+		if(alarm == null) {
+			return;
+		}
+		resetAlarmIfRepeat(context, alarm);
 		
 		Intent i = new Intent(context, AlarmGoOffActivity.class);
 		i.putExtra(EXTRA_ALARM_LABEL, intent.getStringExtra(EXTRA_ALARM_LABEL));
