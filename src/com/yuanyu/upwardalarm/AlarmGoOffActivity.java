@@ -1,5 +1,6 @@
 package com.yuanyu.upwardalarm;
 
+import com.yuanyu.upwardalarm.model.RealTimeProvider;
 import com.yuanyu.upwardalarm.model.Utils;
 import com.yuanyu.upwardalarm.sensor.MovementTracker;
 
@@ -52,7 +53,9 @@ public class AlarmGoOffActivity extends Activity {
 	public static class AlarmGoOffDialog extends DialogFragment {
 		
 		private MovementTracker mTracker;
-		private String mLable;
+		private RealTimeProvider mTimeProvider;
+		
+		private String mLabel;
 		private Ringtone mRingtone;
 		
 		@Override
@@ -61,15 +64,19 @@ public class AlarmGoOffActivity extends Activity {
 			setCancelable(false);
 			
 			Bundle args = getArguments();
+			
 			boolean isVibrate = args.getBoolean(ARGS_KEY_VIBRATE, false);
 			if(isVibrate) {
 				startVibration();
 			}
+			
 			String ringtoneUri = args.getString(ARGS_KEY_RINGTONE_URI);
 			mRingtone = Utils.getRingtoneByUriString(getActivity(), ringtoneUri);
 			if(mRingtone != null) {
 				startRingtone();
 			}
+			
+			mLabel = args.getString(ARGS_KEY_LABEL);
 			
 			mTracker = new MovementTracker(getActivity());
 			mTracker.start();
@@ -79,8 +86,16 @@ public class AlarmGoOffActivity extends Activity {
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			LayoutInflater inflater = LayoutInflater.from(getActivity());
 			View view = inflater.inflate(R.layout.dialog_alarm_go_off, null);
+			
 			TextView labelView = (TextView) view.findViewById(R.id.dialog_alarm_go_off_label);
-			labelView.setText(mLable);
+			if(mLabel!= null && !mLabel.isEmpty()) {
+				labelView.setText(mLabel);
+				labelView.setVisibility(View.VISIBLE);
+			}
+			
+			TextView timeText = (TextView) view.findViewById(R.id.dialog_alarm_go_off_time);
+			mTimeProvider = new RealTimeProvider();
+			mTimeProvider.start(timeText);
 			
 			// TODO show animation
 			
@@ -91,14 +106,19 @@ public class AlarmGoOffActivity extends Activity {
 		
 		@Override
 		public void onDestroyView() {
-			mTracker.stop();
+			release();
 			super.onDestroyView();
 		}
 
 		@Override
 		public void onDestroy() {
-			mTracker.stop();
+			release();
 			super.onDestroy();
+		}
+		
+		private void release() {
+			mTracker.stop();
+			mTimeProvider.stop();
 		}
 
 		private void startRingtone() {

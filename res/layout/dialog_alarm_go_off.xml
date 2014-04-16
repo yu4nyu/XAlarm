@@ -40,14 +40,16 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/item_side_margin_x_2"
         android:textColor="@color/gray"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/dialog_alarm_go_off_image"
-        android:layout_width="@dimen/go_off_image_size"
-        android:layout_height="@dimen/go_off_image_size"
+    <TextView
+        android:id="@+id/dialog_alarm_go_off_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/item_side_margin_x_2"
-        android:src="@drawable/ic_launcher" />
+        android:layout_marginBottom="@dimen/item_side_margin_x_2"
+        android:textSize="64sp" />
 
 </LinearLayout>

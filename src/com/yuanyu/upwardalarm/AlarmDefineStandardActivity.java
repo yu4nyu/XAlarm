@@ -74,6 +74,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mEnabledColor = getResources().getColor(R.color.black);
 		mDisabledColor = getResources().getColor(R.color.gray);
 		
+		// TODO savedInstanceState
+		
 		initViews();
 		setOnClickListeners();
 		
