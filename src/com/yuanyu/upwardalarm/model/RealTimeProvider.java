@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.widget.TextView;
 
 public class RealTimeProvider {
@@ -28,14 +27,11 @@ public class RealTimeProvider {
 		mHandler.removeCallbacksAndMessages(null);
 	}
 	
-	// TODO use SystemClock.uptimeMillis()
 	private void updateTime() {
-		Log.d("YY", "updateTime");
-		Log.d("YY", "start time system clock = " + SystemClock.uptimeMillis());
-		Log.d("YY", "System.currentTimeMillis() = " + System.currentTimeMillis());
 		if(mText == null) return;
 		
 		long time = System.currentTimeMillis();
+		long uptime = SystemClock.uptimeMillis();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(time);
 		calendar.set(Calendar.MILLISECOND, 0);
@@ -47,9 +43,8 @@ public class RealTimeProvider {
 		String result = addZeroIfLessThanTen(hour) + ":" + addZeroIfLessThanTen(minute) + ":" + addZeroIfLessThanTen(second);
 		mText.setText(result);
 		
-		Log.d("YY", "set time = " + calendar.getTimeInMillis());
-		boolean r = mHandler.postAtTime(mRunnable, calendar.getTimeInMillis() + 1000);
-		Log.d("YY", "" + r);
+		long nextTime = uptime / 1000 * 1000; // Set the last 3 numbers to 0
+		mHandler.postAtTime(mRunnable, nextTime);
 	}
 	
 	private String addZeroIfLessThanTen(int number) {

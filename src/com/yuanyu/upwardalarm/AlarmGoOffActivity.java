@@ -6,6 +6,7 @@ import com.yuanyu.upwardalarm.sensor.MovementTracker;
 
 import android.media.Ringtone;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -73,7 +74,7 @@ public class AlarmGoOffActivity extends Activity {
 			String ringtoneUri = args.getString(ARGS_KEY_RINGTONE_URI);
 			mRingtone = Utils.getRingtoneByUriString(getActivity(), ringtoneUri);
 			if(mRingtone != null) {
-				startRingtone();
+				startRingtone(mRingtone);
 			}
 			
 			mLabel = args.getString(ARGS_KEY_LABEL);
@@ -121,20 +122,39 @@ public class AlarmGoOffActivity extends Activity {
 			mTimeProvider.stop();
 		}
 
-		private void startRingtone() {
-			// TODO
+		private void startRingtone(Ringtone ringtone) {
+			if(ringtone != null) {
+				ringtone.play();
+			}
 		}
 		
 		private void startVibration() {
-			// TODO
+			Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
+			
+			int dot = 200;      // Length of a Morse Code "dot" in milliseconds
+			int dash = 500;     // Length of a Morse Code "dash" in milliseconds
+			int short_gap = 200;    // Length of Gap Between dots/dashes
+			int medium_gap = 500;   // Length of Gap Between Letters
+			int long_gap = 1000;    // Length of Gap Between Words
+			long[] pattern = {
+				    0,  // Start immediately
+				    dash, short_gap, dot, short_gap, dash, short_gap, dash, // Y
+				    medium_gap,
+				    dash, short_gap, dot, short_gap, dash, short_gap, dash, // Y
+				    long_gap
+				};
+			vibrator.vibrate(pattern, 0);
 		}
 		
-		private void stopRingtone() {
-			// TODO
+		private void stopRingtone(Ringtone ringtone) {
+			if(ringtone != null) {
+				ringtone.stop();
+			}
 		}
 		
 		private void stopVibration() {
-			// TODO
+			Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
+			vibrator.cancel();
 		}
 	}
 }

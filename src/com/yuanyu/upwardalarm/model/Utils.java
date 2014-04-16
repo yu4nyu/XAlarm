@@ -241,7 +241,7 @@ public class Utils {
 		}
 		
 		if(hour == 0 && minute == 0) {
-			result += " " + context.getString(R.string.less_than_one_minute);
+			result += context.getString(R.string.less_than_one_minute);
 		}
 		
 		return result;
