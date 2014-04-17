@@ -305,8 +305,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			}
 			else {
 				mRepetitionLayout.setVisibility(View.GONE);
-				mSaturday.setVisibility(View.GONE);
-				mSunday.setVisibility(View.GONE);
+				mSaturday.setVisibility(View.INVISIBLE);
+				mSunday.setVisibility(View.INVISIBLE);
 			}
 			break;
 		case R.id.activity_alarm_define_vibrate:
