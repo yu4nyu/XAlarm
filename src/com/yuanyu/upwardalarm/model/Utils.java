@@ -15,7 +15,7 @@ import android.text.Html;
 import android.text.Spanned;
 
 public class Utils {
-
+	
 	/**
 	 * Determine if today's given hour and minute has passed or not
 	 * @return

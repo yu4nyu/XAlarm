@@ -41,10 +41,10 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	private final List<Alarm> mData;
 	private final List<ViewHolder> mItems;
 	private ViewGroup mContainer;
-	
+
 	ActionMode mActionMode = null;
 	SparseBooleanArray mSelectedItems;
-	
+
 	private FrameLayout mTouchedView;
 	private final GestureDetector mGestureDetector;
 	GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
@@ -54,7 +54,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			// TODO scroll to delete
 			return super.onScroll(e1, e2, distanceX, distanceY);
 		}
-		
+
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
 			if(mTouchedView != null) {
@@ -104,7 +104,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		mContext = context;
 		mData = data;
 		mItems = new ArrayList<ViewHolder>();
-		
+
 		mGestureDetector = new GestureDetector(context, mGestureListener);
 		mSelectedItems = new SparseBooleanArray();
 	}
@@ -124,6 +124,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	}
 
 	/**
+	 * Update the alarm and keep the time order automatically
 	 * @param position
 	 * @return true if updated, false means error
 	 */
@@ -131,16 +132,53 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		if(position < 0 || position >= mItems.size()) {
 			return false;
 		}
-		mData.remove(position);
-		mData.add(position, alarm);
+		// Update view
 		ViewHolder holder = mItems.get(position);
 		updateView(holder, position);
+
+		int newPosition = 0;
+		int minutes = alarm.getHour() * 60 + alarm.getMinute();
+		for(; newPosition < mData.size(); newPosition++) {
+			Alarm a = mData.get(newPosition);
+			if(newPosition != position && minutes <= a.getHour() * 60 + a.getMinute()) {
+				break;
+			}
+		}
+
+		// Update order
+		mData.remove(position);
+		if(newPosition == position) { // Order has not been changed
+			mData.add(position, alarm);
+		}
+		else {
+			if(newPosition > position) {
+				newPosition = newPosition - 1; // The content of list will change because we will delete the element first
+			}
+			mData.add(newPosition, alarm);
+			mItems.add(newPosition, mItems.remove(position));
+			View view = mContainer.getChildAt(position);
+			mContainer.removeViewAt(position);
+			mContainer.addView(view, newPosition);
+		}
 
 		return true;
 	}
 
 	/**
-	 * Add alarm at the front of list
+	 * Add alarm at the the given position of list
+	 */
+	private void add(Alarm alarm, int position) {
+		mData.add(position, alarm);
+		ViewHolder holder = createView(position);
+		mItems.add(position, holder);
+		updateView(holder, position);
+		mContainer.addView(holder.layout, position);
+		holder.layout.setOnTouchListener(this);
+		updateIndexTags();
+	}
+
+	/**
+	 * Add alarm to the list and keep the time order automatically
 	 */
 	public void add(Alarm alarm) {
 		mData.add(0, alarm);
@@ -150,6 +188,16 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		mContainer.addView(holder.layout, 0);
 		holder.layout.setOnTouchListener(this);
 		updateIndexTags();
+
+		int position = 0;
+		int minutes = alarm.getHour() * 60 + alarm.getMinute();
+		for(; position < mData.size(); position++) {
+			Alarm a = mData.get(position);
+			if(minutes <= a.getHour() * 60 + a.getMinute()) {
+				break;
+			}
+		}
+		add(alarm, position);
 	}
 
 	public void remove(int position) {
@@ -208,7 +256,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		holder.time.setText(Utils.getTimeText(alarm.getHour(), alarm.getMinute()));
 		holder.enable.setChecked(alarm.getEnable());
 	}
-	
+
 	private void updateIndexTags() {
 		for(int i = 0; i < mItems.size(); i++) {
 			mItems.get(i).layout.setTag(i);
@@ -239,7 +287,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		mGestureDetector.onTouchEvent(event);
 		return true;
 	}
-	
+
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		int position = (Integer) buttonView.getTag();
@@ -257,14 +305,14 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			Manager.INSTANCE.unregister(mContext, alarm.getId());
 		}
 	}
-	
+
 	private void editMode(int position) {
 		Intent intent = new Intent(mContext, AlarmDefineStandardActivity.class);
 		intent.putExtra(AlarmDefineStandardActivity.EXTRA_ALARM, mData.get(position));
 		intent.putExtra(AlarmDefineStandardActivity.EXTRA_POSITION, position);
 		((MainActivity)mContext).startActivityForResult(intent, MainActivity.ACTIVITY_ALARM_EDIT);
 	}
-	
+
 	private void deleteMode(int clickedPosition) {
 		selectItem(mTouchedView);
 		mSelectedItems.clear();
@@ -272,7 +320,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			mSelectedItems.put(i, false);
 		}
 		mSelectedItems.put(clickedPosition, true);
-		
+
 		((MainActivity)mContext).startActionMode(new ActionMode.Callback() {
 			@Override
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -293,29 +341,29 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 				builder.setMessage(R.string.delete_dialog_message)
-					.setNegativeButton(android.R.string.cancel, null)
-					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							deleteSelectedItems();
-						}
-					});
+				.setNegativeButton(android.R.string.cancel, null)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						deleteSelectedItems();
+					}
+				});
 				builder.show();
 				return false;
 			}
 		});
-		
+
 		updateActionModeTitle();
 	}
-	
+
 	private void selectItem(FrameLayout item) {
 		item.setForeground(mContext.getResources().getDrawable(R.drawable.item_highlight_foreground));
 	}
-	
+
 	private void deselectedItem(FrameLayout item) {
 		item.setForeground(null);
 	}
-	
+
 	private void reverseItemSelection(FrameLayout item) {
 		int position = (Integer) item.getTag();
 		boolean checked = mSelectedItems.get(position);
@@ -326,10 +374,10 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			selectItem(item);
 		}
 		mSelectedItems.put(position, !checked);
-		
+
 		updateActionModeTitle();
 	}
-	
+
 	private void deselecteAll() {
 		int length = mData.size();
 		for(int i = 0; i < length; i++) {
@@ -338,7 +386,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			}
 		}
 	}
-	
+
 	/**
 	 * Indicate the number of selected item.
 	 * If count == 0, finish the action mode automatically.
@@ -359,14 +407,14 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			mActionMode.finish();
 		}
 	}
-	
+
 	private void deleteSelectedItems() {
 		for(int i = mData.size() - 1; i >= 0; i--) {
 			if(mSelectedItems.get(i)) {
 				Alarm alarm = mData.get(i);
 				Manager.INSTANCE.deleteAlarmFile(mContext, alarm);
 				Manager.INSTANCE.unregister(mContext, alarm.getId());
-				
+
 				// Must not call remove(int) here, because it calls updateIndexTags().
 				mData.remove(i);
 				mItems.remove(i);

@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
@@ -36,6 +38,15 @@ public enum Manager {
 
 	private final static String ALARM_DATA_FILE_PREFIX = "alarm_data_";
 
+	private class AlarmComparator implements Comparator<Alarm> {
+		@Override
+		public int compare(Alarm lhs, Alarm rhs) {
+			int o1 = lhs.getHour() * 60 + lhs.getMinute();
+            int o2 = rhs.getHour() * 60 + rhs.getMinute();
+            return o1 < o2 ? -1 : (o1 == o2 ? 0 : 1);
+		}
+	}
+	
 	int getUniqueId(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
 		int result = sp.getInt(PREFS_UNIQUE_ID_KEY, -1);
@@ -200,7 +211,8 @@ public enum Manager {
 				}
 			}
 		}
-
+		
+		Collections.sort(result, new AlarmComparator());
 		return result;
 	}
 
