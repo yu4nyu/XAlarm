@@ -26,7 +26,7 @@
     <string name="selected">Selected</string>
     <string name="delete_dialog_message">Delete selected alarm ?</string>
     
-    <string name="time_before_go_off_text">Alarm will go off after</string>
+    <string name="time_before_go_off_text">Alarm set for %s from now</string>
     <string name="hour">hour</string>
     <string name="minute">minute</string>
     <string name="less_than_one_minute">less than 1 minute</string>

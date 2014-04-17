@@ -216,7 +216,7 @@ public class Utils {
 	}
 	
 	public static String getTextTimeBeforeGoOff(Context context, Alarm alarm) {
-		String result = context.getString(R.string.time_before_go_off_text) + " ";
+		String format = context.getString(R.string.time_before_go_off_text) + " ";
 		long time = getGoOffTimeMillis(alarm);
 		if(time == 0) {
 			return "";
@@ -226,25 +226,26 @@ public class Utils {
 		int hour = (int) minuteCount / 60;
 		int minute = (int) minuteCount % 60;
 		
+		String timeText = "";
 		if(hour >= 1) {
-			result += hour + " " + context.getString(R.string.hour);
+			timeText += hour + " " + context.getString(R.string.hour);
 			if(hour > 1) {
-				result += "s";
+				timeText += "s";
 			}
 		}
 		
 		if(minute >= 1) {
-			result += " " + minute + " " + context.getString(R.string.minute);
+			timeText += " " + minute + " " + context.getString(R.string.minute);
 			if(minute > 1) {
-				result += "s";
+				timeText += "s";
 			}
 		}
 		
 		if(hour == 0 && minute == 0) {
-			result += context.getString(R.string.less_than_one_minute);
+			timeText += context.getString(R.string.less_than_one_minute);
 		}
 		
-		return result;
+		return String.format(format, timeText);
 	}
 
 	/**

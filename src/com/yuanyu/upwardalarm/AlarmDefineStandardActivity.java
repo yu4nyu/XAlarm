@@ -239,6 +239,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
+		Uri defaultUri = Uri.parse(mRingtoneUri);
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, defaultUri);
 		startActivityForResult(intent, ACTIVITY_RINGTONE_PICKER);
 	}
 	

@@ -7,6 +7,7 @@ import com.yuanyu.upwardalarm.sensor.MovementTracker;
 import android.media.Ringtone;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -32,7 +33,9 @@ public class AlarmGoOffActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD); // Disable home key TODO make it work
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.activity_test);
 		
 		// TODO savedInstanceState
@@ -50,7 +53,12 @@ public class AlarmGoOffActivity extends Activity {
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "alarmGoOff");
 	}
-
+	
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		return true; // Disable all keys, but does not work for home key and power key
+	}
+	
 	public static class AlarmGoOffDialog extends DialogFragment {
 		
 		private MovementTracker mTracker;
