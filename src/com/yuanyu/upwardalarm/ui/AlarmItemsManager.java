@@ -245,6 +245,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		int position = (Integer) buttonView.getTag();
 		Alarm alarm = mData.get(position);
 		if(isChecked) {
+			alarm.setEnabled(true);
 			Manager.INSTANCE.register(mContext, alarm);
 			String message = Utils.getTextTimeBeforeGoOff(mContext, alarm);
 			if(!message.isEmpty()) {
@@ -252,6 +253,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			}
 		}
 		else {
+			alarm.setEnabled(false);
 			Manager.INSTANCE.unregister(mContext, alarm.getId());
 		}
 	}

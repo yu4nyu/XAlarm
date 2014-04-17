@@ -60,6 +60,10 @@ public class Alarm implements Serializable {
 		builder.mAlarm = new Alarm(alarm);
 		return builder;
 	}
+	
+	public void setEnabled(boolean enabled) {
+		mEnable = enabled;
+	}
 
 	public int getId() {
 		return mId;
