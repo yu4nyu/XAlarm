@@ -112,7 +112,7 @@
                         android:checked="true"
                         android:textOff="@string/saturday"
                         android:textOn="@string/saturday"
-                        android:visibility="invisible" />
+                        android:visibility="gone" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -129,7 +129,7 @@
                         android:checked="true"
                         android:textOff="@string/sunday"
                         android:textOn="@string/sunday"
-                        android:visibility="invisible" />
+                        android:visibility="gone" />
                 </FrameLayout>
 
                 <FrameLayout
