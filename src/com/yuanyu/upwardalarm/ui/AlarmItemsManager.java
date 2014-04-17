@@ -181,14 +181,6 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	 * Add alarm to the list and keep the time order automatically
 	 */
 	public void add(Alarm alarm) {
-		mData.add(0, alarm);
-		ViewHolder holder = createView(0);
-		mItems.add(0, holder);
-		updateView(holder, 0);
-		mContainer.addView(holder.layout, 0);
-		holder.layout.setOnTouchListener(this);
-		updateIndexTags();
-
 		int position = 0;
 		int minutes = alarm.getHour() * 60 + alarm.getMinute();
 		for(; position < mData.size(); position++) {
