@@ -2,6 +2,7 @@ package com.yuanyu.upwardalarm;
 
 import com.yuanyu.upwardalarm.model.RealTimeProvider;
 import com.yuanyu.upwardalarm.model.Utils;
+import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
 import com.yuanyu.upwardalarm.sensor.MovementTracker;
 
 import android.media.Ringtone;
@@ -59,7 +60,7 @@ public class AlarmGoOffActivity extends Activity {
 		return true; // Disable all keys, but does not work for home key and power key
 	}
 	
-	public static class AlarmGoOffDialog extends DialogFragment {
+	public static class AlarmGoOffDialog extends DialogFragment implements MovementAnalysor.MovementListener {
 		
 		private MovementTracker mTracker;
 		private RealTimeProvider mTimeProvider;
@@ -89,6 +90,7 @@ public class AlarmGoOffActivity extends Activity {
 			
 			mTracker = new MovementTracker(getActivity());
 			mTracker.start();
+			MovementAnalysor.INSTANCE.setMovementListener(this);
 		}
 
 		@Override
@@ -163,6 +165,15 @@ public class AlarmGoOffActivity extends Activity {
 		private void stopVibration() {
 			Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
 			vibrator.cancel();
+		}
+
+		@Override
+		public void onUpwardDetected() {
+			MovementAnalysor.INSTANCE.removeMovementListener();
+			stopRingtone(mRingtone);
+			stopVibration();
+			dismiss();
+			getActivity().finish();
 		}
 	}
 }

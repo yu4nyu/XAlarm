@@ -88,11 +88,4 @@ public class MainActivity extends Activity {
 		}
 		Manager.INSTANCE.saveAlarm(this, alarm);
 	}
-	
-	/**
-	 * Unregister the alarm from android system
-	 */
-	private void unregisterAlarm(Alarm alarm) {
-		Manager.INSTANCE.unregister(this, alarm.getId());
-	}
 }

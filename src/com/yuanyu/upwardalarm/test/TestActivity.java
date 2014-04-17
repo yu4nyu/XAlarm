@@ -9,7 +9,6 @@ import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -36,11 +35,6 @@ public class TestActivity extends Activity {
 
 		AlarmGoOffDialog dialog = new AlarmGoOffDialog();
 		dialog.show(getFragmentManager(), "alarmGoOff");
-	}
-
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent event) {
-		return true;
 	}
 
 	public static class AlarmGoOffDialog extends DialogFragment {

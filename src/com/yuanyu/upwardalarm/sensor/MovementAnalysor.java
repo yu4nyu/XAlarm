@@ -38,6 +38,7 @@ public enum MovementAnalysor {
 				mSuccessiveCount = 0;
 			}
 		}
+		samples.clear();
 	}
 	
 	private void notifyMovementListener() {

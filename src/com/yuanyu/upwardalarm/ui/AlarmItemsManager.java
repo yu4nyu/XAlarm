@@ -141,11 +141,13 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		int minutes = alarm.getHour() * 60 + alarm.getMinute();
 		for(; newPosition < mData.size(); newPosition++) {
 			Alarm a = mData.get(newPosition);
-			if(newPosition != position && minutes <= a.getHour() * 60 + a.getMinute()) {
+			if(minutes <= a.getHour() * 60 + a.getMinute()) {
 				break;
 			}
 		}
 
+		Log.d("YY", "position = " + position);
+		Log.d("YY", "new position = " + newPosition);
 		if(newPosition == position) { // Order has not been changed
 			mData.add(position, alarm);
 			

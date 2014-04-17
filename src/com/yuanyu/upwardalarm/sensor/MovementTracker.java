@@ -13,6 +13,8 @@ import android.hardware.SensorManager;
 public class MovementTracker implements SensorEventListener {
 
 	private final static int TRACK_RATE = SensorManager.SENSOR_DELAY_NORMAL; // TODO verify this
+	
+	private final static int THRESHOLD_NUMBER_TO_ANALYSE = 20;
 
 	private SensorManager mSensorManager;
 	private Sensor mAcceleroMeter;
@@ -61,5 +63,9 @@ public class MovementTracker implements SensorEventListener {
 		sample.y = event.values[1];
 		sample.z = event.values[2];
 		mData.add(sample);
+		
+		if(mData.size() >= THRESHOLD_NUMBER_TO_ANALYSE) {
+			MovementAnalysor.INSTANCE.analyse(mData);
+		}
 	}
 }
