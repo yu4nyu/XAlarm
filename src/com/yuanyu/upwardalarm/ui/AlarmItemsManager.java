@@ -309,6 +309,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			alarm.setEnabled(false);
 			Manager.INSTANCE.unregister(mContext, alarm.getId());
 		}
+		Manager.INSTANCE.saveAlarm(mContext, alarm);
 	}
 
 	private void editMode(int position) {
