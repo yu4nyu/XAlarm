@@ -55,6 +55,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	private ToggleButton mSaturday;
 	
 	private Button mDoneBtn;
+	private Button mCancelBtn;
 	
 	private String mRingtoneUri = "";
 	
@@ -121,12 +122,14 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mSaturday = (ToggleButton) findViewById(R.id.activity_alarm_define_saturday_toggle);
 		
 		mDoneBtn = (Button) findViewById(R.id.activity_alarm_define_done_btn);
+		mCancelBtn = (Button) findViewById(R.id.activity_alarm_define_cancel_btn);
 	}
 	
 	private void setOnClickListeners() {
 		mLabelLayout.setOnClickListener(this);
 		mRingtoneLayout.setOnClickListener(this);
 		mDoneBtn.setOnClickListener(this);
+		mCancelBtn.setOnClickListener(this);
 		
 		mRepeatCheck.setOnCheckedChangeListener(this);
 		mVibrateCheck.setOnCheckedChangeListener(this);
@@ -193,6 +196,9 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			break;
 		case R.id.activity_alarm_define_done_btn:
 			done();
+			break;
+		case R.id.activity_alarm_define_cancel_btn:
+			finish();
 			break;
 		}
 	}
