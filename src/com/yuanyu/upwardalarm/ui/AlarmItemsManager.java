@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.GestureDetector;
@@ -132,10 +133,10 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		if(position < 0 || position >= mItems.size()) {
 			return false;
 		}
-		// Update view
-		ViewHolder holder = mItems.get(position);
-		updateView(holder, position);
 
+		// Remove old alarm
+		mData.remove(position);
+		
 		int newPosition = 0;
 		int minutes = alarm.getHour() * 60 + alarm.getMinute();
 		for(; newPosition < mData.size(); newPosition++) {
@@ -145,20 +146,30 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			}
 		}
 
-		// Update order
-		mData.remove(position);
 		if(newPosition == position) { // Order has not been changed
 			mData.add(position, alarm);
+			
+			// Update view
+			ViewHolder holder = mItems.get(position);
+			updateView(holder, position);
 		}
 		else {
 			if(newPosition > position) {
-				newPosition = newPosition - 1; // The content of list will change because we will delete the element first
+				mData.add(newPosition, alarm);
+				// Update Views
+				for(int i = position; i <= newPosition; i++) {
+					ViewHolder holder = mItems.get(i);
+					updateView(holder, i);
+				}
 			}
-			mData.add(newPosition, alarm);
-			mItems.add(newPosition, mItems.remove(position));
-			View view = mContainer.getChildAt(position);
-			mContainer.removeViewAt(position);
-			mContainer.addView(view, newPosition);
+			else {
+				mData.add(newPosition, alarm);
+				// Update Views
+				for(int i = newPosition; i <= position; i++) {
+					ViewHolder holder = mItems.get(i);
+					updateView(holder, i);
+				}
+			}
 		}
 
 		return true;
