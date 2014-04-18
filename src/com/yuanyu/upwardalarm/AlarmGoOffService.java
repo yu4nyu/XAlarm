@@ -1,5 +1,6 @@
 package com.yuanyu.upwardalarm;
 
+import com.yuanyu.upwardalarm.model.AlarmGuardian;
 import com.yuanyu.upwardalarm.model.RealTimeProvider;
 import com.yuanyu.upwardalarm.model.Utils;
 import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
@@ -10,7 +11,6 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.util.Log;
 
 public class AlarmGoOffService extends Service implements MovementAnalysor.MovementListener {
 
@@ -36,16 +36,29 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
-
-		boolean isVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
-		Log.d("YY", "isVibrate = " + isVibrate);
+		
+		boolean isVibrate = false;
+		String uri = null;
+		if(intent != null) { // The service was killed but restarted by the system
+			isVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
+			uri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
+			
+			AlarmGuardian.markGotOff(this);
+			AlarmGuardian.saveIsVibrate(this, isVibrate);
+			AlarmGuardian.saveRingtoneUri(this, uri);
+		}
+		else {
+			if(AlarmGuardian.isGotOff(this)) {
+				isVibrate = AlarmGuardian.getIsVibrate(this);
+				uri = AlarmGuardian.getRingtoneUri(this);
+			}
+		}
+		
 		if(isVibrate) {
 			startVibration();
 		}
 
-		String uri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
 		mRingtone = Utils.getRingtoneByUriString(this, uri);
-		Log.d("YY", "ringtone = " + mRingtone);
 		if(mRingtone != null) {
 			startRingtone();
 		}
@@ -100,5 +113,6 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		stopRingtone();
 		stopVibration();
 		stopSelf();
+		AlarmGuardian.markStopped(this);
 	}
 }

@@ -32,8 +32,8 @@ public enum Manager {
 
 	INSTANCE;
 
+	final static String PREFS_KEY = "prefs";
 	private final static String INTENT_DATA_PREFIX = "com.yuanyu.upwardalarm:";
-	private final static String PREFS_KEY = "prefs";
 	private final static String PREFS_UNIQUE_ID_KEY = "unique_id";
 
 	private final static String ALARM_DATA_FILE_PREFIX = "alarm_data_";
