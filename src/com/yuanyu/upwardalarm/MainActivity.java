@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.yuanyu.upwardalarm.model.Alarm;
 import com.yuanyu.upwardalarm.model.Manager;
+import com.yuanyu.upwardalarm.model.Utils;
 import com.yuanyu.upwardalarm.test.TestActivity;
 import com.yuanyu.upwardalarm.ui.AlarmItemsManager;
 
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -73,6 +75,13 @@ public class MainActivity extends Activity {
 				int position = data.getIntExtra(AlarmDefineStandardActivity.EXTRA_POSITION, -1);
 				if(mManager.update(position, alarm)) { // Update succeeded
 					registerAlarm(alarm); // The existed alarm will be replaced
+					
+					if(alarm.getEnable()) {
+						String message = Utils.getTextTimeBeforeGoOff(this, alarm);
+						if(!message.isEmpty()) {
+							Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+						}
+					}
 				}
 			}
 			break;
