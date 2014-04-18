@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.GestureDetector;
@@ -146,8 +145,6 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			}
 		}
 
-		Log.d("YY", "position = " + position);
-		Log.d("YY", "new position = " + newPosition);
 		if(newPosition == position) { // Order has not been changed
 			mData.add(position, alarm);
 			
@@ -265,6 +262,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	private void updateIndexTags() {
 		for(int i = 0; i < mItems.size(); i++) {
 			mItems.get(i).layout.setTag(i);
+			mItems.get(i).enable.setTag(i);
 		}		
 	}
 
@@ -297,6 +295,9 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		int position = (Integer) buttonView.getTag();
 		Alarm alarm = mData.get(position);
+		if(isChecked == alarm.getEnable()) {
+			return; // State has not been changed
+		}
 		if(isChecked) {
 			alarm.setEnabled(true);
 			Manager.INSTANCE.register(mContext, alarm);
