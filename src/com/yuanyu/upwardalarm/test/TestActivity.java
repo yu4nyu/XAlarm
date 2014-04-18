@@ -3,7 +3,6 @@ package com.yuanyu.upwardalarm.test;
 import java.util.List;
 
 import com.yuanyu.upwardalarm.R;
-import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
 import com.yuanyu.upwardalarm.sensor.MovementTracker;
 import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
@@ -48,7 +47,6 @@ public class TestActivity extends Activity {
 
 			mTracker = new MovementTracker(getActivity());
 			mTracker.start();
-			MovementAnalysor.INSTANCE.setMovementListener(null);
 		}
 
 		@Override

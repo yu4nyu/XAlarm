@@ -36,6 +36,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent" />
         <receiver android:name="com.yuanyu.upwardalarm.AlarmBroadcastReceiver" />
+        <service android:name="com.yuanyu.upwardalarm.AlarmGoOffService" />e
         
         <activity android:name="com.yuanyu.upwardalarm.test.TestActivity"
             android:screenOrientation="portrait" />

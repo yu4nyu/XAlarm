@@ -1,5 +1,6 @@
 package com.yuanyu.upwardalarm.sensor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
@@ -18,14 +19,14 @@ public enum MovementAnalysor {
 	
 	private int mSuccessiveCount = 0;
 	
-	private MovementListener mMovementListener;
+	private List<MovementListener> mMovementListeners = new ArrayList<MovementListener>();
 	
-	public void setMovementListener(MovementListener listener) {
-		mMovementListener = listener;
+	public void addMovementListener(MovementListener listener) {
+		mMovementListeners.add(listener);
 	}
 	
-	public void removeMovementListener() {
-		mMovementListener = null;
+	public void removeMovementListener(MovementListener listener) {
+		mMovementListeners.remove(listener);
 	}
 	
 	void analyse(List<Sample> samples) {
@@ -42,8 +43,9 @@ public enum MovementAnalysor {
 	}
 	
 	private void notifyMovementListener() {
-		if(mMovementListener != null) {
-			mMovementListener.onUpwardDetected();
+		for(MovementListener listener : mMovementListeners) {
+			listener.onUpwardDetected();
 		}
+		mMovementListeners.clear(); // TODO do not clear here if want to notify several times
 	}
 }

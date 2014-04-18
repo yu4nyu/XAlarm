@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.util.Log;
 
 public class AlarmGoOffService extends Service implements MovementAnalysor.MovementListener {
 
@@ -24,7 +25,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 
 		mTracker = new MovementTracker(this);
 		mTracker.start();
-		MovementAnalysor.INSTANCE.setMovementListener(this);
+		MovementAnalysor.INSTANCE.addMovementListener(this);
 	}
 
 	@Override
@@ -37,12 +38,14 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		super.onStartCommand(intent, flags, startId);
 
 		boolean isVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
+		Log.d("YY", "isVibrate = " + isVibrate);
 		if(isVibrate) {
 			startVibration();
 		}
 
 		String uri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
 		mRingtone = Utils.getRingtoneByUriString(this, uri);
+		Log.d("YY", "ringtone = " + mRingtone);
 		if(mRingtone != null) {
 			startRingtone();
 		}
@@ -94,7 +97,6 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 
 	@Override
 	public void onUpwardDetected() {
-		MovementAnalysor.INSTANCE.removeMovementListener();
 		stopRingtone();
 		stopVibration();
 		stopSelf();

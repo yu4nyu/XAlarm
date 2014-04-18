@@ -1,6 +1,7 @@
 package com.yuanyu.upwardalarm;
 
 import com.yuanyu.upwardalarm.model.RealTimeProvider;
+import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -18,8 +19,12 @@ import android.content.Intent;
 public class AlarmGoOffActivity extends Activity {
 
 	private static final String ARGS_KEY_LABEL = "label";
+	private static final String ARGS_KEY_VIBRATE = "vibrate";
+	private static final String ARGS_KEY_RINGTONE_URI = "ringtone";
 	
 	private String mLabel;
+	private boolean mVibrate;
+	private String mRingtoneUri;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +39,14 @@ public class AlarmGoOffActivity extends Activity {
 		
 		Intent intent = getIntent();
 		mLabel = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL);
+		mVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
+		mRingtoneUri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
 		
 		AlarmGoOffDialog dialog = new AlarmGoOffDialog();
 		Bundle args = new Bundle();
 		args.putString(ARGS_KEY_LABEL, mLabel);
+		args.putBoolean(ARGS_KEY_VIBRATE, mVibrate);
+		args.putString(ARGS_KEY_RINGTONE_URI, mRingtoneUri);
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "alarmGoOff");
 	}
@@ -47,10 +56,12 @@ public class AlarmGoOffActivity extends Activity {
 		return true; // Disable all keys, but does not work for home key and power key
 	}
 	
-	public static class AlarmGoOffDialog extends DialogFragment {
+	public static class AlarmGoOffDialog extends DialogFragment implements MovementAnalysor.MovementListener {
 
 		private RealTimeProvider mTimeProvider;
 		private String mLabel;
+		private boolean mIsVibrate;
+		private String mRingtoneUri;
 		
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,10 @@ public class AlarmGoOffActivity extends Activity {
 			
 			Bundle args = getArguments();
 			mLabel = args.getString(ARGS_KEY_LABEL);
+			mIsVibrate = args.getBoolean(ARGS_KEY_VIBRATE);
+			mRingtoneUri = args.getString(ARGS_KEY_RINGTONE_URI);
+			
+			MovementAnalysor.INSTANCE.addMovementListener(this);
 		}
 
 		@Override
@@ -80,7 +95,23 @@ public class AlarmGoOffActivity extends Activity {
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setView(view);
+			
+			startService(); // Start the ringtone and vibrate service
+			
 			return builder.create();
+		}
+
+		@Override
+		public void onUpwardDetected() {
+			dismiss();
+			getActivity().finish();
+		}
+		
+		private void startService() {
+			Intent i = new Intent(getActivity(), AlarmGoOffService.class);
+			i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, mIsVibrate);
+			i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, mRingtoneUri);
+			getActivity().startService(i);
 		}
 	}
 }
