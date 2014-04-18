@@ -81,10 +81,15 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		setOnClickListeners();
 		
 		Object extra = getIntent().getSerializableExtra(EXTRA_ALARM);
-		if(extra != null) {
+		if(extra != null) { // Edit
+			setTitle(R.string.title_edit_alarm);
+			
 			mAlarm = (Alarm)extra;
 			initStatus(mAlarm);
 			mPosition =  getIntent().getIntExtra(EXTRA_POSITION, -1);
+		}
+		else { // Add a new alarm
+			setTitle(R.string.title_add_alarm);
 		}
 	}
 

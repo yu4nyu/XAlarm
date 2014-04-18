@@ -6,6 +6,9 @@
     <string name="action_delete">Delete</string>
 
     <!-- Alarm Define Activity -->
+    <string name="title_add_alarm">Add alarm</string>
+    <string name="title_edit_alarm">Edit alarm</string>
+    
     <string name="sunday">Sun</string>
     <string name="monday">Mon</string>
     <string name="tuesday">Tue</string>
