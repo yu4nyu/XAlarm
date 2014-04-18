@@ -28,12 +28,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 		}
 		resetAlarmIfRepeat(context, alarm);
 		
-		Intent i = new Intent(context, AlarmGoOffActivity.class);
-		i.putExtra(EXTRA_ALARM_LABEL, intent.getStringExtra(EXTRA_ALARM_LABEL));
-		i.putExtra(EXTRA_IS_VIBRATE, intent.getBooleanExtra(EXTRA_IS_VIBRATE, false));
-		i.putExtra(EXTRA_RINGTONE_URI, intent.getStringExtra(EXTRA_RINGTONE_URI));
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(i);
+		Intent activityIntent = new Intent(context, AlarmGoOffActivity.class);
+		activityIntent.putExtra(EXTRA_ALARM_LABEL, intent.getStringExtra(EXTRA_ALARM_LABEL));
+		activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(activityIntent);
+		
+		Intent serviceIntent = new Intent(context, AlarmGoOffService.class);
+		serviceIntent.putExtra(EXTRA_IS_VIBRATE, intent.getBooleanExtra(EXTRA_IS_VIBRATE, false));
+		serviceIntent.putExtra(EXTRA_RINGTONE_URI, intent.getStringExtra(EXTRA_RINGTONE_URI));
+		context.startService(serviceIntent);
 	}
 	
 	private void resetAlarmIfRepeat(Context context, Alarm alarm) {
