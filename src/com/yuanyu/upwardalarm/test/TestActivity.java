@@ -8,6 +8,7 @@ import com.yuanyu.upwardalarm.sensor.MovementTracker;
 import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -31,8 +32,8 @@ public class TestActivity extends Activity {
 		Intent i = new Intent();
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, "TESTING ALARM !!!");
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, true);
-		String uri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM).toString();
-		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, uri);
+		Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, uri != null ? uri.toString() : "");
 	}
 
 	@Override
