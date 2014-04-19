@@ -37,6 +37,10 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private void resetAlarmIfRepeat(Context context, Alarm alarm) {
-		Manager.INSTANCE.resetIfRepeat(context, alarm);
+		Manager.INSTANCE.resetForNextTime(context, alarm);
+		if(!alarm.isRepeat()) {
+			alarm.setEnabled(false);
+			Manager.INSTANCE.saveAlarm(context, alarm);
+		}
 	}
 }

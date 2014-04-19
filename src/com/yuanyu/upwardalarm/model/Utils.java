@@ -23,7 +23,7 @@ public class Utils {
 	 * Determine if today's given hour and minute has passed or not
 	 * @return
 	 */
-	static boolean isNextTimeToday(int hour, int minute) {
+	private static boolean isNextTimeToday(int hour, int minute) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minute);
@@ -76,7 +76,7 @@ public class Utils {
 	 * @param minute
 	 * @return The time of today if not passed yet or tomorrow otherwise
 	 */
-	static long getNextTimeMillis(int hour, int minute) {
+	private static long getNextTimeMillis(int hour, int minute) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minute);
@@ -107,8 +107,7 @@ public class Utils {
 	 * Get the next time when the alarm goes off by taking account the week repetition
 	 * @return 0 if can't get the time
 	 */
-	// TODO use this in Manager ?
-	static long getGoOffTimeMillis(Alarm alarm) {		
+	public static long getGoOffTimeMillis(Alarm alarm) {		
 		if(!alarm.isRepeat()) {
 			return getNextTimeMillis(alarm.getHour(), alarm.getMinute());
 		}

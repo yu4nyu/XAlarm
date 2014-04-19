@@ -8,11 +8,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
 
@@ -27,10 +31,13 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 public enum Manager {
 
 	INSTANCE;
+	
+	private final static String TAG = "Manager";
 
 	final static String PREFS_KEY = "prefs";
 	private final static String INTENT_DATA_PREFIX = "com.yuanyu.upwardalarm:";
@@ -65,12 +72,20 @@ public enum Manager {
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	private void registerForKitKatOrLater(AlarmManager alarmManager, long timeInMillis, PendingIntent alarmPending) {
 		alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
+		
+		Date date = new Date(timeInMillis);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+		Log.d(TAG, "set exact alarm at " + format.format(date));
 	}
 
 	/**
 	 * Register the alarm to android system with given time
 	 */
 	void register(Context context, Alarm alarm, long timeInMillis) {
+		if(timeInMillis == 0) {
+			Log.d(TAG, "Error, register time is 0");
+		}
+		
 		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
 		intent.setData(Uri.parse(INTENT_DATA_PREFIX + alarm.getId()));
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, alarm.getId());
@@ -84,6 +99,10 @@ public enum Manager {
 		}
 		else {
 			alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmPending);
+			
+			Date date = new Date(timeInMillis);
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+			Log.d(TAG, "set alarm at " + format.format(date));
 		}
 	}
 
@@ -91,7 +110,7 @@ public enum Manager {
 	 * Register the alarm to android system
 	 */
 	public void register(Context context, Alarm alarm) {
-		register(context, alarm, Utils.getNextTimeMillis(alarm.getHour(), alarm.getMinute()));
+		register(context, alarm, Utils.getGoOffTimeMillis(alarm));
 	}
 
 	/**
@@ -104,10 +123,20 @@ public enum Manager {
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
 		alarmManager.cancel(alarmPending);
 	}
+	
+	public void resetForNextTime(Context context, Alarm alarm) {
+		if(alarm.isRepeat()) {
+			long time = Utils.getGoOffTimeMillis(alarm);
+			if(time != 0) {
+				register(context, alarm, time);
+			}
+		}
+	}
 
 	/**
 	 * Register the alarm to android system for the next time.
 	 */
+	@Deprecated
 	public void resetIfRepeat(Context context, Alarm alarm) {
 		if(alarm.isRepeat()) {
 			if(alarm.isRepeatWholeWeek()) {
