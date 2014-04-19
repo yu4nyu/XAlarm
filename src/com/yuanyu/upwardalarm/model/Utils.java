@@ -1,5 +1,6 @@
 package com.yuanyu.upwardalarm.model;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import com.yuanyu.upwardalarm.R;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -259,4 +262,17 @@ public class Utils {
 		Uri uri = Uri.parse(uriString);
 		return RingtoneManager.getRingtone(context, uri);
 	}
+	
+	public static void startAlarm(Context context, MediaPlayer player) throws IOException {
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        // Do not play alarms if stream volume is 0 (typically because ringer mode is silent).
+        if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+            player.setAudioStreamType(AudioManager.STREAM_ALARM);
+            player.setLooping(true);
+            player.prepare();
+            audioManager.requestAudioFocus(null,
+                    AudioManager.STREAM_ALARM, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+            player.start();
+        }
+    }
 }
