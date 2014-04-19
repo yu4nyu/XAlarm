@@ -14,7 +14,6 @@ import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
@@ -30,7 +29,6 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	private static final float IN_CALL_VOLUME = 0.125f;
 
 	private MovementTracker mTracker;
-	private Ringtone mRingtone; // TODO delete this
 	
 	private MediaPlayer mMediaPlayer;
 	private TelephonyManager mTelephonyManager;
@@ -47,7 +45,6 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		super.onCreate();
 
 		mTracker = new MovementTracker(this);
-		mTracker.start();
 		MovementAnalysor.INSTANCE.addMovementListener(this);
 		
 		mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -62,6 +59,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 
+		boolean started = false;
 		boolean isVibrate = false;
 		String uri = null;
 		if(intent != null) { // The service was killed but restarted by the system
@@ -71,24 +69,27 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			AlarmGuardian.markGotOff(this);
 			AlarmGuardian.saveIsVibrate(this, isVibrate);
 			AlarmGuardian.saveRingtoneUri(this, uri);
+			
+			started = true;
 		}
 		else {
 			if(AlarmGuardian.isGotOff(this)) {
 				isVibrate = AlarmGuardian.getIsVibrate(this);
 				uri = AlarmGuardian.getRingtoneUri(this);
+				started = true;
 			}
+		}
+		
+		if(started) {
+			mTracker.start();
 		}
 
 		if(isVibrate) {
 			startVibration();
 		}
 
-		Log.d("YY", "uri = " + uri);
-		mRingtone = Utils.getRingtoneByUriString(this, uri);
-		Log.d("YY", "ringtone = " + mRingtone);
-		if(mRingtone != null) {
-			startRingtone();
-			startAlarmNoise(uri, false);
+		if(uri != null && !uri.isEmpty()) {
+			this.startAlarmNoise(uri, false); // TODO
 		}
 
 		return  START_STICKY ;
@@ -98,12 +99,6 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	public void onDestroy() {
 		mTracker.stop();
 		super.onDestroy();
-	}
-
-	private void startRingtone() {
-		if(mRingtone != null) {
-			mRingtone.play();
-		}
 	}
 
 	private void startAlarmNoise(String uriString, boolean inTelephoneCall) {
@@ -179,12 +174,6 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 				long_gap
 		};
 		vibrator.vibrate(pattern, 0);
-	}
-
-	private void stopRingtone() {
-		if(mRingtone != null) {
-			mRingtone.stop();
-		}
 	}
 
 	private void stopVibration() {
