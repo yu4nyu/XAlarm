@@ -29,11 +29,12 @@ public class TestActivity extends Activity {
 	private TextView mText;
 	
 	public static void startGoOffActivity(Context context) {
-		Intent i = new Intent();
+		Intent i = new Intent(context, AlarmBroadcastReceiver.class);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, "TESTING ALARM !!!");
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, true);
 		Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, uri != null ? uri.toString() : "");
+		context.sendBroadcast(i);
 	}
 
 	@Override
