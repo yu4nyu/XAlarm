@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 		if(item.getItemId() == R.id.action_add) {
 			Intent intent = new Intent(MainActivity.this, AlarmDefineStandardActivity.class);
 			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
-			// TODO apply animation for starting activity
+			overridePendingTransition(R.anim.shift_in_from_right, R.anim.shift_out_to_left);
 		}
 		// For test only
 		else if(item.getItemId() == R.id.action_test) {

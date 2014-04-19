@@ -207,6 +207,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			break;
 		case R.id.activity_alarm_define_cancel_btn:
 			finish();
+			overridePendingTransition(R.anim.shift_in_from_left, R.anim.shift_out_to_right);
 			break;
 		}
 	}
@@ -283,6 +284,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		intent.putExtra(EXTRA_POSITION, mPosition);
 		setResult(Activity.RESULT_OK, intent);
 		finish();
+		overridePendingTransition(R.anim.shift_in_from_left, R.anim.shift_out_to_right);
 	}
 
 	@Override

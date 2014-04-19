@@ -119,7 +119,13 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			container.addView(holder.layout);
 			holder.layout.setOnTouchListener(this);
 			holder.enable.setOnCheckedChangeListener(this);
-			// TODO apply animation
+
+			if(i%2 == 0) {
+				AlarmItemAnimator.shiftFromLeft(mContext, holder.layout);
+			}
+			else {
+				AlarmItemAnimator.shiftFromRight(mContext, holder.layout);
+			}
 		}
 	}
 
@@ -318,6 +324,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		intent.putExtra(AlarmDefineStandardActivity.EXTRA_ALARM, mData.get(position));
 		intent.putExtra(AlarmDefineStandardActivity.EXTRA_POSITION, position);
 		((MainActivity)mContext).startActivityForResult(intent, MainActivity.ACTIVITY_ALARM_EDIT);
+		((MainActivity)mContext).overridePendingTransition(R.anim.shift_in_from_right, R.anim.shift_out_to_left);
 	}
 
 	private void deleteMode(int clickedPosition) {
