@@ -18,6 +18,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -30,8 +31,23 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 
 	private MovementTracker mTracker;
 	
+	private boolean mIsVibrate;
+	private String mRingtoneUri;
+	
 	private MediaPlayer mMediaPlayer;
 	private TelephonyManager mTelephonyManager;
+	
+	private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+        @Override
+        public void onCallStateChanged(int state, String ignored) {
+            if (state == TelephonyManager.CALL_STATE_IDLE) { // Call finished
+            	startAlarm();
+            }
+            else { // Call started
+            	stopAlarm();
+            }
+        }
+    };
 
 	public static void startService(Context context, boolean isVibrate, String ringtoneUri) {
 		Intent i = new Intent(context, AlarmGoOffService.class);
@@ -62,36 +78,29 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		Log.d(TAG, "onStartCommand");
 		
 		boolean started = false;
-		boolean isVibrate = false;
-		String uri = null;
+		mIsVibrate = false;
+		mRingtoneUri = null;
 		if(intent != null) { // The service was killed but restarted by the system
-			isVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
-			uri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
+			mIsVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
+			mRingtoneUri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
 
 			AlarmGuardian.markGotOff(this);
-			AlarmGuardian.saveIsVibrate(this, isVibrate);
-			AlarmGuardian.saveRingtoneUri(this, uri);
+			AlarmGuardian.saveIsVibrate(this, mIsVibrate);
+			AlarmGuardian.saveRingtoneUri(this, mRingtoneUri);
 			
 			started = true;
 		}
 		else {
 			if(AlarmGuardian.isGotOff(this)) {
-				isVibrate = AlarmGuardian.getIsVibrate(this);
-				uri = AlarmGuardian.getRingtoneUri(this);
+				mIsVibrate = AlarmGuardian.getIsVibrate(this);
+				mRingtoneUri = AlarmGuardian.getRingtoneUri(this);
 				started = true;
 			}
 		}
 		
 		if(started) {
 			mTracker.start();
-		}
-
-		if(isVibrate) {
-			startVibration();
-		}
-
-		if(uri != null && !uri.isEmpty()) {
-			this.startAlarmNoise(uri, false); // TODO
+			startAlarm();
 		}
 
 		return  START_STICKY ;
@@ -102,6 +111,25 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		Log.d(TAG, "onDestroy");
 		mTracker.stop();
 		super.onDestroy();
+	}
+	
+	private void startAlarm() {
+		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+		
+		boolean isInCall = mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE;
+		if(mIsVibrate && !isInCall) {
+			startVibration();
+		}
+
+		if(mRingtoneUri != null && !mRingtoneUri.isEmpty()) {
+			startAlarmNoise(mRingtoneUri, isInCall);
+		}
+	}
+	
+	private void stopAlarm() {
+		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+		stopAlarmNoise();
+		stopVibration();
 	}
 
 	private void startAlarmNoise(String uriString, boolean inTelephoneCall) {
@@ -187,8 +215,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	@Override
 	public void onUpwardDetected() {
 		Log.d(TAG, "onUpwardDetected");
-		stopAlarmNoise();
-		stopVibration();
+		stopAlarm();
 		stopSelf();
 		AlarmGuardian.markStopped(this);
 	}
