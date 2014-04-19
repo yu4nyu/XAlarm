@@ -8,8 +8,8 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"
         android:required="false" />
@@ -28,17 +28,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.yuanyu.upwardalarm.test.AlarmDefineActivity" />
+        <activity android:name="com.yuanyu.upwardalarm.test.AlarmDefineActivity" />
         <activity android:name="com.yuanyu.upwardalarm.AlarmDefineStandardActivity" />
         <activity
             android:name="com.yuanyu.upwardalarm.AlarmGoOffActivity"
+            android:excludeFromRecents="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Transparent" />
+            android:showOnLockScreen="true"
+            android:theme="@style/Transparent"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
         <receiver android:name="com.yuanyu.upwardalarm.AlarmBroadcastReceiver" />
-        <service android:name="com.yuanyu.upwardalarm.AlarmGoOffService" />e
-        
-        <activity android:name="com.yuanyu.upwardalarm.test.TestActivity"
+
+        <service
+            android:name="com.yuanyu.upwardalarm.AlarmGoOffService"
+            android:exported="false" />
+
+        <activity
+            android:name="com.yuanyu.upwardalarm.test.TestActivity"
             android:screenOrientation="portrait" />
     </application>
 

@@ -59,6 +59,8 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 
+		Log.d(TAG, "onStartCommand");
+		
 		boolean started = false;
 		boolean isVibrate = false;
 		String uri = null;
@@ -97,6 +99,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 
 	@Override
 	public void onDestroy() {
+		Log.d(TAG, "onDestroy");
 		mTracker.stop();
 		super.onDestroy();
 	}
@@ -183,6 +186,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 
 	@Override
 	public void onUpwardDetected() {
+		Log.d(TAG, "onUpwardDetected");
 		stopAlarmNoise();
 		stopVibration();
 		stopSelf();

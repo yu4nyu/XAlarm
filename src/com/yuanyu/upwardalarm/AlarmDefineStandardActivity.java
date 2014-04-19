@@ -7,6 +7,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,8 @@ import android.content.Intent;
 
 public class AlarmDefineStandardActivity extends Activity implements View.OnClickListener,
 	OnCheckedChangeListener {
+	
+	private final static String TAG = "AlarmDefineStandardActivity";
 	
 	private final static int ACTIVITY_RINGTONE_PICKER = 0;
 	
@@ -297,6 +300,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 				mRingtoneTxt.setText(""); // It will the default hint text
 				mRingtoneTxt.setTextColor(mDisabledColor);
 			}
+			
+			Log.d(TAG, "mRingtoneUri = " + mRingtoneUri);
 		}
 	}
 

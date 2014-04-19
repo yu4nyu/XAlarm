@@ -53,9 +53,9 @@ public class MainActivity extends Activity {
 		}
 		// For test only
 		else if(item.getItemId() == R.id.action_test) {
-			//Intent intent = new Intent(MainActivity.this, TestActivity.class);
-			//startActivity(intent);
-			TestActivity.startGoOffActivity(this);
+			Intent intent = new Intent(MainActivity.this, TestActivity.class);
+			startActivity(intent);
+			//TestActivity.startGoOffActivity(this);
 		}
 		return super.onOptionsItemSelected(item);
 	}

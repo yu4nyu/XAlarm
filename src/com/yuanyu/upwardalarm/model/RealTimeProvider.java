@@ -25,6 +25,7 @@ public class RealTimeProvider {
 	public void stop() {
 		mText = null;
 		mHandler.removeCallbacksAndMessages(null);
+		mHandler = null;
 	}
 	
 	private void updateTime() {

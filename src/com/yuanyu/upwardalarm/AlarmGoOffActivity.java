@@ -4,6 +4,7 @@ import com.yuanyu.upwardalarm.model.RealTimeProvider;
 import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import android.content.Intent;
 
 public class AlarmGoOffActivity extends Activity implements MovementAnalysor.MovementListener {
 
+	private static final String TAG = "AlarmGoOffActivity";
+	
 	private static final String ARGS_KEY_LABEL = "label";
 	private static final String ARGS_KEY_VIBRATE = "vibrate";
 	private static final String ARGS_KEY_RINGTONE_URI = "ringtone";
@@ -69,8 +72,10 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 	@Override
 	public void onUpwardDetected() {
 		if(!isFinishing() && !isDestroyed) {
+			mDialog.release();
 			mDialog.dismiss();
 			finish();
+			Log.d(TAG, "finish()");
 		}
 	}
 	
@@ -116,6 +121,10 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri);
 			
 			return builder.create();
+		}
+		
+		public void release() {
+			mTimeProvider.stop();
 		}
 	}
 }
