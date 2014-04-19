@@ -2,10 +2,12 @@ package com.yuanyu.upwardalarm.test;
 
 import java.util.List;
 
+import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
 import com.yuanyu.upwardalarm.R;
 import com.yuanyu.upwardalarm.sensor.MovementTracker;
 import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -17,11 +19,21 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 
 public class TestActivity extends Activity {
 
 	private TextView mText;
+	
+	public static void startGoOffActivity(Context context) {
+		Intent i = new Intent();
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, "TESTING ALARM !!!");
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, true);
+		String uri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM).toString();
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, uri);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
