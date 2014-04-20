@@ -3,6 +3,7 @@ package com.yuanyu.upwardalarm;
 import java.io.IOException;
 
 import com.yuanyu.upwardalarm.model.AlarmGuardian;
+import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
 import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
 import com.yuanyu.upwardalarm.sensor.MovementTracker;
@@ -57,6 +58,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		Intent i = new Intent(context, AlarmGoOffService.class);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, isVibrate);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, ringtoneUri);
+		Manager.INSTANCE.requireWakeLock(context);
 		context.startService(i);
 	}
 	
@@ -106,6 +108,9 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			mTracker.start();
 			startAlarm();
 		}
+		else {
+			Manager.INSTANCE.releaseWakeLock();
+		}
 
 		return  START_STICKY ;
 	}
@@ -118,6 +123,8 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	}
 	
 	private void startAlarm() {
+		Manager.INSTANCE.requireWakeLock(this); // Make sure the device is awake
+		
 		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 		mInitPhoneState = mTelephonyManager.getCallState();
 		boolean isInCall = mInitPhoneState != TelephonyManager.CALL_STATE_IDLE;
@@ -133,6 +140,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
 		stopAlarmNoise();
 		stopVibration();
+		Manager.INSTANCE.releaseWakeLock();
 	}
 
 	private void startAlarmNoise(String uriString, boolean inTelephoneCall) {

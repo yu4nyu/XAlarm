@@ -31,6 +31,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.util.Log;
 
 public enum Manager {
@@ -44,6 +45,8 @@ public enum Manager {
 	private final static String PREFS_UNIQUE_ID_KEY = "unique_id";
 
 	private final static String ALARM_DATA_FILE_PREFIX = "alarm_data_";
+	
+	private PowerManager.WakeLock mCpuWakeLock;
 
 	private class AlarmComparator implements Comparator<Alarm> {
 		@Override
@@ -265,8 +268,23 @@ public enum Manager {
 
 		return result;
 	}
-
-	public void onApplicationExit() {
+	
+	public void requireWakeLock(Context context) {
+		if (mCpuWakeLock != null) {
+            return;
+        }
 		
+		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+		mCpuWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Upward Alarm");
+		mCpuWakeLock.acquire();
+	}
+	
+	public void releaseWakeLock() {
+		if(mCpuWakeLock == null) {
+			return;
+		}
+		
+		mCpuWakeLock.release();
+		mCpuWakeLock = null;
 	}
 }
