@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -31,9 +32,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		View emptyText = findViewById(R.id.activity_main_empty_text);
+		
 		List<Alarm> data = new ArrayList<Alarm>();
 		data.addAll(Manager.INSTANCE.getSavedAlarms(this));
-		mManager = new AlarmItemsManager(this, data);
+		mManager = new AlarmItemsManager(this, data, emptyText);
 
 		ViewGroup scrollable = (ViewGroup) findViewById(R.id.activity_main_scroll_view);
 		mManager.fillAlarmList(scrollable);

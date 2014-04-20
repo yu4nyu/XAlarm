@@ -41,6 +41,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	private final List<Alarm> mData;
 	private final List<ViewHolder> mItems;
 	private ViewGroup mContainer;
+	private View mEmptyText;
 
 	ActionMode mActionMode = null;
 	SparseBooleanArray mSelectedItems;
@@ -100,13 +101,14 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		public Switch enable;
 	}
 
-	public AlarmItemsManager(Context context, List<Alarm> data) {
+	public AlarmItemsManager(Context context, List<Alarm> data, View emptyText) {
 		mContext = context;
 		mData = data;
 		mItems = new ArrayList<ViewHolder>();
 
 		mGestureDetector = new GestureDetector(context, mGestureListener);
 		mSelectedItems = new SparseBooleanArray();
+		mEmptyText = emptyText;
 	}
 
 	public void fillAlarmList(ViewGroup container) {
@@ -123,6 +125,9 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 
 			AlarmItemAnimator.throwUpDelayed(mContext, holder.layout, delay);
 			delay += 30;
+		}
+		if(mData.isEmpty()) {
+			mEmptyText.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -188,6 +193,8 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		mContainer.addView(holder.layout, position);
 		holder.layout.setOnTouchListener(this);
 		updateIndexTags();
+		
+		mEmptyText.setVisibility(View.GONE);
 	}
 
 	/**
@@ -210,6 +217,9 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		mItems.remove(position);
 		mContainer.removeViewAt(position);
 		updateIndexTags();
+		if(mData.isEmpty()) {
+			mEmptyText.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private ViewHolder createView(int position) {
@@ -430,6 +440,9 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 				mData.remove(i);
 				mItems.remove(i);
 				mContainer.removeViewAt(i);
+				if(mData.isEmpty()) {
+					mEmptyText.setVisibility(View.VISIBLE);
+				}
 			}
 		}
 		updateIndexTags(); // This must not be called in the for loop above.

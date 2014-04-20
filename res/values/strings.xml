@@ -8,6 +8,8 @@
     <string name="action_share">Share this app</string>
     <string name="action_ads">View ads</string>
     <string name="action_about">About</string>
+    
+    <string name="no_alarm">No alarm\n\nPress the \"+\" button to add one</string>
 
     <!-- Alarm Define Activity -->
     <string name="title_add_alarm">Add alarm</string>

@@ -1,16 +1,31 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activity_background"
     tools:context=".MainActivity" >
 
-    <LinearLayout
-        android:id="@+id/activity_main_scroll_view"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:layout_height="match_parent" >
 
-</ScrollView>
+        <LinearLayout
+            android:id="@+id/activity_main_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/activity_main_empty_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_alarm"
+        android:textColor="@color/gray"
+        android:textSize="24sp"
+        android:visibility="gone" />
+
+</FrameLayout>
