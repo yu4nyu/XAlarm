@@ -103,6 +103,12 @@ public class MainActivity extends Activity {
 			break;
 		}
 	}
+	
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(0, R.anim.exit_out_animation);
+	}
 
 	/**
 	 * Register the alarm to android system
