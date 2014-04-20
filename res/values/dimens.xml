@@ -9,6 +9,7 @@
     <dimen name="item_side_margin_negative">-12dp</dimen>
     <dimen name="item_top_margin">-2dp</dimen>
     <dimen name="item_top_icon_calibration">6dp</dimen>
+    <dimen name="item_top_icon_calibration_half">3dp</dimen>
     <dimen name="time_text_size">52sp</dimen>
     <dimen name="button_width">100dp</dimen>
     

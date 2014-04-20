@@ -8,33 +8,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/theme_blue" >
-        
-        <TextView
-            android:id="@+id/alarm_list_item_repeat_text"
+
+        <LinearLayout
+            android:id="@+id/alarm_list_item_top_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:layout_marginLeft="@dimen/item_side_margin"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true" />
+            android:orientation="horizontal" >
 
-        <ImageView
-            android:id="@+id/alarm_list_top_right_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_ringtone" />
+            <TextView
+                android:id="@+id/alarm_list_item_label_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/item_side_margin"
+                android:layout_marginTop="@dimen/item_top_icon_calibration_half"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:textColor="@android:color/white" />
 
-        <ImageView
-            android:id="@+id/alarm_list_icon_left_to_top_right_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@id/alarm_list_top_right_icon"
-            android:layout_marginTop="@dimen/item_top_icon_calibration"
-            android:src="@drawable/ic_vibrate" />
+            <TextView
+                android:id="@+id/alarm_list_item_repeat_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/item_side_margin"
+                android:layout_marginTop="@dimen/item_top_icon_calibration_half"
+                android:singleLine="true"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/alarm_list_icon_left_to_top_right_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/item_top_icon_calibration"
+                android:src="@drawable/ic_vibrate" />
+
+            <ImageView
+                android:id="@+id/alarm_list_top_right_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_ringtone" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/alarm_list_item_time"
@@ -42,9 +55,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/alarm_list_item_repeat_text"
-            android:layout_marginTop="@dimen/item_side_margin_negative"
-            android:layout_marginLeft="@dimen/item_side_margin" />
+            android:layout_below="@id/alarm_list_item_top_line"
+            android:layout_marginLeft="@dimen/item_side_margin"
+            android:layout_marginTop="@dimen/item_side_margin_negative" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -60,11 +73,10 @@
 
             <Switch
                 android:id="@+id/alarm_list_item_switch"
-                android:saveEnabled="false"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:saveEnabled="false" />
         </LinearLayout>
-
     </RelativeLayout>
 
 </FrameLayout>

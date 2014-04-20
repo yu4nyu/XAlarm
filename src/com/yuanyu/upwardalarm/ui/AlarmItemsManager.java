@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
+import android.text.Spanned;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.GestureDetector;
@@ -51,12 +52,6 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
 		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			// TODO scroll to delete
-			return super.onScroll(e1, e2, distanceX, distanceY);
-		}
-
-		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
 			if(mTouchedView != null) {
 				if(mActionMode == null) {
@@ -96,6 +91,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 
 		public ImageView image1; // image view at the right top corner
 		public ImageView image2; // image view at the left side of image1
+		public TextView label;
 		public TextView repeat;
 		public TextView time;
 		public Switch enable;
@@ -233,6 +229,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		holder.layout.setTag(position); // Let the view know its own position.
 		holder.image1 = (ImageView) layout.findViewById(R.id.alarm_list_top_right_icon);
 		holder.image2 = (ImageView) layout.findViewById(R.id.alarm_list_icon_left_to_top_right_icon);
+		holder.label = (TextView) layout.findViewById(R.id.alarm_list_item_label_text);
 		holder.repeat = (TextView) layout.findViewById(R.id.alarm_list_item_repeat_text);
 		holder.time = (TextView) layout.findViewById(R.id.alarm_list_item_time);
 		holder.enable = (Switch) layout.findViewById(R.id.alarm_list_item_switch);
@@ -267,7 +264,18 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		}
 
 		// Set text
-		holder.repeat.setText(Utils.getRepeatText(mContext, alarm));
+		Spanned label = Utils.getLabelSpannedText(mContext, alarm);
+		Spanned repeat = Utils.getRepeatSpannedText(mContext, alarm);
+		if(label.length() != 0 || repeat.length() != 0) {
+			holder.label.setVisibility(View.VISIBLE);
+			holder.label.setText(label);
+			holder.repeat.setText(repeat);
+		}
+		else { // Here to make sure all the items have the same height
+			holder.label.setText("YY");
+			holder.label.setVisibility(View.INVISIBLE);
+		}
+		
 		holder.time.setText(Utils.getTimeText(alarm.getHour(), alarm.getMinute()));
 		holder.enable.setChecked(alarm.getEnable());
 	}

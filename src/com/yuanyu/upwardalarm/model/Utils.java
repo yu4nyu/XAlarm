@@ -18,7 +18,7 @@ import android.text.Html;
 import android.text.Spanned;
 
 public class Utils {
-	
+
 	/**
 	 * Determine if today's given hour and minute has passed or not
 	 * @return
@@ -104,7 +104,7 @@ public class Utils {
 		}
 		return calendar.getTimeInMillis();
 	}
-	
+
 	/**
 	 * Get the next time when the alarm goes off by taking account the week repetition
 	 * @return 0 if can't get the time
@@ -113,7 +113,7 @@ public class Utils {
 		if(!alarm.isRepeat()) {
 			return getNextTimeMillis(alarm.getHour(), alarm.getMinute());
 		}
-		
+
 		Calendar todayCal = Calendar.getInstance();
 		int today = todayCal.get(Calendar.DAY_OF_WEEK) - 1;
 
@@ -122,14 +122,14 @@ public class Utils {
 		alarmCal.set(Calendar.MINUTE, alarm.getMinute());
 		alarmCal.set(Calendar.SECOND, 0);
 		alarmCal.set(Calendar.MILLISECOND, 0);
-		
+
 		boolean[] weekRepeat = alarm.getWeekRepeat();
 		if(weekRepeat[today]) {
 			if(alarmCal.after(todayCal)) {
 				return alarmCal.getTimeInMillis();
 			}
 		}
-		
+
 		int dayAfter = 0;
 		for(int i = today + 1; i < 7; i++) {
 			dayAfter++;
@@ -143,7 +143,7 @@ public class Utils {
 				return getNextTimeMillisDaysAfter(alarm.getHour(), alarm.getMinute(), dayAfter);
 			}
 		}
-		
+
 		return 0;
 	}
 
@@ -163,23 +163,24 @@ public class Utils {
 		return Html.fromHtml(html);
 	}
 
-	/**
-	 * Get the text of label and repetition displayed on items of alarm list
-	 */
-	public static Spanned getRepeatText(Context context, Alarm alarm) {
-
+	public static Spanned getLabelSpannedText(Context context, Alarm alarm) {
 		String html = "";
 
 		// Set the label
 		String label = alarm.getLabel();
 		if(label != null && !label.trim().isEmpty()) {
-			html += "<b>" + label;
-			if(alarm.isRepeat()) {
-				html += ":";
-			}
-			html += "</b> ";
+			html += "<b>" + label + "</b> ";
 		}
 
+		return Html.fromHtml(html);
+	}
+
+	/**
+	 * Get the text of label and repetition displayed on items of alarm list
+	 */
+	public static Spanned getRepeatSpannedText(Context context, Alarm alarm) {
+
+		String html = "";
 		if(alarm.isRepeat()) {
 			// Set the repetition
 			if(alarm.isRepeatWholeWeek()) {
@@ -218,7 +219,7 @@ public class Utils {
 
 		return Html.fromHtml(html);
 	}
-	
+
 	public static String getTextTimeBeforeGoOff(Context context, Alarm alarm) {
 		String format = context.getString(R.string.time_before_go_off_text) + " ";
 		long time = getGoOffTimeMillis(alarm);
@@ -229,7 +230,7 @@ public class Utils {
 		long minuteCount = TimeUnit.MILLISECONDS.toMinutes(timeBefore);
 		int hour = (int) minuteCount / 60;
 		int minute = (int) minuteCount % 60;
-		
+
 		String timeText = "";
 		if(hour >= 1) {
 			timeText += hour + " " + context.getString(R.string.hour);
@@ -237,18 +238,18 @@ public class Utils {
 				timeText += "s";
 			}
 		}
-		
+
 		if(minute >= 1) {
 			timeText += " " + minute + " " + context.getString(R.string.minute);
 			if(minute > 1) {
 				timeText += "s";
 			}
 		}
-		
+
 		if(hour == 0 && minute == 0) {
 			timeText += context.getString(R.string.less_than_one_minute);
 		}
-		
+
 		return String.format(format, timeText);
 	}
 
@@ -263,17 +264,17 @@ public class Utils {
 		Uri uri = Uri.parse(uriString);
 		return RingtoneManager.getRingtone(context, uri);
 	}
-	
+
 	public static void startAlarm(Context context, MediaPlayer player) throws IOException {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        // Do not play alarms if stream volume is 0 (typically because ringer mode is silent).
-        if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
-            player.setAudioStreamType(AudioManager.STREAM_ALARM);
-            player.setLooping(true);
-            player.prepare();
-            audioManager.requestAudioFocus(null,
-                    AudioManager.STREAM_ALARM, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-            player.start();
-        }
-    }
+		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		// Do not play alarms if stream volume is 0 (typically because ringer mode is silent).
+		if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+			player.setAudioStreamType(AudioManager.STREAM_ALARM);
+			player.setLooping(true);
+			player.prepare();
+			audioManager.requestAudioFocus(null,
+					AudioManager.STREAM_ALARM, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+			player.start();
+		}
+	}
 }
