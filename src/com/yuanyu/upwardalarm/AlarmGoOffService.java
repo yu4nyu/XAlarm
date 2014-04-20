@@ -36,14 +36,18 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	
 	private MediaPlayer mMediaPlayer;
 	private TelephonyManager mTelephonyManager;
+	private int mInitPhoneState;
 	
 	private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String ignored) {
+        	if(state == mInitPhoneState) return;
             if (state == TelephonyManager.CALL_STATE_IDLE) { // Call finished
+            	Log.d(TAG, "Phone state changed to IDLE");
             	startAlarm();
             }
             else { // Call started
+            	Log.d(TAG, "Phone state changed to BUSY");
             	stopAlarm();
             }
         }
@@ -115,12 +119,11 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	
 	private void startAlarm() {
 		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-		
-		boolean isInCall = mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE;
+		mInitPhoneState = mTelephonyManager.getCallState();
+		boolean isInCall = mInitPhoneState != TelephonyManager.CALL_STATE_IDLE;
 		if(mIsVibrate && !isInCall) {
 			startVibration();
 		}
-
 		if(mRingtoneUri != null && !mRingtoneUri.isEmpty()) {
 			startAlarmNoise(mRingtoneUri, isInCall);
 		}

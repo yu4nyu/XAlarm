@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/theme_blue3" >
+        android:background="@color/theme_blue" >
         
         <TextView
             android:id="@+id/alarm_list_item_repeat_text"
