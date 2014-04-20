@@ -139,7 +139,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 
 		// Remove old alarm
 		mData.remove(position);
-		
+
 		int newPosition = 0;
 		int minutes = alarm.getHour() * 60 + alarm.getMinute();
 		for(; newPosition < mData.size(); newPosition++) {
@@ -151,7 +151,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 
 		if(newPosition == position) { // Order has not been changed
 			mData.add(position, alarm);
-			
+
 			// Update view
 			ViewHolder holder = mItems.get(position);
 			updateView(holder, position);
@@ -189,7 +189,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		mContainer.addView(holder.layout, position);
 		holder.layout.setOnTouchListener(this);
 		updateIndexTags();
-		
+
 		mEmptyText.setVisibility(View.GONE);
 	}
 
@@ -275,9 +275,24 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			holder.label.setText("YY");
 			holder.label.setVisibility(View.INVISIBLE);
 		}
-		
 		holder.time.setText(Utils.getTimeText(alarm.getHour(), alarm.getMinute()));
 		holder.enable.setChecked(alarm.getEnable());
+
+		// Set text color
+		updateEnableState(holder, alarm.getEnable());
+	}
+
+	private void updateEnableState(ViewHolder holder, boolean isEnable) {
+		if(isEnable) {
+			holder.label.setAlpha(1.0f);
+			holder.repeat.setAlpha(1.0f);
+			holder.time.setAlpha(1.0f);
+		}
+		else {
+			holder.label.setAlpha(0.5f);
+			holder.repeat.setAlpha(0.5f);
+			holder.time.setAlpha(0.5f);
+		}
 	}
 
 	private void updateIndexTags() {
@@ -331,6 +346,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			alarm.setEnabled(false);
 			Manager.INSTANCE.unregister(mContext, alarm.getId());
 		}
+		updateEnableState(mItems.get(position), isChecked);
 		Manager.INSTANCE.saveAlarm(mContext, alarm);
 	}
 
