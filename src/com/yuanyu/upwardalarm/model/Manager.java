@@ -182,7 +182,6 @@ public enum Manager {
 	/**
 	 * Save alarm to file system
 	 */
-	// TODO maybe use a AsyncTask ?
 	public void saveAlarm(Context context, Alarm alarm) {
 		try {
 			FileOutputStream fos;
@@ -197,14 +196,13 @@ public enum Manager {
 		}
 	}
 
-	// TODO maybe use a AsyncTask ?
 	public void deleteAlarmFile(Context context, Alarm alarm) {
 		File file = new File(context.getFilesDir(), ALARM_DATA_FILE_PREFIX + alarm.getId());
-		file.delete(); // TODO take account the return value ?
+		file.delete();
 	}
 
 	/**
-	 * @return null if can't get the valid Ringtone object
+	 * @return null if can't get the valid ringtone object
 	 */
 	public Ringtone getRingtone(Context context, String ringtoneUri) {
 		if(ringtoneUri == null || ringtoneUri.isEmpty()) {
@@ -217,7 +215,6 @@ public enum Manager {
 		return RingtoneManager.getRingtone(context, uri);
 	}
 
-	// TODO maybe use a AsyncTask ?
 	public List<Alarm> getSavedAlarms(Context context) {
 
 		File dir = context.getFilesDir();

@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
 		ViewGroup scrollable = (ViewGroup) findViewById(R.id.activity_main_scroll_view);
 		mManager.fillAlarmList(scrollable);
 
+		// Show overflow option on every devices
 		try {
 			ViewConfiguration config = ViewConfiguration.get(this);
 			Field menuKeyField = ViewConfiguration.class
@@ -65,8 +66,8 @@ public class MainActivity extends Activity {
 			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
 			overridePendingTransition(R.anim.shift_in_from_right, R.anim.shift_out_to_left);
 		}
-		// For test only
 		else if(item.getItemId() == R.id.action_test) {
+			// TODO
 			Intent intent = new Intent(MainActivity.this, TestActivity.class);
 			startActivity(intent);
 			//TestActivity.startGoOffActivity(this);

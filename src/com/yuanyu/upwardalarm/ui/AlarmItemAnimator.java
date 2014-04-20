@@ -35,4 +35,24 @@ public class AlarmItemAnimator {
 			}
 		}, delay);
 	}
+	
+	static public void shakeForever(Context context, final View view) {
+		Animation anim = AnimationUtils.loadAnimation(context, R.anim.shake);
+		//anim.setRepeatCount(Integer.MAX_VALUE); // This method does not work for animation set !!!
+		anim.setAnimationListener(new AnimationListener(){
+			@Override
+			public void onAnimationEnd(Animation anim) {
+				view.startAnimation(anim);
+			}
+			@Override
+			public void onAnimationRepeat(Animation anim) {
+				
+			}
+			@Override
+			public void onAnimationStart(Animation anim) {
+				
+			}
+		});
+		view.startAnimation(anim);
+	}
 }

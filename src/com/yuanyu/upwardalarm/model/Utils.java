@@ -23,6 +23,7 @@ public class Utils {
 	 * Determine if today's given hour and minute has passed or not
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private static boolean isNextTimeToday(int hour, int minute) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -50,6 +51,7 @@ public class Utils {
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 
+		// Do not check if is today as daysAfter must be > 0
 		//if(calendar.getTimeInMillis() > System.currentTimeMillis()) { // Next time is in today
 		//return calendar.getTimeInMillis();
 		//}

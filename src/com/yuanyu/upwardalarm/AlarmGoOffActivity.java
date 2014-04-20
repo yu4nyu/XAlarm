@@ -2,6 +2,7 @@ package com.yuanyu.upwardalarm;
 
 import com.yuanyu.upwardalarm.model.RealTimeProvider;
 import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
+import com.yuanyu.upwardalarm.ui.AlarmItemAnimator;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -111,7 +113,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			mTimeProvider = new RealTimeProvider();
 			mTimeProvider.start(timeText);
 
-			// TODO show animation
+			ImageView icon = (ImageView) view.findViewById(R.id.dialog_alarm_go_off_icon);
+			AlarmItemAnimator.shakeForever(getActivity(), icon);
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setView(view);
