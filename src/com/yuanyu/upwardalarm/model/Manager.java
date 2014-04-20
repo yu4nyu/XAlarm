@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public enum Manager {
 
@@ -47,6 +48,8 @@ public enum Manager {
 	private final static String ALARM_DATA_FILE_PREFIX = "alarm_data_";
 	
 	private PowerManager.WakeLock mCpuWakeLock;
+	
+	private Toast mLastToast;
 
 	private class AlarmComparator implements Comparator<Alarm> {
 		@Override
@@ -283,5 +286,13 @@ public enum Manager {
 		
 		mCpuWakeLock.release();
 		mCpuWakeLock = null;
+	}
+	
+	public void showToast(Context context, String message) {
+		if(mLastToast != null) {
+			mLastToast.cancel();
+		}
+		mLastToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		mLastToast.show();
 	}
 }

@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -98,7 +97,7 @@ public class MainActivity extends Activity {
 					if(alarm.getEnable()) {
 						String message = Utils.getTextTimeBeforeGoOff(this, alarm);
 						if(!message.isEmpty()) {
-							Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+							Manager.INSTANCE.showToast(this, message);
 						}
 					}
 				}

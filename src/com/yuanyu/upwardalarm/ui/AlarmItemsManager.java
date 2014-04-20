@@ -24,7 +24,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.yuanyu.upwardalarm.AlarmDefineStandardActivity;
 import com.yuanyu.upwardalarm.MainActivity;
@@ -340,7 +339,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			Manager.INSTANCE.register(mContext, alarm);
 			String message = Utils.getTextTimeBeforeGoOff(mContext, alarm);
 			if(!message.isEmpty()) {
-				Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+				Manager.INSTANCE.showToast(mContext, message);
 			}
 		}
 		else {
