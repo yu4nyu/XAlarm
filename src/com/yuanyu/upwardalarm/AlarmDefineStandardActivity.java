@@ -105,6 +105,12 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		return true;
 	}
 
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.shift_in_from_left, R.anim.shift_out_to_right);
+	}
+
 	private void initViews() {
 		mLabelLayout = findViewById(R.id.activity_alarm_define_label_layout);
 		mLabelTxt = (TextView) findViewById(R.id.activity_alarm_define_label);

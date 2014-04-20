@@ -1,5 +1,6 @@
 package com.yuanyu.upwardalarm;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -21,27 +23,39 @@ public class MainActivity extends Activity {
 
 	private final static int ACTIVITY_ALARM_DEFINE = 0;
 	public final static int ACTIVITY_ALARM_EDIT = 1;
-	
+
 	private AlarmItemsManager mManager;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		List<Alarm> data = new ArrayList<Alarm>();
 		data.addAll(Manager.INSTANCE.getSavedAlarms(this));
 		mManager = new AlarmItemsManager(this, data);
-		
+
 		ViewGroup scrollable = (ViewGroup) findViewById(R.id.activity_main_scroll_view);
 		mManager.fillAlarmList(scrollable);
+
+		try {
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class
+					.getDeclaredField("sHasPermanentMenuKey");
+			if (menuKeyField != null) {
+				menuKeyField.setAccessible(true);
+				menuKeyField.setBoolean(config, false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -76,7 +90,7 @@ public class MainActivity extends Activity {
 				int position = data.getIntExtra(AlarmDefineStandardActivity.EXTRA_POSITION, -1);
 				if(mManager.update(position, alarm)) { // Update succeeded
 					registerAlarm(alarm); // The existed alarm will be replaced
-					
+
 					if(alarm.getEnable()) {
 						String message = Utils.getTextTimeBeforeGoOff(this, alarm);
 						if(!message.isEmpty()) {
@@ -88,7 +102,7 @@ public class MainActivity extends Activity {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Register the alarm to android system
 	 */

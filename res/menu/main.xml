@@ -2,14 +2,35 @@
 
     <item
         android:id="@+id/action_add"
-        android:showAsAction="always"
         android:icon="@drawable/ic_add"
+        android:showAsAction="ifRoom"
         android:title="@string/action_add"/>
-    
-    <item
+
+    <!--
+          item
         android:id="@+id/action_test"
         android:orderInCategory="101"
         android:showAsAction="always"
-        android:title="TEST" />
+        android:title="TEST"
+    -->
+
+    <item
+        android:id="@+id/action_test"
+        android:showAsAction="never"
+        android:title="@string/action_test"/>
+    
+    <item 
+        android:id="@+id/action_share"
+        android:showAsAction="never"
+        android:title="@string/action_share" />
+    
+    <item
+        android:id="@+id/action_ads"
+        android:showAsAction="never"
+        android:title="@string/action_ads" />
+    <item
+        android:id="@+id/action_about"
+        android:showAsAction="never"
+        android:title="@string/action_about" />
 
 </menu>

@@ -4,6 +4,10 @@
     <string name="app_name">Upward Alarm</string>
     <string name="action_add">Add</string>
     <string name="action_delete">Delete</string>
+    <string name="action_test">Test sensor</string>
+    <string name="action_share">Share this app</string>
+    <string name="action_ads">View ads</string>
+    <string name="action_about">About</string>
 
     <!-- Alarm Define Activity -->
     <string name="title_add_alarm">Add alarm</string>
