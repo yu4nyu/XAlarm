@@ -26,9 +26,6 @@ import android.util.Log;
 public class AlarmGoOffService extends Service implements MovementAnalysor.MovementListener {
 
 	private static final String TAG = "AlarmGoOffService";
-	
-	// Volume suggested by media team for in-call alarms.
-	private static final float IN_CALL_VOLUME = 0.125f;
 
 	private MovementTracker mTracker;
 	
@@ -37,18 +34,19 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	
 	private MediaPlayer mMediaPlayer;
 	private TelephonyManager mTelephonyManager;
-	private int mInitPhoneState;
+	private int mlastPhoneState;
 	
 	private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String ignored) {
-        	if(state == mInitPhoneState) return;
+        	if(state == mlastPhoneState) return;
             if (state == TelephonyManager.CALL_STATE_IDLE) { // Call finished
             	Log.d(TAG, "Phone state changed to IDLE");
             	startAlarm();
             }
             else { // Call started
             	Log.d(TAG, "Phone state changed to BUSY");
+            	mlastPhoneState = state;
             	stopAlarm();
             }
         }
@@ -126,24 +124,25 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		Manager.INSTANCE.requireWakeLock(this); // Make sure the device is awake
 		
 		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-		mInitPhoneState = mTelephonyManager.getCallState();
-		boolean isInCall = mInitPhoneState != TelephonyManager.CALL_STATE_IDLE;
-		if(mIsVibrate && !isInCall) {
-			startVibration();
-		}
-		if(mRingtoneUri != null && !mRingtoneUri.isEmpty()) {
-			startAlarmNoise(mRingtoneUri, isInCall);
+		mlastPhoneState = mTelephonyManager.getCallState();
+		boolean isInCall = mlastPhoneState != TelephonyManager.CALL_STATE_IDLE;
+		if(!isInCall) {
+			if(mIsVibrate && !isInCall) {
+				startVibration();
+			}
+			if(mRingtoneUri != null && !mRingtoneUri.isEmpty()) {
+				startAlarmNoise(mRingtoneUri);
+			}
 		}
 	}
 	
 	private void stopAlarm() {
-		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
 		stopAlarmNoise();
 		stopVibration();
 		Manager.INSTANCE.releaseWakeLock();
 	}
 
-	private void startAlarmNoise(String uriString, boolean inTelephoneCall) {
+	private void startAlarmNoise(String uriString) {
 		if(uriString == null || uriString.isEmpty()) {
 			return;
 		}
@@ -164,15 +163,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		});
 
 		try {
-			// Check if we are in a call. If we are, use the in-call alarm
-			// resource at a low volume to not disrupt the call.
-			if (inTelephoneCall) {
-				Log.v(TAG, "Using the in-call alarm");
-				mMediaPlayer.setVolume(IN_CALL_VOLUME, IN_CALL_VOLUME);
-				setDataSourceFromResource(this, mMediaPlayer, R.raw.beep);
-			} else {
-				mMediaPlayer.setDataSource(this, alarmNoise);
-			}
+			mMediaPlayer.setDataSource(this, alarmNoise);
 			Utils.startAlarm(this, mMediaPlayer);
 		} catch (Exception ex) {
 			Log.v(TAG, "Using the fallback ringtone");
@@ -226,6 +217,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	@Override
 	public void onUpwardDetected() {
 		Log.d(TAG, "onUpwardDetected");
+		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
 		stopAlarm();
 		stopSelf();
 		AlarmGuardian.markStopped(this);
