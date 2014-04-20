@@ -188,6 +188,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		updateView(holder, position);
 		mContainer.addView(holder.layout, position);
 		holder.layout.setOnTouchListener(this);
+		holder.enable.setOnCheckedChangeListener(this);
 		updateIndexTags();
 
 		mEmptyText.setVisibility(View.GONE);
