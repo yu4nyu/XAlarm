@@ -112,6 +112,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	public void fillAlarmList(ViewGroup container) {
 		mItems.clear();
 		mContainer = container;
+		int delay = 0;
 		for(int i = 0; i < mData.size(); i++) {
 			ViewHolder holder = createView(i);
 			mItems.add(holder);
@@ -120,12 +121,8 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			holder.layout.setOnTouchListener(this);
 			holder.enable.setOnCheckedChangeListener(this);
 
-			if(i%2 == 0) {
-				AlarmItemAnimator.shiftFromLeft(mContext, holder.layout);
-			}
-			else {
-				AlarmItemAnimator.shiftFromRight(mContext, holder.layout);
-			}
+			AlarmItemAnimator.throwUpDelayed(mContext, holder.layout, delay);
+			delay += 30;
 		}
 	}
 
