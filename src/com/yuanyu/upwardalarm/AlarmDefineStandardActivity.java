@@ -78,8 +78,6 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mEnabledColor = getResources().getColor(R.color.black);
 		mDisabledColor = getResources().getColor(R.color.gray);
 		
-		// TODO savedInstanceState
-		
 		initViews();
 		setOnClickListeners();
 		
@@ -94,6 +92,11 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		else { // Add a new alarm
 			setTitle(R.string.title_add_alarm);
 		}
+		
+		if(savedInstanceState != null) {
+			Alarm alarm = (Alarm) savedInstanceState.getSerializable("alarm");
+			initStatus(alarm);
+		}
 	}
 
 	@Override
@@ -106,6 +109,12 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	}
 
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable("alarm", generateAlarmObject());
+	}
+
+	@Override
 	public void onBackPressed() {
 		finish();
 		overridePendingTransition(R.anim.shift_in_from_left, R.anim.shift_out_to_right);
@@ -115,7 +124,6 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mLabelLayout = findViewById(R.id.activity_alarm_define_label_layout);
 		mLabelTxt = (TextView) findViewById(R.id.activity_alarm_define_label);
 		
-		// TODO make the default time more intelligent ?
 		mTimePicker = (TimePicker) findViewById(R.id.activity_alarm_define_time_picker);
 		mTimePicker.setCurrentHour(8);
 		mTimePicker.setCurrentMinute(0);
@@ -259,7 +267,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		startActivityForResult(intent, ACTIVITY_RINGTONE_PICKER);
 	}
 	
-	private void done() {
+	private Alarm generateAlarmObject() {
 		Alarm.Builder builder;
 		if(mAlarm == null) {
 			builder = Alarm.newBuilder(this);
@@ -283,8 +291,11 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 				mFriday.isChecked(),
 				mSaturday.isChecked())
 		;
-		Alarm alarm = builder.build();
-		
+		return builder.build();
+	}
+	
+	private void done() {
+		Alarm alarm = generateAlarmObject();
 		Intent intent = new Intent();
 		intent.putExtra(EXTRA_ALARM, alarm);
 		intent.putExtra(EXTRA_POSITION, mPosition);
