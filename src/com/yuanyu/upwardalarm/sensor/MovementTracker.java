@@ -45,6 +45,9 @@ public class MovementTracker implements SensorEventListener {
 
 	public void stop() {
 		mSensorManager.unregisterListener(this);
+	}
+	
+	public void clearData() {
 		mData.clear();
 	}
 	

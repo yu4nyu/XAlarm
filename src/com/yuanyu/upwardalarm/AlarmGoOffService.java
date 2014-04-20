@@ -117,6 +117,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	public void onDestroy() {
 		Log.d(TAG, "onDestroy");
 		mTracker.stop();
+		mTracker.clearData();
 		super.onDestroy();
 	}
 	
