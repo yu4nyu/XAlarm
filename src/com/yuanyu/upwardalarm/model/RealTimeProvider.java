@@ -3,7 +3,6 @@ package com.yuanyu.upwardalarm.model;
 import java.util.Calendar;
 
 import android.os.Handler;
-import android.os.SystemClock;
 import android.widget.TextView;
 
 public class RealTimeProvider {
@@ -32,10 +31,8 @@ public class RealTimeProvider {
 		if(mText == null) return;
 		
 		long time = System.currentTimeMillis();
-		long uptime = SystemClock.uptimeMillis();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(time);
-		calendar.set(Calendar.MILLISECOND, 0);
 		
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
@@ -44,8 +41,7 @@ public class RealTimeProvider {
 		String result = addZeroIfLessThanTen(hour) + ":" + addZeroIfLessThanTen(minute) + ":" + addZeroIfLessThanTen(second);
 		mText.setText(result);
 		
-		long nextTime = uptime / 1000 * 1000; // Set the last 3 numbers to 0
-		mHandler.postAtTime(mRunnable, nextTime);
+		mHandler.postDelayed(mRunnable, 1000);
 	}
 	
 	private String addZeroIfLessThanTen(int number) {
