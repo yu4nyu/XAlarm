@@ -38,9 +38,14 @@
     <string name="hour">hour</string>
     <string name="minute">minute</string>
     <string name="less_than_one_minute">less than 1 minute</string>
-    <string name="way_to_stop_alarm">Configurate the way to stop alarm</string>
+    <string name="config_way_to_stop_alarm">Configurate the way to stop alarm</string>
     <string name="title_activity_stop_way_config">StopWayConfigActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    
+    <!-- Alarm stop config dialog -->
+	<string name="way_to_stop_alarm">Way to stop alarm</string>
+	<string name="level">Level</string>
+	<string name="times">Times</string>
 
 </resources>

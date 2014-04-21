@@ -267,7 +267,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="8dp"
-                    android:text="@string/way_to_stop_alarm" />
+                    android:text="@string/config_way_to_stop_alarm" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

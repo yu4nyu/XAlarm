@@ -235,7 +235,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	}
 	
 	private void startStopWayConfigActivity() {
-		// TODO
+		AlarmStopConfigDialog dialog = new AlarmStopConfigDialog();
+		dialog.show(getFragmentManager(), "Stop Way Config");
 	}
 	
 	private void showTitleDefineDialog() {
