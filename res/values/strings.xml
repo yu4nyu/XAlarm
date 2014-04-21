@@ -8,13 +8,11 @@
     <string name="action_share">Share this app</string>
     <string name="action_ads">View ads</string>
     <string name="action_about">About</string>
-    
     <string name="no_alarm">No alarm\n\nPress the \"+\" button to add one</string>
 
     <!-- Alarm Define Activity -->
     <string name="title_add_alarm">Add alarm</string>
     <string name="title_edit_alarm">Edit alarm</string>
-    
     <string name="sunday">Sun</string>
     <string name="monday">Mon</string>
     <string name="tuesday">Tue</string>
@@ -23,7 +21,6 @@
     <string name="friday">Fri</string>
     <string name="saturday">Sat</string>
     <string name="every_day">Every day</string>
-    
     <string name="label">Label</string>
     <string name="time_separator">:</string>
     <string name="silent">Silent</string>
@@ -32,11 +29,18 @@
     <string name="label_define_dialog_title">Label of alarm</string>
     <string name="ringtone_picker_title">Select ringtone for alarm</string>
 
+    <!-- Delete dialog -->
     <string name="selected">Selected</string>
     <string name="delete_dialog_message">Delete selected alarm ?</string>
-    
+
+    <!-- Toast message -->
     <string name="time_before_go_off_text">Alarm set for %s from now</string>
     <string name="hour">hour</string>
     <string name="minute">minute</string>
     <string name="less_than_one_minute">less than 1 minute</string>
+    <string name="way_to_stop_alarm">Configurate the way to stop alarm</string>
+    <string name="title_activity_stop_way_config">StopWayConfigActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 </resources>

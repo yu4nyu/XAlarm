@@ -57,6 +57,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	private ToggleButton mFriday;
 	private ToggleButton mSaturday;
 	
+	private View mDefineAlarmStopLayout;
+	
 	private Button mDoneBtn;
 	private Button mCancelBtn;
 	
@@ -143,6 +145,8 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mFriday = (ToggleButton) findViewById(R.id.activity_alarm_define_friday_toggle);
 		mSaturday = (ToggleButton) findViewById(R.id.activity_alarm_define_saturday_toggle);
 		
+		mDefineAlarmStopLayout = (View) findViewById(R.id.activity_alarm_define_stop_layout);
+		
 		mDoneBtn = (Button) findViewById(R.id.activity_alarm_define_done_btn);
 		mCancelBtn = (Button) findViewById(R.id.activity_alarm_define_cancel_btn);
 	}
@@ -150,6 +154,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	private void setOnClickListeners() {
 		mLabelLayout.setOnClickListener(this);
 		mRingtoneLayout.setOnClickListener(this);
+		mDefineAlarmStopLayout.setOnClickListener(this);
 		mDoneBtn.setOnClickListener(this);
 		mCancelBtn.setOnClickListener(this);
 		
@@ -216,6 +221,9 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		case R.id.activity_alarm_define_ringtone_layout:
 			showRingtonePicker();
 			break;
+		case R.id.activity_alarm_define_stop_layout:
+			startStopWayConfigActivity();
+			break;
 		case R.id.activity_alarm_define_done_btn:
 			done();
 			break;
@@ -224,6 +232,10 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			overridePendingTransition(R.anim.shift_in_from_left, R.anim.shift_out_to_right);
 			break;
 		}
+	}
+	
+	private void startStopWayConfigActivity() {
+		// TODO
 	}
 	
 	private void showTitleDefineDialog() {
@@ -260,7 +272,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.ringtone_picker_title));
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+		//intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
 		Uri defaultUri = Uri.parse(mRingtoneUri);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, defaultUri);
