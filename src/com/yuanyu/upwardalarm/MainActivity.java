@@ -85,6 +85,7 @@ public class MainActivity extends Activity {
 				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineStandardActivity.EXTRA_ALARM);
 				mManager.add(alarm);
 				registerAlarm(alarm);
+				showToastMessage(alarm);
 			}
 			break;
 		case ACTIVITY_ALARM_EDIT:
@@ -93,13 +94,7 @@ public class MainActivity extends Activity {
 				int position = data.getIntExtra(AlarmDefineStandardActivity.EXTRA_POSITION, -1);
 				if(mManager.update(position, alarm)) { // Update succeeded
 					registerAlarm(alarm); // The existed alarm will be replaced
-
-					if(alarm.getEnable()) {
-						String message = Utils.getTextTimeBeforeGoOff(this, alarm);
-						if(!message.isEmpty()) {
-							Manager.INSTANCE.showToast(this, message);
-						}
-					}
+					showToastMessage(alarm);
 				}
 			}
 			break;
@@ -120,5 +115,14 @@ public class MainActivity extends Activity {
 			Manager.INSTANCE.register(this, alarm);
 		}
 		Manager.INSTANCE.saveAlarm(this, alarm);
+	}
+	
+	private void showToastMessage(Alarm alarm) {
+		if(alarm.getEnable()) {
+			String message = Utils.getTextTimeBeforeGoOff(this, alarm);
+			if(!message.isEmpty()) {
+				Manager.INSTANCE.showToast(this, message);
+			}
+		}
 	}
 }
