@@ -34,8 +34,9 @@ import com.yuanyu.upwardalarm.model.Utils;
 
 public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.OnCheckedChangeListener {
 
-	private final static float ALPHA_PRESSED = 0.5f;
+	private final static float ALPHA_PRESSED = 0.6f;
 	private final static float ALPHA_NORMAL = 1.0f;
+	private final static float ALPHA_DISABLED = 0.7f;
 
 	private final Context mContext;
 	private final List<Alarm> mData;
@@ -284,14 +285,14 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 
 	private void updateEnableState(ViewHolder holder, boolean isEnable) {
 		if(isEnable) {
-			holder.label.setAlpha(1.0f);
-			holder.repeat.setAlpha(1.0f);
-			holder.time.setAlpha(1.0f);
+			holder.label.setAlpha(ALPHA_NORMAL);
+			holder.repeat.setAlpha(ALPHA_NORMAL);
+			holder.time.setAlpha(ALPHA_NORMAL);
 		}
 		else {
-			holder.label.setAlpha(0.5f);
-			holder.repeat.setAlpha(0.5f);
-			holder.time.setAlpha(0.5f);
+			holder.label.setAlpha(ALPHA_DISABLED);
+			holder.repeat.setAlpha(ALPHA_DISABLED);
+			holder.time.setAlpha(ALPHA_DISABLED);
 		}
 	}
 
