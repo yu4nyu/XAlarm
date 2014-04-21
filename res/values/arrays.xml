@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="stop_selections">
+        <item>Click button</item>
         <item>Throw upward</item>
         <item>Tap</item>
         <item>Shake</item>
