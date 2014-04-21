@@ -30,9 +30,6 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 	private boolean mVibrate;
 	private String mRingtoneUri;
 
-	private AlarmGoOffDialog mDialog;
-	private boolean isDestroyed;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,21 +45,14 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		mRingtoneUri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
 
 		MovementAnalysor.INSTANCE.addMovementListener(this);
-		isDestroyed = false;
 
-		mDialog = new AlarmGoOffDialog();
+		AlarmGoOffDialog dialog = new AlarmGoOffDialog();
 		Bundle args = new Bundle();
 		args.putString(ARGS_KEY_LABEL, mLabel);
 		args.putBoolean(ARGS_KEY_VIBRATE, mVibrate);
 		args.putString(ARGS_KEY_RINGTONE_URI, mRingtoneUri);
-		mDialog.setArguments(args);
-		mDialog.show(getFragmentManager(), "alarmGoOff");
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		isDestroyed = true;
+		dialog.setArguments(args);
+		dialog.show(getFragmentManager(), "alarmGoOff");
 	}
 
 	@Override
@@ -72,12 +62,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 
 	@Override
 	public void onUpwardDetected() {
-		if(!isFinishing() && !isDestroyed) {
-			mDialog.release();
-			mDialog.dismiss();
-			finish();
-			Log.d(TAG, "finish()");
-		}
+		finish();
+		Log.d(TAG, "finish()");
 	}
 
 	public static class AlarmGoOffDialog extends DialogFragment {
