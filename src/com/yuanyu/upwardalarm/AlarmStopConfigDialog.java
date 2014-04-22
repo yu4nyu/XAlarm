@@ -82,6 +82,7 @@ public class AlarmStopConfigDialog extends DialogFragment {
 					int level = mLevelSpinner.getSelectedItemPosition();
 					int times = mTimesSeekBar.getProgress();
 					notifyOnAlarmStopConfiguredListener(type, level, times);
+					mOnAlarmStopConfiguredListener = null;
 				}
 			});
 

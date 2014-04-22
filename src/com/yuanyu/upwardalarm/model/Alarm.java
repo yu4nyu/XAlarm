@@ -6,23 +6,24 @@ import android.content.Context;
 
 public class Alarm implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	private int mId;
-
 	private String mLabel;
-
 	private boolean mEnable;
 
 	private int mHour;
 	private int mMinute;
 
 	private String mRingtoneUri;
-
 	private boolean mVibrate;
 
 	private boolean mRepeat;
 	private boolean[] mWeekRepeat = new boolean[7]; // Begin with Sunday
+	
+	private int mStopWay;
+	private int mStopLevel;
+	private int mStopTimes; // Times of operation to stop the alarm
 
 	private Alarm() {
 		mLabel = "";
@@ -35,6 +36,10 @@ public class Alarm implements Serializable {
 		for(int i = 0; i < mWeekRepeat.length; i++) {
 			mWeekRepeat[i] = true;
 		}
+		
+		mStopWay = Constants.STOP_WAY_BUTTON;
+		mStopLevel = Constants.LEVEL_EASY;
+		mStopTimes = 1;
 	}
 
 	private Alarm(Alarm alarm) {
@@ -49,6 +54,10 @@ public class Alarm implements Serializable {
 		for(int i = 0; i < mWeekRepeat.length; i++) {
 			mWeekRepeat[i] = alarm.mWeekRepeat[i];
 		}
+		
+		mStopWay = alarm.mStopWay;
+		mStopLevel = alarm.mStopLevel;
+		mStopTimes = alarm.mStopTimes;
 	}
 	
 	public static Builder newBuilder(Context context) {
@@ -127,6 +136,18 @@ public class Alarm implements Serializable {
 
 	public boolean isRepeat() {
 		return mRepeat;
+	}
+	
+	public int getStopWay() {
+		return mStopWay;
+	}
+	
+	public int getStopLevel() {
+		return mStopLevel;
+	}
+	
+	public int getStopTimes() {
+		return mStopTimes;
 	}
 
 	/**
@@ -212,6 +233,21 @@ public class Alarm implements Serializable {
 			for(int i = 0; i < mAlarm.mWeekRepeat.length; i++) {
 				mAlarm.mWeekRepeat[i] = true;
 			}
+			return this;
+		}
+		
+		public Builder setStopWay(int way) {
+			mAlarm.mStopWay = way;
+			return this;
+		}
+		
+		public Builder setStopLevel(int level) {
+			mAlarm.mStopLevel = level;
+			return this;
+		}
+		
+		public Builder setStopTimes(int times) {
+			mAlarm.mStopTimes = times;
 			return this;
 		}
 

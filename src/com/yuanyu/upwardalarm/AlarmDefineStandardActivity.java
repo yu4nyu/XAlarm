@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -27,7 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 public class AlarmDefineStandardActivity extends Activity implements View.OnClickListener,
-	OnCheckedChangeListener {
+	CompoundButton.OnCheckedChangeListener, AlarmStopConfigDialog.OnAlarmStopConfiguredListener {
 	
 	private final static String TAG = "AlarmDefineStandardActivity";
 	
@@ -236,7 +235,13 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	
 	private void startStopWayConfigActivity() {
 		AlarmStopConfigDialog dialog = new AlarmStopConfigDialog();
+		dialog.setOnAlarmStopConfiguredListener(this);
 		dialog.show(getFragmentManager(), "Stop Way Config");
+	}
+	
+	@Override
+	public void onAlarmStopConfigured(int type, int level, int times) {
+		// TODO
 	}
 	
 	private void showTitleDefineDialog() {
