@@ -30,6 +30,7 @@
         android:layout_gravity="center" />
 
     <TextView
+        android:id="@+id/dialog_alarm_stop_config_times_text"
         style="@style/AlarmStopConfig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,8 +38,9 @@
 
     <SeekBar
         android:id="@+id/dialog_alarm_stop_config_seekbar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:max="9" />
 
 </LinearLayout>
