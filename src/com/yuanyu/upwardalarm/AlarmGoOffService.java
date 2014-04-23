@@ -29,7 +29,10 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	private static final String TAG = "AlarmGoOffService";
 
 	private MovementTracker mTracker;
+	
 	private int mStopWay;
+	private int mStopLevel;
+	private int mStopTimes;
 	
 	private boolean mIsVibrate;
 	private String mRingtoneUri;
@@ -54,11 +57,14 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
         }
     };
 
-	public static void startService(Context context, boolean isVibrate, String ringtoneUri, int stopWay) {
+	public static void startService(Context context, boolean isVibrate, String ringtoneUri,
+			int stopWay, int stopLevel, int stopTimes) {
 		Intent i = new Intent(context, AlarmGoOffService.class);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, isVibrate);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, ringtoneUri);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, stopWay);
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, stopLevel);
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, stopTimes);
 		Manager.INSTANCE.requireWakeLock(context);
 		context.startService(i);
 	}
@@ -98,11 +104,13 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			mIsVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
 			mRingtoneUri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
 			mStopWay = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, Constants.STOP_WAY_BUTTON);
+			mStopLevel = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, Constants.LEVEL_EASY);
+			mStopTimes = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, 1);
 
 			AlarmGuardian.markGotOff(this);
 			AlarmGuardian.saveIsVibrate(this, mIsVibrate);
 			AlarmGuardian.saveRingtoneUri(this, mRingtoneUri);
-			// TODO save stop way
+			// TODO save stop way, stop level, stop times
 			
 			started = true;
 		}
@@ -117,7 +125,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		
 		if(started) {
 			if(mStopWay != Constants.STOP_WAY_BUTTON) {
-				mTracker.start(mStopWay);
+				mTracker.start(mStopWay, mStopLevel, mStopTimes);
 			}
 			else {
 				MovementAnalysor.INSTANCE.removeMovementListener(this);

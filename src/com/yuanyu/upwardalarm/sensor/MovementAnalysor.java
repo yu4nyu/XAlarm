@@ -25,10 +25,10 @@ public enum MovementAnalysor {
 		mMovementListeners.remove(listener);
 	}
 
-	void initMovement(int movementType) {
+	void initMovement(int movementType, int movementLevel, int movementTimes) {
 		switch(movementType) {
 		case Constants.STOP_WAY_UPWARD:
-			mMovement = new MovementThrowUp(mMovementListeners);
+			mMovement = new MovementThrowUp(mMovementListeners, movementLevel, movementTimes);
 			break;
 		case Constants.STOP_WAY_TAP:
 			// TODO

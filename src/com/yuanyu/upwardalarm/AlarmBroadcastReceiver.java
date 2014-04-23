@@ -38,6 +38,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 		i.putExtra(EXTRA_IS_VIBRATE, intent.getBooleanExtra(EXTRA_IS_VIBRATE, false));
 		i.putExtra(EXTRA_RINGTONE_URI, intent.getStringExtra(EXTRA_RINGTONE_URI));
 		i.putExtra(EXTRA_STOP_WAY, intent.getIntExtra(EXTRA_STOP_WAY, Constants.STOP_WAY_BUTTON));
+		i.putExtra(EXTRA_STOP_LEVEL, intent.getIntExtra(EXTRA_STOP_LEVEL, Constants.LEVEL_EASY));
+		i.putExtra(EXTRA_STOP_TIMES, intent.getIntExtra(EXTRA_STOP_TIMES, 1));
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(i);
 	}

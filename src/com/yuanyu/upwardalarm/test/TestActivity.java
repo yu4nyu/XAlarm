@@ -61,7 +61,7 @@ public class TestActivity extends Activity {
 			setCancelable(false);
 
 			mTracker = new MovementTracker(getActivity());
-			mTracker.start(Constants.STOP_WAY_BUTTON);
+			mTracker.start(Constants.STOP_WAY_BUTTON, 0, 1);
 		}
 
 		@Override

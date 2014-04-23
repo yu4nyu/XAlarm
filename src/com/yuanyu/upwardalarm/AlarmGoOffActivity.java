@@ -23,15 +23,13 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 
 	private static final String TAG = "AlarmGoOffActivity";
 
-	private static final String ARGS_KEY_LABEL = "label";
-	private static final String ARGS_KEY_VIBRATE = "vibrate";
-	private static final String ARGS_KEY_RINGTONE_URI = "ringtone";
-	private static final String ARGS_KEY_STOP_WAY = "stop";
-
 	private String mLabel;
 	private boolean mVibrate;
 	private String mRingtoneUri;
+	
 	private int mStopWay;
+	private int mStopLevel;
+	private int mStopTimes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +44,22 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		mLabel = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL);
 		mVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
 		mRingtoneUri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
+		
 		mStopWay = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, Constants.STOP_WAY_BUTTON);
-
+		mStopLevel = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, Constants.LEVEL_EASY);
+		mStopTimes = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, 1);
+		
 		// TODO take account the stop way
 		MovementAnalysor.INSTANCE.addMovementListener(this);
 
 		AlarmGoOffDialog dialog = new AlarmGoOffDialog();
 		Bundle args = new Bundle();
-		args.putString(ARGS_KEY_LABEL, mLabel);
-		args.putBoolean(ARGS_KEY_VIBRATE, mVibrate);
-		args.putString(ARGS_KEY_RINGTONE_URI, mRingtoneUri);
-		args.putInt(ARGS_KEY_STOP_WAY, mStopWay);
+		args.putString(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, mLabel);
+		args.putBoolean(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, mVibrate);
+		args.putString(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, mRingtoneUri);
+		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_WAY, mStopWay);
+		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, mStopLevel);
+		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, mStopTimes);
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "alarmGoOff");
 	}
@@ -78,7 +81,10 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		private String mLabel;
 		private boolean mIsVibrate;
 		private String mRingtoneUri;
+		
 		private int mStopWay;
+		private int mStopLevel;
+		private int mStopTimes;
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -86,10 +92,12 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			setCancelable(false);
 
 			Bundle args = getArguments();
-			mLabel = args.getString(ARGS_KEY_LABEL);
-			mIsVibrate = args.getBoolean(ARGS_KEY_VIBRATE);
-			mRingtoneUri = args.getString(ARGS_KEY_RINGTONE_URI);
-			mStopWay = args.getInt(ARGS_KEY_STOP_WAY);
+			mLabel = args.getString(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL);
+			mIsVibrate = args.getBoolean(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE);
+			mRingtoneUri = args.getString(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
+			mStopWay = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_WAY);
+			mStopLevel = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL);
+			mStopTimes = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, 1);
 		}
 
 		@Override
@@ -102,6 +110,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 				labelView.setText(mLabel);
 				labelView.setVisibility(View.VISIBLE);
 			}
+			
+			// TODO show times on dialog
 
 			TextView timeText = (TextView) view.findViewById(R.id.dialog_alarm_go_off_time);
 			mTimeProvider = new RealTimeProvider();
@@ -114,7 +124,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			builder.setView(view);
 
 			// Start the ringtone and vibrate service
-			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri, mStopWay);
+			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri, mStopWay, mStopLevel, mStopTimes);
 
 			return builder.create();
 		}
