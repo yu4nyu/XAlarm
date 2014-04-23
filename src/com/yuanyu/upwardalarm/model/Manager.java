@@ -98,6 +98,9 @@ public enum Manager {
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, alarm.getLabel());
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, alarm.getVibrateEnable());
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, alarm.getRingtoneUri());
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, alarm.getStopWay());
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, alarm.getStopLevel());
+		intent.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, alarm.getStopTimes());
 		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarm.getId(), intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
 		if(Utils.isKitKatOrLater()) {

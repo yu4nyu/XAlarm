@@ -14,7 +14,10 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 	public final static String EXTRA_ALARM_LABEL = "alarm_label"; // String extra
 	public final static String EXTRA_IS_VIBRATE = "is_vibrate"; // boolean extra
 	public final static String EXTRA_RINGTONE_URI = "ringtone"; // String extra
+	
 	public final static String EXTRA_STOP_WAY = "movement_type";
+	public final static String EXTRA_STOP_LEVEL = "stop_level";
+	public final static String EXTRA_STOP_TIMES = "stop_times";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {

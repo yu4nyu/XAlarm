@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yuanyu.upwardalarm.AlarmBroadcastReceiver;
 import com.yuanyu.upwardalarm.R;
+import com.yuanyu.upwardalarm.model.Constants;
 import com.yuanyu.upwardalarm.sensor.MovementTracker;
 import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
@@ -60,7 +61,7 @@ public class TestActivity extends Activity {
 			setCancelable(false);
 
 			mTracker = new MovementTracker(getActivity());
-			mTracker.start();
+			mTracker.start(Constants.STOP_WAY_BUTTON);
 		}
 
 		@Override

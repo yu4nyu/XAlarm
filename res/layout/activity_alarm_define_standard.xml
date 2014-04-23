@@ -272,6 +272,11 @@
                     android:layout_marginLeft="8dp"
                     android:text="@string/config_way_to_stop_alarm" />
             </LinearLayout>
+            
+            <TextView
+                android:id="@+id/activity_alarm_define_stop_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />"
         </LinearLayout>
     </ScrollView>
 

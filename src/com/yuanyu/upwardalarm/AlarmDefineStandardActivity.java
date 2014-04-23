@@ -1,7 +1,9 @@
 package com.yuanyu.upwardalarm;
 
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.model.Constants;
 import com.yuanyu.upwardalarm.model.Manager;
+import com.yuanyu.upwardalarm.model.Utils;
 
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -63,6 +65,11 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	
 	private String mRingtoneUri = "";
 	
+	private int mStopWay = Constants.STOP_WAY_BUTTON;
+	private int mStopLevel = Constants.LEVEL_EASY;
+	private int mStopTimes = 1;
+	private TextView mStopWayText;
+	
 	private int mEnabledColor;
 	private int mDisabledColor;
 	
@@ -81,6 +88,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		
 		initViews();
 		setOnClickListeners();
+		updateStopWayText();
 		
 		Object extra = getIntent().getSerializableExtra(EXTRA_ALARM);
 		if(extra != null) { // Edit
@@ -145,6 +153,7 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		mSaturday = (ToggleButton) findViewById(R.id.activity_alarm_define_saturday_toggle);
 		
 		mDefineAlarmStopLayout = (View) findViewById(R.id.activity_alarm_define_stop_layout);
+		mStopWayText = (TextView) findViewById(R.id.activity_alarm_define_stop_text);
 		
 		mDoneBtn = (Button) findViewById(R.id.activity_alarm_define_done_btn);
 		mCancelBtn = (Button) findViewById(R.id.activity_alarm_define_cancel_btn);
@@ -209,6 +218,11 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 			mSaturday.setChecked(isCheck);
 			mSaturday.setTextColor(isCheck ? mEnabledColor : mDisabledColor);
 		}
+		
+		mStopWay = alarm.getStopWay();
+		mStopLevel = alarm.getStopLevel();
+		mStopTimes = alarm.getStopTimes();
+		updateStopWayText();
 	}
 
 	@Override
@@ -239,9 +253,16 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 		dialog.show(getFragmentManager(), "Stop Way Config");
 	}
 	
+	private void updateStopWayText() {
+		mStopWayText.setText(Utils.getStopWayText(this, mStopWay, mStopLevel, mStopTimes));
+	}
+	
 	@Override
 	public void onAlarmStopConfigured(int type, int level, int times) {
-		// TODO
+		mStopWay = type;
+		mStopLevel = level;
+		mStopTimes = times;
+		updateStopWayText();
 	}
 	
 	private void showTitleDefineDialog() {
@@ -308,7 +329,10 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 				mThursday.isChecked(),
 				mFriday.isChecked(),
 				mSaturday.isChecked())
-		;
+		.setStopWay(mStopWay)
+		.setStopLevel(mStopLevel)
+		.setStopTimes(mStopTimes);
+		
 		return builder.build();
 	}
 	

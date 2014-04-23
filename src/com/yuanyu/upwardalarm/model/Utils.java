@@ -252,6 +252,21 @@ public class Utils {
 
 		return String.format(format, timeText);
 	}
+	
+	// TODO use html ???
+	public static String getStopWayText(Context context, int way, int level, int times) {
+		// TODO take account the BUTTON case
+		String result = context.getResources().getStringArray(R.array.stop_selections)[way];
+		result += "  " + times + " ";
+		if(times == 1) {
+			result += context.getString(R.string.times_lowercase_singular);
+		}
+		else {
+			result += context.getString(R.string.times_lowercase);
+		}
+		result += "  " + context.getResources().getStringArray(R.array.level)[level];
+		return result;
+	}
 
 	/**
 	 * Returns whether the SDK is KitKat or later

@@ -47,5 +47,7 @@
 	<string name="way_to_stop_alarm">Way to stop alarm</string>
 	<string name="level">Level</string>
 	<string name="times">Times</string>
+	<string name="times_lowercase_singular">time</string>
+	<string name="times_lowercase">times</string>
 
 </resources>
