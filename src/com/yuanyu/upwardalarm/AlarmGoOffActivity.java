@@ -1,5 +1,6 @@
 package com.yuanyu.upwardalarm;
 
+import com.yuanyu.upwardalarm.model.Constants;
 import com.yuanyu.upwardalarm.model.RealTimeProvider;
 import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
 import com.yuanyu.upwardalarm.ui.AlarmItemAnimator;
@@ -25,10 +26,12 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 	private static final String ARGS_KEY_LABEL = "label";
 	private static final String ARGS_KEY_VIBRATE = "vibrate";
 	private static final String ARGS_KEY_RINGTONE_URI = "ringtone";
+	private static final String ARGS_KEY_STOP_WAY = "stop";
 
 	private String mLabel;
 	private boolean mVibrate;
 	private String mRingtoneUri;
+	private int mStopWay;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,9 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		mLabel = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL);
 		mVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
 		mRingtoneUri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
+		mStopWay = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, Constants.STOP_WAY_BUTTON);
 
+		// TODO take account the stop way
 		MovementAnalysor.INSTANCE.addMovementListener(this);
 
 		AlarmGoOffDialog dialog = new AlarmGoOffDialog();
@@ -51,6 +56,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		args.putString(ARGS_KEY_LABEL, mLabel);
 		args.putBoolean(ARGS_KEY_VIBRATE, mVibrate);
 		args.putString(ARGS_KEY_RINGTONE_URI, mRingtoneUri);
+		args.putInt(ARGS_KEY_STOP_WAY, mStopWay);
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "alarmGoOff");
 	}
@@ -61,7 +67,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 	}
 
 	@Override
-	public void onUpwardDetected() {
+	public void onMovementDetected() {
 		finish();
 		Log.d(TAG, "finish()");
 	}
@@ -72,6 +78,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		private String mLabel;
 		private boolean mIsVibrate;
 		private String mRingtoneUri;
+		private int mStopWay;
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +89,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			mLabel = args.getString(ARGS_KEY_LABEL);
 			mIsVibrate = args.getBoolean(ARGS_KEY_VIBRATE);
 			mRingtoneUri = args.getString(ARGS_KEY_RINGTONE_URI);
+			mStopWay = args.getInt(ARGS_KEY_STOP_WAY);
 		}
 
 		@Override
@@ -106,7 +114,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			builder.setView(view);
 
 			// Start the ringtone and vibrate service
-			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri);
+			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri, mStopWay);
 
 			return builder.create();
 		}

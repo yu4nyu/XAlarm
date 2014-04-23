@@ -3,6 +3,7 @@ package com.yuanyu.upwardalarm;
 import java.io.IOException;
 
 import com.yuanyu.upwardalarm.model.AlarmGuardian;
+import com.yuanyu.upwardalarm.model.Constants;
 import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
 import com.yuanyu.upwardalarm.sensor.MovementAnalysor;
@@ -28,6 +29,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	private static final String TAG = "AlarmGoOffService";
 
 	private MovementTracker mTracker;
+	private int mStopWay;
 	
 	private boolean mIsVibrate;
 	private String mRingtoneUri;
@@ -52,12 +54,20 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
         }
     };
 
-	public static void startService(Context context, boolean isVibrate, String ringtoneUri) {
+	public static void startService(Context context, boolean isVibrate, String ringtoneUri, int stopWay) {
 		Intent i = new Intent(context, AlarmGoOffService.class);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, isVibrate);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, ringtoneUri);
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, stopWay);
 		Manager.INSTANCE.requireWakeLock(context);
 		context.startService(i);
+	}
+	
+	public static void stopService(Context context) {
+		Intent i = new Intent(context, AlarmGoOffService.class);
+		Manager.INSTANCE.releaseWakeLock();
+		// TODO need to release other resources here ???
+		context.stopService(i);
 	}
 	
 	@Override
@@ -87,10 +97,12 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		if(intent != null) { // The service was killed but restarted by the system
 			mIsVibrate = intent.getBooleanExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, false);
 			mRingtoneUri = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI);
+			mStopWay = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, Constants.STOP_WAY_BUTTON);
 
 			AlarmGuardian.markGotOff(this);
 			AlarmGuardian.saveIsVibrate(this, mIsVibrate);
 			AlarmGuardian.saveRingtoneUri(this, mRingtoneUri);
+			// TODO save stop way
 			
 			started = true;
 		}
@@ -98,12 +110,18 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			if(AlarmGuardian.isGotOff(this)) {
 				mIsVibrate = AlarmGuardian.getIsVibrate(this);
 				mRingtoneUri = AlarmGuardian.getRingtoneUri(this);
+				// TODO get stop way
 				started = true;
 			}
 		}
 		
 		if(started) {
-			mTracker.start();
+			if(mStopWay != Constants.STOP_WAY_BUTTON) {
+				mTracker.start(mStopWay);
+			}
+			else {
+				MovementAnalysor.INSTANCE.removeMovementListener(this);
+			}
 			startAlarm();
 		}
 		else {
@@ -216,7 +234,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	}
 
 	@Override
-	public void onUpwardDetected() {
+	public void onMovementDetected() {
 		Log.d(TAG, "onUpwardDetected");
 		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
 		stopAlarm();

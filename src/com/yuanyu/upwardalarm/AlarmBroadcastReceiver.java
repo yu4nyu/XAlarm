@@ -1,6 +1,7 @@
 package com.yuanyu.upwardalarm;
 
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.model.Constants;
 import com.yuanyu.upwardalarm.model.Manager;
 
 import android.content.BroadcastReceiver;
@@ -13,6 +14,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 	public final static String EXTRA_ALARM_LABEL = "alarm_label"; // String extra
 	public final static String EXTRA_IS_VIBRATE = "is_vibrate"; // boolean extra
 	public final static String EXTRA_RINGTONE_URI = "ringtone"; // String extra
+	public final static String EXTRA_STOP_WAY = "movement_type";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -32,6 +34,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 		i.putExtra(EXTRA_ALARM_LABEL, intent.getStringExtra(EXTRA_ALARM_LABEL));
 		i.putExtra(EXTRA_IS_VIBRATE, intent.getBooleanExtra(EXTRA_IS_VIBRATE, false));
 		i.putExtra(EXTRA_RINGTONE_URI, intent.getStringExtra(EXTRA_RINGTONE_URI));
+		i.putExtra(EXTRA_STOP_WAY, intent.getIntExtra(EXTRA_STOP_WAY, Constants.STOP_WAY_BUTTON));
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(i);
 	}
