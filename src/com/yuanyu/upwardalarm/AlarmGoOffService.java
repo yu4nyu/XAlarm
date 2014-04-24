@@ -33,6 +33,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	private int mStopWay;
 	private int mStopLevel;
 	private int mStopTimes;
+	private int mStopTimesCount;
 	
 	private boolean mIsVibrate;
 	private String mRingtoneUri;
@@ -80,6 +81,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	public void onCreate() {
 		super.onCreate();
 
+		mStopTimesCount = 0;
 		mTracker = new MovementTracker(this);
 		MovementAnalysor.INSTANCE.addMovementListener(this);
 		
@@ -110,7 +112,10 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			AlarmGuardian.markGotOff(this);
 			AlarmGuardian.saveIsVibrate(this, mIsVibrate);
 			AlarmGuardian.saveRingtoneUri(this, mRingtoneUri);
-			// TODO save stop way, stop level, stop times
+			AlarmGuardian.saveStopWay(this, mStopWay);
+			AlarmGuardian.saveStopLevel(this, mStopLevel);
+			AlarmGuardian.saveStopTimes(this, mStopTimes);
+			AlarmGuardian.saveStopTimesCount(this, mStopTimesCount);
 			
 			started = true;
 		}
@@ -118,7 +123,10 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			if(AlarmGuardian.isGotOff(this)) {
 				mIsVibrate = AlarmGuardian.getIsVibrate(this);
 				mRingtoneUri = AlarmGuardian.getRingtoneUri(this);
-				// TODO get stop way
+				mStopWay = AlarmGuardian.getStopWay(this);
+				mStopLevel = AlarmGuardian.getStopLevel(this);
+				mStopTimes = AlarmGuardian.getStopTimes(this);
+				mStopTimesCount = AlarmGuardian.getStopTimesCount(this);
 				started = true;
 			}
 		}
@@ -243,7 +251,12 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 
 	@Override
 	public void onMovementDetected() {
-		Log.d(TAG, "onUpwardDetected");
+		mStopTimesCount++;
+		Log.d(TAG, "onUpwardDetected, mStopTimesCount = " + mStopTimesCount);
+		if(mStopTimesCount < mStopTimes) {
+			return;
+		}
+		
 		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
 		stopAlarm();
 		stopSelf();
