@@ -125,7 +125,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		
 		if(started) {
 			if(mStopWay != Constants.STOP_WAY_BUTTON) {
-				mTracker.start(mStopWay, mStopLevel, mStopTimes);
+				mTracker.start(mStopWay, mStopLevel);
 			}
 			else {
 				MovementAnalysor.INSTANCE.removeMovementListener(this);

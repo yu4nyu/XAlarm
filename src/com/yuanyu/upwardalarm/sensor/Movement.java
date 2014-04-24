@@ -10,12 +10,10 @@ abstract class Movement {
 	List<MovementListener> mMovementListeners;
 	
 	protected int mMovementLevel;
-	protected int mMovementTimes;
 	
-	public Movement(List<MovementListener> listeners, int movementLevel, int movementTimes) {
+	public Movement(List<MovementListener> listeners, int movementLevel) {
 		mMovementListeners = listeners;
 		mMovementLevel = movementLevel;
-		mMovementTimes = movementTimes;
 	}
 
 	abstract void detectMovement(List<Sample> samples);

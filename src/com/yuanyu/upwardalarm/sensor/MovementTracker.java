@@ -39,8 +39,8 @@ public class MovementTracker implements SensorEventListener {
 	/**
 	 * Do not forget to call stop() if you do not need to track the movement
 	 */
-	public void start(int movementType, int movementLevel, int movementTimes) {
-		MovementAnalysor.INSTANCE.initMovement(movementType, movementLevel, movementTimes);
+	public void start(int movementType, int movementLevel) {
+		MovementAnalysor.INSTANCE.initMovement(movementType, movementLevel);
 		mSensorManager.registerListener(this, mAcceleroMeter, TRACK_RATE);
 	}
 

@@ -11,6 +11,10 @@ public enum MovementAnalysor {
 	INSTANCE;
 
 	public static interface MovementListener {
+		
+		/**
+		 * Movement detected one time
+		 */
 		void onMovementDetected();
 	}
 
@@ -25,10 +29,10 @@ public enum MovementAnalysor {
 		mMovementListeners.remove(listener);
 	}
 
-	void initMovement(int movementType, int movementLevel, int movementTimes) {
+	void initMovement(int movementType, int movementLevel) {
 		switch(movementType) {
 		case Constants.STOP_WAY_UPWARD:
-			mMovement = new MovementThrowUp(mMovementListeners, movementLevel, movementTimes);
+			mMovement = new MovementThrowUp(mMovementListeners, movementLevel);
 			break;
 		case Constants.STOP_WAY_TAP:
 			// TODO
