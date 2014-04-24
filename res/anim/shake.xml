@@ -2,24 +2,24 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <rotate
-        android:duration="100"
+        android:duration="80"
         android:fromDegrees="0"
         android:pivotX="50%"
         android:pivotY="50%"
         android:toDegrees="-30" />
     <rotate
-        android:duration="200"
+        android:duration="160"
         android:fromDegrees="-30"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:startOffset="100"
+        android:startOffset="80"
         android:toDegrees="30" />
     <rotate
-        android:duration="100"
+        android:duration="80"
         android:fromDegrees="30"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:startOffset="300"
+        android:startOffset="240"
         android:toDegrees="0" />
 
 </set>

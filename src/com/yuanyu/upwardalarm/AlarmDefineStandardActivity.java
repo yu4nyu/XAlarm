@@ -250,6 +250,11 @@ public class AlarmDefineStandardActivity extends Activity implements View.OnClic
 	private void startStopWayConfigActivity() {
 		AlarmStopConfigDialog dialog = new AlarmStopConfigDialog();
 		dialog.setOnAlarmStopConfiguredListener(this);
+		Bundle args = new Bundle();
+		args.putInt(AlarmStopConfigDialog.ARGS_STOP_WAY, mStopWay);
+		args.putInt(AlarmStopConfigDialog.ARGS_STOP_LEVEL, mStopLevel);
+		args.putInt(AlarmStopConfigDialog.ARGS_STOP_TIMES, mStopTimes);
+		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "Stop Way Config");
 	}
 	

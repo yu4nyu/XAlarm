@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 public class AlarmStopConfigDialog extends DialogFragment {
 	
+	public static final String ARGS_STOP_WAY = "stop_way";
+	public static final String ARGS_STOP_LEVEL = "stop_level";
+	public static final String ARGS_STOP_TIMES = "stop_times";
+	
 	public static interface OnAlarmStopConfiguredListener {
 		void onAlarmStopConfigured(int type, int level, int times);
 	}
@@ -71,6 +75,13 @@ public class AlarmStopConfigDialog extends DialogFragment {
 				
 			}
 		});
+		
+		Bundle args = getArguments();
+		if(args != null) {
+			mSelectionSpinner.setSelection(args.getInt(ARGS_STOP_WAY));
+			mLevelSpinner.setSelection(args.getInt(ARGS_STOP_LEVEL));
+			mTimesSeekBar.setProgress(args.getInt(ARGS_STOP_TIMES) - 1);
+		}
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setView(view)
