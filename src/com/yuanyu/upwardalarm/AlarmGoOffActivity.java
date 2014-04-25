@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 public class AlarmGoOffActivity extends Activity implements MovementAnalysor.MovementListener {
@@ -30,6 +31,9 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 	private int mStopWay;
 	private int mStopLevel;
 	private int mStopTimes;
+	
+	private AlarmGoOffDialog mDialog;
+	private int mStopTimesCount;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +53,12 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		mStopLevel = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, Constants.LEVEL_EASY);
 		mStopTimes = intent.getIntExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, 1);
 		
-		// TODO take account the stop way
-		MovementAnalysor.INSTANCE.addMovementListener(this);
+		if(mStopWay != Constants.STOP_WAY_BUTTON) {
+			mStopTimesCount = 0;
+			MovementAnalysor.INSTANCE.addMovementListener(this);
+		}
 
-		AlarmGoOffDialog dialog = new AlarmGoOffDialog();
+		mDialog = new AlarmGoOffDialog();
 		Bundle args = new Bundle();
 		args.putString(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, mLabel);
 		args.putBoolean(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, mVibrate);
@@ -60,8 +66,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_WAY, mStopWay);
 		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, mStopLevel);
 		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, mStopTimes);
-		dialog.setArguments(args);
-		dialog.show(getFragmentManager(), "alarmGoOff");
+		mDialog.setArguments(args);
+		mDialog.show(getFragmentManager(), "alarmGoOff");
 	}
 
 	@Override
@@ -71,6 +77,11 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 
 	@Override
 	public void onMovementDetected() {
+		mStopTimesCount++;
+		mDialog.updateTimesText(mStopTimesCount);
+		if(mStopTimesCount < mStopTimes) {
+			return;
+		}
 		finish();
 		Log.d(TAG, "finish()");
 	}
@@ -85,6 +96,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		private int mStopWay;
 		private int mStopLevel;
 		private int mStopTimes;
+		
+		private TextView mStopTimesText;
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -110,8 +123,6 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 				labelView.setText(mLabel);
 				labelView.setVisibility(View.VISIBLE);
 			}
-			
-			// TODO show times on dialog
 
 			TextView timeText = (TextView) view.findViewById(R.id.dialog_alarm_go_off_time);
 			mTimeProvider = new RealTimeProvider();
@@ -120,13 +131,40 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			ImageView icon = (ImageView) view.findViewById(R.id.dialog_alarm_go_off_icon);
 			AlarmItemAnimator.shakeForever(getActivity(), icon);
 
+			TextView stopWayText = (TextView) view.findViewById(R.id.dialog_alarm_go_off_stop_way);
+			stopWayText.setText(getResources().getStringArray(R.array.stop_selections)[mStopWay]);
+			
+			TextView stopLevelText = (TextView) view.findViewById(R.id.dialog_alarm_go_off_stop_level);
+			stopLevelText.setText(getResources().getStringArray(R.array.level)[mStopLevel]);
+			
+			mStopTimesText = (TextView) view.findViewById(R.id.dialog_alarm_go_off_stop_times);
+			updateTimesText(0);
+			
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setView(view);
-
+			
 			// Start the ringtone and vibrate service
 			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri, mStopWay, mStopLevel, mStopTimes);
-
+			
+			if(mStopWay == Constants.STOP_WAY_BUTTON) {
+				stopWayText.setVisibility(View.GONE);
+				stopLevelText.setVisibility(View.GONE);
+				mStopTimesText.setVisibility(View.GONE);
+				builder.setPositiveButton(R.string.stop_alarm, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						AlarmGoOffService.stopService(getActivity());
+						getActivity().finish();
+					}
+				});
+			}
+			
 			return builder.create();
+		}
+		
+		public void updateTimesText(int times) {
+			String text = times + "/" + mStopTimes;
+			mStopTimesText.setText(text);
 		}
 
 		public void release() {

@@ -2,15 +2,19 @@
 <resources>
 
     <string name="app_name">Upward Alarm</string>
+    
+    <!-- Menu actions -->
     <string name="action_add">Add</string>
     <string name="action_delete">Delete</string>
     <string name="action_test">Test sensor</string>
     <string name="action_share">Share this app</string>
     <string name="action_ads">View ads</string>
     <string name="action_about">About</string>
+    
+    <!-- Main activity -->
     <string name="no_alarm">No alarm\n\nPress the \"+\" button to add one</string>
 
-    <!-- Alarm Define Activity -->
+    <!-- Alarm define activity -->
     <string name="title_add_alarm">Add alarm</string>
     <string name="title_edit_alarm">Edit alarm</string>
     <string name="sunday">Sun</string>
@@ -49,5 +53,8 @@
 	<string name="times">Times</string>
 	<string name="times_lowercase_singular">time</string>
 	<string name="times_lowercase">times</string>
+	
+	<!-- Alarm go off activity -->
+	<string name="stop_alarm">Stop alarm</string>
 
 </resources>

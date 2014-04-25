@@ -71,7 +71,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="@dimen/item_side_margin_x_2"
-        android:text="Throw upward"
         android:textColor="@color/dark_gray"
         android:textSize="24sp" />
 
@@ -87,9 +86,7 @@
             android:id="@+id/dialog_alarm_go_off_stop_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(Moderate)"
-            
-        android:layout_marginRight="@dimen/item_side_margin_x_2"
+            android:layout_marginRight="@dimen/item_side_margin_x_2"
             android:textColor="@color/dark_gray"
             android:textSize="20sp" />
 
@@ -97,7 +94,6 @@
             android:id="@+id/dialog_alarm_go_off_stop_times"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3/5"
             android:textColor="@color/dark_gray"
             android:textSize="22sp" />
     </LinearLayout>
