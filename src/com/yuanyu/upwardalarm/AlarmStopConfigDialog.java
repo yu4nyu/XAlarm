@@ -1,5 +1,7 @@
 package com.yuanyu.upwardalarm;
 
+import com.yuanyu.upwardalarm.model.Constants;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -7,6 +9,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -72,6 +76,24 @@ public class AlarmStopConfigDialog extends DialogFragment {
 			}
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
+				
+			}
+		});
+		
+		mSelectionSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if(position == Constants.STOP_WAY_BUTTON) {
+					mLevelSpinner.setEnabled(false);
+					mTimesSeekBar.setEnabled(false);
+				}
+				else {
+					mLevelSpinner.setEnabled(true);
+					mTimesSeekBar.setEnabled(true);
+				}
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
 				
 			}
 		});
