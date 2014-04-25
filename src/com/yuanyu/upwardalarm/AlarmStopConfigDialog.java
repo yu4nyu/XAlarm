@@ -33,6 +33,8 @@ public class AlarmStopConfigDialog extends DialogFragment {
 	private Spinner mLevelSpinner;
 	private SeekBar mTimesSeekBar;
 	private TextView mTimesText;
+	
+	private boolean mIsTestSensor;
 
 	public void setOnAlarmStopConfiguredListener(OnAlarmStopConfiguredListener listener) {
 		mOnAlarmStopConfiguredListener = listener;
@@ -50,10 +52,6 @@ public class AlarmStopConfigDialog extends DialogFragment {
 		View view = inflater.inflate(R.layout.dialog_alarm_stop_config, null);
 		
 		mSelectionSpinner = (Spinner) view.findViewById(R.id.dialog_alarm_stop_config_selection_spinner);
-		ArrayAdapter<CharSequence> selectionAdapter = ArrayAdapter.createFromResource(
-				getActivity(), R.array.stop_selections, android.R.layout.simple_spinner_item);
-		selectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mSelectionSpinner.setAdapter(selectionAdapter);
 		
 		mLevelSpinner = (Spinner) view.findViewById(R.id.dialog_alarm_stop_config_level_spinner);
 		ArrayAdapter<CharSequence> levelAdapter = ArrayAdapter.createFromResource(
@@ -80,9 +78,38 @@ public class AlarmStopConfigDialog extends DialogFragment {
 			}
 		});
 		
+		Bundle args = getArguments();
+		if(args != null) { // Define alarm
+			mIsTestSensor = false;
+			
+			ArrayAdapter<CharSequence> selectionAdapter = ArrayAdapter.createFromResource(
+					getActivity(), R.array.stop_selections, android.R.layout.simple_spinner_item);
+			selectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			mSelectionSpinner.setAdapter(selectionAdapter);
+			
+			mSelectionSpinner.setSelection(args.getInt(ARGS_STOP_WAY));
+			mLevelSpinner.setSelection(args.getInt(ARGS_STOP_LEVEL));
+			mTimesSeekBar.setProgress(args.getInt(ARGS_STOP_TIMES) - 1);
+		}
+		else { // Test sensor
+			mIsTestSensor = true;
+			
+			// Do not show first selection "Click button"
+			String[] selections = getResources().getStringArray(R.array.stop_selections);
+			String[] newSelections = new String[selections.length - 1];
+			System.arraycopy(selections, 1, newSelections, 0, selections.length - 1);
+			ArrayAdapter<String> selectionAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, newSelections);
+			selectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			mSelectionSpinner.setAdapter(selectionAdapter);
+		}
+		
 		mSelectionSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if(mIsTestSensor) {
+					return;
+				}
+				
 				if(position == Constants.STOP_WAY_BUTTON) {
 					mLevelSpinner.setEnabled(false);
 					mTimesSeekBar.setEnabled(false);
@@ -98,13 +125,6 @@ public class AlarmStopConfigDialog extends DialogFragment {
 			}
 		});
 		
-		Bundle args = getArguments();
-		if(args != null) {
-			mSelectionSpinner.setSelection(args.getInt(ARGS_STOP_WAY));
-			mLevelSpinner.setSelection(args.getInt(ARGS_STOP_LEVEL));
-			mTimesSeekBar.setProgress(args.getInt(ARGS_STOP_TIMES) - 1);
-		}
-		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setView(view)
 			.setNegativeButton(android.R.string.cancel, null)
@@ -112,6 +132,9 @@ public class AlarmStopConfigDialog extends DialogFragment {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					int type = mSelectionSpinner.getSelectedItemPosition();
+					if(mIsTestSensor) {
+						type++;
+					}
 					int level = mLevelSpinner.getSelectedItemPosition();
 					int times = mTimesSeekBar.getProgress() + 1;
 					notifyOnAlarmStopConfiguredListener(type, level, times);

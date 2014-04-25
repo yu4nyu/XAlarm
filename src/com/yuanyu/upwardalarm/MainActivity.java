@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAlarmStopConfiguredListener {
 
 	private final static int ACTIVITY_ALARM_DEFINE = 0;
 	public final static int ACTIVITY_ALARM_EDIT = 1;
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		View emptyText = findViewById(R.id.activity_main_empty_text);
-		
+
 		List<Alarm> data = new ArrayList<Alarm>();
 		data.addAll(Manager.INSTANCE.getSavedAlarms(this));
 		mManager = new AlarmItemsManager(this, data, emptyText);
@@ -63,16 +63,20 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.action_add) {
+		switch(item.getItemId()) {
+		case R.id.action_add:
 			Intent intent = new Intent(MainActivity.this, AlarmDefineStandardActivity.class);
 			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
 			overridePendingTransition(R.anim.shift_in_from_right, R.anim.shift_out_to_left);
-		}
-		else if(item.getItemId() == R.id.action_test) {
-			// TODO
-			Intent intent = new Intent(MainActivity.this, TestActivity.class);
-			startActivity(intent);
-			//TestActivity.startGoOffActivity(this);
+			break;
+		case R.id.action_test:
+			AlarmStopConfigDialog dialog = new AlarmStopConfigDialog();
+			dialog.show(getFragmentManager(), "Test sensor");
+			break;
+		case R.id.action_test_debug: // For test only. TODO delete this
+			Intent i = new Intent(MainActivity.this, TestActivity.class);
+			startActivity(i);
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -100,7 +104,7 @@ public class MainActivity extends Activity {
 			break;
 		}
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		finish();
@@ -116,7 +120,7 @@ public class MainActivity extends Activity {
 		}
 		Manager.INSTANCE.saveAlarm(this, alarm);
 	}
-	
+
 	private void showToastMessage(Alarm alarm) {
 		if(alarm.getEnable()) {
 			String message = Utils.getTextTimeBeforeGoOff(this, alarm);
@@ -124,5 +128,10 @@ public class MainActivity extends Activity {
 				Manager.INSTANCE.showToast(this, message);
 			}
 		}
+	}
+
+	@Override
+	public void onAlarmStopConfigured(int type, int level, int times) {
+		// TODO
 	}
 }
