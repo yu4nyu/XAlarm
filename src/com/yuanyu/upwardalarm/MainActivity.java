@@ -7,7 +7,6 @@ import java.util.List;
 import com.yuanyu.upwardalarm.model.Alarm;
 import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
-import com.yuanyu.upwardalarm.test.TestActivity;
 import com.yuanyu.upwardalarm.ui.AlarmItemsManager;
 
 import android.os.Bundle;
@@ -77,7 +76,7 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.action_add:
-			Intent intent = new Intent(MainActivity.this, AlarmDefineStandardActivity.class);
+			Intent intent = new Intent(MainActivity.this, AlarmDefineActivity.class);
 			startActivityForResult(intent, ACTIVITY_ALARM_DEFINE);
 			overridePendingTransition(R.anim.shift_in_from_right, R.anim.shift_out_to_left);
 			break;
@@ -99,7 +98,7 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		switch(requestCode) {
 		case ACTIVITY_ALARM_DEFINE:
 			if(resultCode == Activity.RESULT_OK) {
-				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineStandardActivity.EXTRA_ALARM);
+				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineActivity.EXTRA_ALARM);
 				mManager.add(alarm);
 				registerAlarm(alarm);
 				showToastMessage(alarm);
@@ -107,8 +106,8 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 			break;
 		case ACTIVITY_ALARM_EDIT:
 			if(resultCode == Activity.RESULT_OK) {
-				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineStandardActivity.EXTRA_ALARM);
-				int position = data.getIntExtra(AlarmDefineStandardActivity.EXTRA_POSITION, -1);
+				Alarm alarm = (Alarm) data.getSerializableExtra(AlarmDefineActivity.EXTRA_ALARM);
+				int position = data.getIntExtra(AlarmDefineActivity.EXTRA_POSITION, -1);
 				if(mManager.update(position, alarm)) { // Update succeeded
 					registerAlarm(alarm); // The existed alarm will be replaced
 					showToastMessage(alarm);

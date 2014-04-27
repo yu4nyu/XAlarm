@@ -27,7 +27,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-public class AlarmDefineStandardActivity extends Activity implements View.OnClickListener,
+public class AlarmDefineActivity extends Activity implements View.OnClickListener,
 	CompoundButton.OnCheckedChangeListener, AlarmStopConfigDialog.OnAlarmStopConfiguredListener {
 	
 	private final static String TAG = "AlarmDefineStandardActivity";

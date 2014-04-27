@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.yuanyu.upwardalarm.AlarmDefineStandardActivity;
+import com.yuanyu.upwardalarm.AlarmDefineActivity;
 import com.yuanyu.upwardalarm.MainActivity;
 import com.yuanyu.upwardalarm.R;
 import com.yuanyu.upwardalarm.model.Alarm;
@@ -352,9 +352,9 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 	}
 
 	private void editMode(int position) {
-		Intent intent = new Intent(mContext, AlarmDefineStandardActivity.class);
-		intent.putExtra(AlarmDefineStandardActivity.EXTRA_ALARM, mData.get(position));
-		intent.putExtra(AlarmDefineStandardActivity.EXTRA_POSITION, position);
+		Intent intent = new Intent(mContext, AlarmDefineActivity.class);
+		intent.putExtra(AlarmDefineActivity.EXTRA_ALARM, mData.get(position));
+		intent.putExtra(AlarmDefineActivity.EXTRA_POSITION, position);
 		((MainActivity)mContext).startActivityForResult(intent, MainActivity.ACTIVITY_ALARM_EDIT);
 		((MainActivity)mContext).overridePendingTransition(R.anim.shift_in_from_right, R.anim.shift_out_to_left);
 	}
