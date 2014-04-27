@@ -7,6 +7,7 @@ import com.yuanyu.upwardalarm.model.Manager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
@@ -18,6 +19,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 	public final static String EXTRA_STOP_WAY = "movement_type";
 	public final static String EXTRA_STOP_LEVEL = "stop_level";
 	public final static String EXTRA_STOP_TIMES = "stop_times";
+	
+	public final static String BROADCAST_ACTION_UPDATE_ITEM = "com.yuanyu.upwardalarm.broadcastActionUpdateItem";
+	public final static String BROADCAST_KEY_ALARM_ID = "broadcast_alarm_id";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -49,6 +53,18 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 		if(!alarm.isRepeat()) {
 			alarm.setEnabled(false);
 			Manager.INSTANCE.saveAlarm(context, alarm);
+			
+			updateAlarmItem(context, alarm.getId());
 		}
+	}
+	
+	/**
+	 * Send a local broadcast to update the alarm list
+	 */
+	private void updateAlarmItem(Context context, int alarmId) {
+		LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(context);
+		Intent intent = new Intent(BROADCAST_ACTION_UPDATE_ITEM);
+		intent.putExtra(BROADCAST_KEY_ALARM_ID, alarmId);
+		broadcaster.sendBroadcast(intent);
 	}
 }

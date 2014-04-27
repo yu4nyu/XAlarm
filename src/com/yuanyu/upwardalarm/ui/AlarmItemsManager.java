@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.text.Spanned;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.GestureDetector;
@@ -176,6 +177,23 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		}
 
 		return true;
+	}
+	
+	public boolean disable(int alarmId) {
+		int position = -1;
+		for(int i = 0, size = mData.size(); i < size; i++) {
+			if(mData.get(i).getId() == alarmId) {
+				position = i;
+				break;
+			}
+		}
+		if(position != -1) {
+			mData.get(position).setEnabled(false);
+			ViewHolder holder = mItems.get(position);
+			updateView(holder, position);
+			return true;
+		}
+		return false;
 	}
 
 	/**

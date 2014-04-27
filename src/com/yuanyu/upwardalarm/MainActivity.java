@@ -11,7 +11,11 @@ import com.yuanyu.upwardalarm.ui.AlarmItemsManager;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +30,16 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 
 	private AlarmItemsManager mManager;
 	ShareActionProvider mShareActionProvider;
+	
+	BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int alarmId = intent.getIntExtra(AlarmBroadcastReceiver.BROADCAST_KEY_ALARM_ID, -1);
+            if(alarmId >= 0) {
+            	mManager.disable(alarmId);
+            }
+        }
+    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +67,19 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,
+				new IntentFilter(AlarmBroadcastReceiver.BROADCAST_ACTION_UPDATE_ITEM));
+	}
+
+	@Override
+	protected void onStop() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+		super.onStop();
 	}
 
 	@Override
