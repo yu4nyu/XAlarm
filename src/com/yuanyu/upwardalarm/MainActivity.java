@@ -71,6 +71,7 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 			break;
 		case R.id.action_test:
 			AlarmStopConfigDialog dialog = new AlarmStopConfigDialog();
+			dialog.setOnAlarmStopConfiguredListener(this);
 			dialog.show(getFragmentManager(), "Test sensor");
 			break;
 		case R.id.action_test_debug: // For test only. TODO delete this
@@ -132,6 +133,13 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 
 	@Override
 	public void onAlarmStopConfigured(int type, int level, int times) {
-		// TODO
+		Intent i = new Intent(this, AlarmGoOffActivity.class);
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, getString(R.string.test_sensor));
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, true);
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, "");
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, type);
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, level);
+		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, times);
+		startActivity(i);
 	}
 }
