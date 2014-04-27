@@ -26,8 +26,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 public class TestActivity extends Activity {
-
+	
+	private final static float FILTER_ALPHA = 0.1f;
+	
 	private TextView mText;
+	
+	private float lowX,lowY,lowZ;
 	
 	public static void startGoOffActivity(Context context) {
 		Intent i = new Intent(context, AlarmBroadcastReceiver.class);
@@ -98,11 +102,38 @@ public class TestActivity extends Activity {
 	}
 
 	private void showData(List<Sample> data) {
+		double min = Double.MAX_VALUE;
+		double max = Double.MIN_VALUE;
+		
 		StringBuilder builder = new StringBuilder();
 		for(Sample s : data) {
-			builder.append(s.independentValue() + "\n");
+			//double independent = s.independentValue();
 			//builder.append(s.sumValue() + "\n");
+			
+			////////////// FILTERED DATA ///////////////
+			float x = s.x;
+			float y = s.y;
+			float z = s.z;
+			//Low-Pass Filter
+			lowX = x * FILTER_ALPHA + lowX * (1.0f - FILTER_ALPHA);
+			lowY = y * FILTER_ALPHA + lowY * (1.0f - FILTER_ALPHA);
+			lowZ = z * FILTER_ALPHA + lowZ * (1.0f - FILTER_ALPHA);
+			//High-pass filter
+			float highX = x - lowX;
+			float highY = y - lowY;
+			float highZ = z - lowZ;
+			
+			//double independent = Math.sqrt(highX*highX + highY*highY + highZ*highZ);
+			float maxHigh = Math.max(highX, Math.max(highY, highZ));
+			if(maxHigh > max) {
+				max = maxHigh;
+			}
+			if(maxHigh < min) {
+				min = maxHigh;
+			}
+			builder.append(maxHigh + "\n");
 		}
+		builder.append("Max = " + max + "\nMin = " + min + "\nDelta = " + (max - min) + "\n");
 		mText.setText(builder.toString());
 	}
 }

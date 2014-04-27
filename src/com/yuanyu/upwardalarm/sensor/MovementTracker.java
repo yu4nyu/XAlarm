@@ -20,9 +20,9 @@ public class MovementTracker implements SensorEventListener {
 	private Sensor mAcceleroMeter;
 	
 	public static class Sample {
-		float x;
-		float y;
-		float z;
+		public float x;
+		public float y;
+		public float z;
 		
 		public double independentValue() {
 			return Math.sqrt(x*x + y*y + z*z);

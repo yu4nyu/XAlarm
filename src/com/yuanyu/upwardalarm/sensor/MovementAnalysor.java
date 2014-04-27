@@ -41,7 +41,7 @@ public enum MovementAnalysor {
 			mMovement = new MovementTap(mMovementListeners, movementLevel);
 			break;
 		case Constants.STOP_WAY_SHAKE:
-			// TODO
+			mMovement = new MovementShake(mMovementListeners, movementLevel);
 			break;
 		}
 	}

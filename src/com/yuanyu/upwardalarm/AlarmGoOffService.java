@@ -106,6 +106,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			MovementAnalysor.INSTANCE.removeMovementListener(this);
 			mTracker.stop();
 			mTracker.clearData();
+			stopSelf();
 			return Service.START_NOT_STICKY;
 		}
 		
