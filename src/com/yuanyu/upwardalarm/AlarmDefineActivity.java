@@ -304,10 +304,12 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.ringtone_picker_title));
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-		//intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
-		Uri defaultUri = Uri.parse(mRingtoneUri);
-		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, defaultUri);
+		if(mRingtoneUri != null && !mRingtoneUri.isEmpty()) {
+			Uri defaultUri = Uri.parse(mRingtoneUri);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, defaultUri);
+		}
 		startActivityForResult(intent, ACTIVITY_RINGTONE_PICKER);
 	}
 	
