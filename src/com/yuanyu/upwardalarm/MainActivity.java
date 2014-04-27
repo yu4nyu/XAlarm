@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.ShareActionProvider;
 
 public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAlarmStopConfiguredListener {
 
@@ -25,6 +26,7 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 	public final static int ACTIVITY_ALARM_EDIT = 1;
 
 	private AlarmItemsManager mManager;
+	ShareActionProvider mShareActionProvider;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,16 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		
+		// TODO add google play address
+		MenuItem shareItem = menu.findItem(R.id.action_share);
+		mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
+		String shareText = getString(R.string.share_text, getString(R.string.app_name));
+		Intent shareIntent = new Intent(Intent.ACTION_SEND);
+		shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        mShareActionProvider.setShareIntent(shareIntent);
+		
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -74,10 +86,10 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 			dialog.setOnAlarmStopConfiguredListener(this);
 			dialog.show(getFragmentManager(), "Test sensor");
 			break;
-		case R.id.action_test_debug: // For test only. TODO delete this
+		/*case R.id.action_test_debug: // For test only
 			Intent i = new Intent(MainActivity.this, TestActivity.class);
 			startActivity(i);
-			break;
+			break;*/
 		}
 		return super.onOptionsItemSelected(item);
 	}

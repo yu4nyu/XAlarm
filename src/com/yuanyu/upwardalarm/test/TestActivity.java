@@ -107,11 +107,12 @@ public class TestActivity extends Activity {
 		
 		StringBuilder builder = new StringBuilder();
 		for(Sample s : data) {
-			//double independent = s.independentValue();
+			double independent = s.independentValue();
+			builder.append(independent + "\n");
 			//builder.append(s.sumValue() + "\n");
 			
 			////////////// FILTERED DATA ///////////////
-			float x = s.x;
+			/*float x = s.x;
 			float y = s.y;
 			float z = s.z;
 			//Low-Pass Filter
@@ -121,17 +122,17 @@ public class TestActivity extends Activity {
 			//High-pass filter
 			float highX = x - lowX;
 			float highY = y - lowY;
-			float highZ = z - lowZ;
+			float highZ = z - lowZ;*/
 			
 			//double independent = Math.sqrt(highX*highX + highY*highY + highZ*highZ);
-			float maxHigh = Math.max(highX, Math.max(highY, highZ));
+			/*float maxHigh = Math.max(highX, Math.max(highY, highZ));
 			if(maxHigh > max) {
 				max = maxHigh;
 			}
 			if(maxHigh < min) {
 				min = maxHigh;
 			}
-			builder.append(maxHigh + "\n");
+			builder.append(maxHigh + "\n");*/
 		}
 		builder.append("Max = " + max + "\nMin = " + min + "\nDelta = " + (max - min) + "\n");
 		mText.setText(builder.toString());

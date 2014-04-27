@@ -14,6 +14,7 @@
     <!-- Main activity -->
     <string name="no_alarm">No alarm\n\nPress the \"+\" button to add one</string>
     <string name="test_sensor">Test sensor</string>
+    <string name="share_text">Hi There, I\'m using %s. A funny and useful alarm. When the alarm goes off, you can not only stop it by clicking a button, but also by taping it, shaking it, shout to it, or even throwing it up !</string>
 
     <!-- Alarm define activity -->
     <string name="title_add_alarm">Add alarm</string>

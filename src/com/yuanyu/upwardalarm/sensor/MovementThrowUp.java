@@ -12,11 +12,14 @@ public class MovementThrowUp extends Movement {
 	private final static int SUCCESSIVE_THRESHOLD_EASY = 5;
 	private final static int SUCCESSIVE_THRESHOLD_MODERATE = 10;
 	private final static int SUCCESSIVE_THRESHOLD_HARD = 15;
+	private final static long THROW_INTERVAL = 2000;
 
 	private int mSuccessiveCount = 0;
 	private boolean mNewMovementStarted = true;
 	private boolean mLastValueDetected = false;
 	private final int mSuccessiveThreshold;
+
+	private long mLastDetectedTime = 0;
 
 	public MovementThrowUp(List<MovementListener> listeners, int movementLevel) {
 		super(listeners, movementLevel);
@@ -40,6 +43,10 @@ public class MovementThrowUp extends Movement {
 	@Override
 	public void detectMovement(List<Sample> samples) {
 		for(Sample sample : samples) {
+			if(System.currentTimeMillis() - mLastDetectedTime < THROW_INTERVAL) {
+				continue;
+			}
+			
 			if(sample.independentValue() <= VALUE_THRESHOLD && mNewMovementStarted) {
 				if(mSuccessiveCount == 0) {
 					mSuccessiveCount++;
@@ -64,6 +71,7 @@ public class MovementThrowUp extends Movement {
 				mSuccessiveCount = 0;
 				notifyMovementDetected();
 				mNewMovementStarted = false;
+				mLastDetectedTime = System.currentTimeMillis();
 			}
 		}
 	}

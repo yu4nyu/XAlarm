@@ -3,13 +3,13 @@
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_add"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/action_add"/>
-    <item
+    <!-- item
         android:id="@+id/action_test_debug"
         android:orderInCategory="101"
         android:showAsAction="always"
-        android:title="TEST"/>
+        android:title="TEST"-->
     <item
         android:id="@+id/action_test"
         android:showAsAction="never"
@@ -17,6 +17,7 @@
     <item
         android:id="@+id/action_share"
         android:showAsAction="never"
+        android:actionProviderClass="android.widget.ShareActionProvider"
         android:title="@string/action_share"/>
     <item
         android:id="@+id/action_ads"
