@@ -61,7 +61,7 @@ public class TestActivity extends Activity {
 			setCancelable(false);
 
 			mTracker = new MovementTracker(getActivity());
-			mTracker.start(Constants.STOP_WAY_BUTTON, 0);
+			mTracker.start(Constants.STOP_WAY_TEST, Constants.LEVEL_HARD);
 		}
 
 		@Override
@@ -101,6 +101,7 @@ public class TestActivity extends Activity {
 		StringBuilder builder = new StringBuilder();
 		for(Sample s : data) {
 			builder.append(s.independentValue() + "\n");
+			//builder.append(s.sumValue() + "\n");
 		}
 		mText.setText(builder.toString());
 	}

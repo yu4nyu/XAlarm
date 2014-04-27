@@ -12,7 +12,7 @@ import android.hardware.SensorManager;
 
 public class MovementTracker implements SensorEventListener {
 
-	private final static int TRACK_RATE = SensorManager.SENSOR_DELAY_NORMAL; // TODO verify this
+	private final static int TRACK_RATE = SensorManager.SENSOR_DELAY_NORMAL;
 	
 	private final static int THRESHOLD_NUMBER_TO_ANALYSE = 20;
 
@@ -26,6 +26,10 @@ public class MovementTracker implements SensorEventListener {
 		
 		public double independentValue() {
 			return Math.sqrt(x*x + y*y + z*z);
+		}
+		
+		public float sumValue() {
+			return x + y + z;
 		}
 	}
 	

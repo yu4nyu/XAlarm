@@ -31,11 +31,14 @@ public enum MovementAnalysor {
 
 	void initMovement(int movementType, int movementLevel) {
 		switch(movementType) {
+		case Constants.STOP_WAY_TEST:
+			mMovement = new MovementTest(new ArrayList<MovementListener>(), movementLevel);
+			break;
 		case Constants.STOP_WAY_UPWARD:
 			mMovement = new MovementThrowUp(mMovementListeners, movementLevel);
 			break;
 		case Constants.STOP_WAY_TAP:
-			// TODO
+			mMovement = new MovementTap(mMovementListeners, movementLevel);
 			break;
 		case Constants.STOP_WAY_SHAKE:
 			// TODO
@@ -45,6 +48,8 @@ public enum MovementAnalysor {
 
 	void analyse(List<Sample> samples) {
 		mMovement.detectMovement(samples);
-		samples.clear();
+		if(!(mMovement instanceof MovementTest)) {
+			samples.clear();
+		}
 	}
 }
