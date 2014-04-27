@@ -147,6 +147,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri, mStopWay, mStopLevel, mStopTimes);
 			
 			if(mStopWay == Constants.STOP_WAY_BUTTON) {
+				View separator = view.findViewById(R.id.dialog_alarm_go_off_separator);
+				separator.setVisibility(View.GONE);
 				stopWayText.setVisibility(View.GONE);
 				stopLevelText.setVisibility(View.GONE);
 				mStopTimesText.setVisibility(View.GONE);

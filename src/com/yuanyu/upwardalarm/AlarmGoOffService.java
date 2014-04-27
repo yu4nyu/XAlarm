@@ -27,6 +27,8 @@ import android.util.Log;
 public class AlarmGoOffService extends Service implements MovementAnalysor.MovementListener {
 
 	private static final String TAG = "AlarmGoOffService";
+	private static final String ACTION_START = "start_service";
+	private static final String ACTION_STOP = "stop_service";
 
 	private MovementTracker mTracker;
 	
@@ -66,15 +68,15 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, stopWay);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, stopLevel);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, stopTimes);
+		i.setAction(ACTION_START);
 		Manager.INSTANCE.requireWakeLock(context);
 		context.startService(i);
 	}
 	
 	public static void stopService(Context context) {
 		Intent i = new Intent(context, AlarmGoOffService.class);
-		Manager.INSTANCE.releaseWakeLock();
-		// TODO need to release other resources here ???
-		context.stopService(i);
+		i.setAction(ACTION_STOP);
+		context.startService(i);
 	}
 	
 	@Override
@@ -98,6 +100,14 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		super.onStartCommand(intent, flags, startId);
 
 		Log.d(TAG, "onStartCommand");
+		
+		if(intent != null && intent.getAction().equals(ACTION_STOP)) {
+			stopAlarm();
+			MovementAnalysor.INSTANCE.removeMovementListener(this);
+			mTracker.stop();
+			mTracker.clearData();
+			return Service.START_NOT_STICKY;
+		}
 		
 		boolean started = false;
 		mIsVibrate = false;
@@ -144,7 +154,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			Manager.INSTANCE.releaseWakeLock();
 		}
 
-		return  START_STICKY ;
+		return START_STICKY ;
 	}
 
 	@Override

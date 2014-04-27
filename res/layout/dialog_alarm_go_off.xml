@@ -57,6 +57,7 @@
         android:textSize="60sp" />
 
     <View
+        android:id="@+id/dialog_alarm_go_off_separator"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="16dp"
@@ -70,7 +71,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="@dimen/item_side_margin_x_2"
+        android:layout_marginTop="@dimen/item_side_margin"
         android:textColor="@color/dark_gray"
         android:textSize="24sp" />
 
@@ -78,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/item_side_margin_x_2"
+        android:layout_marginBottom="@dimen/item_side_margin"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" >
 
