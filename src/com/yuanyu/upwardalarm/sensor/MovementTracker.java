@@ -3,12 +3,15 @@ package com.yuanyu.upwardalarm.sensor;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yuanyu.upwardalarm.model.Constants;
+
 import android.app.Service;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaRecorder;
 
 public class MovementTracker implements SensorEventListener {
 
@@ -18,6 +21,8 @@ public class MovementTracker implements SensorEventListener {
 
 	private SensorManager mSensorManager;
 	private Sensor mAcceleroMeter;
+	
+	private int mMovementType;
 	
 	public static class Sample {
 		public float x;
@@ -41,15 +46,26 @@ public class MovementTracker implements SensorEventListener {
 	}
 
 	/**
-	 * Do not forget to call stop() if you do not need to track the movement
+	 * Do not forget to call stop() if you do not need to track the movement any more
 	 */
 	public void start(int movementType, int movementLevel) {
+		mMovementType = movementType;
 		MovementAnalysor.INSTANCE.initMovement(movementType, movementLevel);
-		mSensorManager.registerListener(this, mAcceleroMeter, TRACK_RATE);
+		if(Constants.isNeedAccelerometer(movementType)) {
+			mSensorManager.registerListener(this, mAcceleroMeter, TRACK_RATE);
+		}
+		if(Constants.isNeedMicrophone(movementType)) {
+			
+		}
 	}
 
 	public void stop() {
-		mSensorManager.unregisterListener(this);
+		if(Constants.isNeedAccelerometer(mMovementType)) {
+			mSensorManager.unregisterListener(this);
+		}
+		if(Constants.isNeedMicrophone(mMovementType)) {
+			
+		}
 	}
 	
 	public void clearData() {
