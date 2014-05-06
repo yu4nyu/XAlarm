@@ -10,10 +10,12 @@ public enum SoundDetector {
 	INSTANCE;
 
 	private static final double EMA_FILTER = 0.6;
+	private static final long SCHEDULE_PERIODE = 200;
 	
 	public static interface SoundAmplitudeListener {
-		// TODO
+		void onRegularSoundDetection(double amplitude);
 	}
+	private SoundAmplitudeListener mSoundAmplitudeListener;
 
 	private MediaRecorder mMediaRecorder;
 	private double mEMA = 0.0;
@@ -22,11 +24,20 @@ public enum SoundDetector {
 	private Runnable mTimerSchedule = new Runnable() {
 		@Override
 		public void run() {
-			
+			notifyListener();
+			mHandler.postDelayed(this, SCHEDULE_PERIODE);
 		}
 	};
+	
+	private void notifyListener() {
+		if(mSoundAmplitudeListener != null) {
+			mSoundAmplitudeListener.onRegularSoundDetection(getAmplitude());
+		}
+	}
 
-	public void start() {
+	public void start(SoundAmplitudeListener listener) {
+		mSoundAmplitudeListener = listener;
+		
 		mMediaRecorder = new MediaRecorder();
 		mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -43,18 +54,24 @@ public enum SoundDetector {
 
 		mMediaRecorder.start();
 		mEMA = 0.0;
+		
+		mHandler.postDelayed(mTimerSchedule, SCHEDULE_PERIODE);
 	}
 
 	public void stop() {
+		mSoundAmplitudeListener = null;
+		
 		if(mMediaRecorder != null) {
 			mMediaRecorder.stop();
 			mMediaRecorder.release();
 		}
 		
+		mHandler.removeCallbacksAndMessages(null);
+		
 		// TODO remove temp audio file
 	}
 
-	public double getAmplitude() {
+	private double getAmplitude() {
 		if (mMediaRecorder != null) {
 			return (mMediaRecorder.getMaxAmplitude() / 2700.0);
 		}
@@ -64,7 +81,7 @@ public enum SoundDetector {
 	}
 
 	// TODO verify this
-	public double getAmplitudeEMA() {
+	private double getAmplitudeEMA() {
 		double amp = getAmplitude();
 		mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
 		return mEMA;

@@ -11,9 +11,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.MediaRecorder;
 
-public class MovementTracker implements SensorEventListener {
+public class MovementTracker implements SensorEventListener, SoundDetector.SoundAmplitudeListener {
 
 	private final static int TRACK_RATE = SensorManager.SENSOR_DELAY_NORMAL;
 	
@@ -55,7 +54,7 @@ public class MovementTracker implements SensorEventListener {
 			mSensorManager.registerListener(this, mAcceleroMeter, TRACK_RATE);
 		}
 		if(Constants.isNeedMicrophone(movementType)) {
-			
+			SoundDetector.INSTANCE.start(this);
 		}
 	}
 
@@ -64,7 +63,7 @@ public class MovementTracker implements SensorEventListener {
 			mSensorManager.unregisterListener(this);
 		}
 		if(Constants.isNeedMicrophone(mMovementType)) {
-			
+			SoundDetector.INSTANCE.stop();
 		}
 	}
 	
@@ -92,5 +91,10 @@ public class MovementTracker implements SensorEventListener {
 		if(mData.size() >= THRESHOLD_NUMBER_TO_ANALYSE) {
 			MovementAnalysor.INSTANCE.analyse(mData);
 		}
+	}
+
+	@Override
+	public void onRegularSoundDetection(double amplitude) {
+		// TODO
 	}
 }
