@@ -95,6 +95,12 @@ public class MovementTracker implements SensorEventListener, SoundDetector.Sound
 
 	@Override
 	public void onRegularSoundDetection(double amplitude) {
-		// TODO
+		Sample sample = new Sample();
+		sample.x = (float) amplitude;
+		mData.add(sample);
+		
+		if(mData.size() >= THRESHOLD_NUMBER_TO_ANALYSE) {
+			MovementAnalysor.INSTANCE.analyse(mData);
+		}
 	}
 }
