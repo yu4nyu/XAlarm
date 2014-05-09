@@ -402,8 +402,9 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			}
 			@Override
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				String message = mContext.getResources().getQuantityString(R.plurals.delete_dialog_message, getSelectedItemsCount());
 				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-				builder.setMessage(R.string.delete_dialog_message)
+				builder.setMessage(message)
 				.setNegativeButton(android.R.string.cancel, null)
 				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					@Override
@@ -450,18 +451,23 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		}
 	}
 
-	/**
-	 * Indicate the number of selected item.
-	 * If count == 0, finish the action mode automatically.
-	 */
-	private void updateActionModeTitle() {
-		if(mActionMode == null) return;
+	private int getSelectedItemsCount() {
 		int count = 0;
 		for(int i = 0; i < mData.size(); i++) {
 			if(mSelectedItems.get(i)) {
 				count++;
 			}
 		}
+		return count;
+	}
+	
+	/**
+	 * Indicate the number of selected item.
+	 * If count == 0, finish the action mode automatically.
+	 */
+	private void updateActionModeTitle() {
+		if(mActionMode == null) return;
+		int count = getSelectedItemsCount();
 		if(count != 0) {
 			String title = count + " " + mContext.getString(R.string.selected);
 			mActionMode.setTitle(title);

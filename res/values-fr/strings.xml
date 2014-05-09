@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">X Alarm</string>
+    
+    <!-- Menu actions -->
+    <string name="action_add">Ajouter</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="action_test">Tester capteur</string>
+    <string name="action_share">Partager app</string>
+    <string name="action_ads">Regarder pub</string>
+    <string name="action_about">À propos</string>
+    
+    <!-- Main activity -->
+    <string name="no_alarm">Aucune alarme\n\nAppuyer sur le button \"+\" pour en créer une</string>
+    <string name="share_text">Salut, je suis en train d\'utiliser %s. Une app d\'alarme drôle et utile. Lorsque l\'alarme se déclenche, vous pouvez l\'arrêter non seulement en cliquant sur un bouton, mais aussi par la tapotant, la secouant, criant à elle, ou même la jeter vers le haut !</string>
+
+    <!-- Alarm define activity -->
+    <string name="title_add_alarm">Ajouter alarme</string>
+    <string name="title_edit_alarm">Edit alarm</string>
+    <string name="sunday">Dim</string>
+    <string name="monday">Lun</string>
+    <string name="tuesday">Mar</string>
+    <string name="wednesday">Mer</string>
+    <string name="thursday">Jeu</string>
+    <string name="friday">Ven</string>
+    <string name="saturday">Sam</string>
+    <string name="every_day">Tous les jours</string>
+    <string name="label">Label</string>
+    <string name="time_separator">:</string>
+    <string name="silent">Silencieuse</string>
+    <string name="vibrate">Vibreur</string>
+    <string name="repeat">Répéter</string>
+    <string name="label_define_dialog_title">Label d\'alarme</string>
+    <string name="ringtone_picker_title">Selectionner Sonnerie</string>
+
+    <!-- Delete dialog -->
+    <string name="selected">Selected</string>
+    <plurals name="delete_dialog_message">
+        <item quantity="one">Supprimer l\'alarme sélectionnée ?</item>
+        <item quantity="other">Supprimer les alarmes sélectionnées ?</item>
+    </plurals>
+
+    <!-- Toast message -->
+    <string name="time_before_go_off_text">Prochaine alarme prévue dans %s</string>
+    <string name="hour">heure</string>
+    <string name="minute">minute</string>
+    <string name="less_than_one_minute">1 minute</string>
+    <string name="config_way_to_stop_alarm">Configurer le moyen pour arrêter alarme</string>
+    <string name="action_settings">Paramètres</string>
+    
+    <!-- Alarm stop config dialog -->
+	<string name="way_to_stop_alarm">Moyen pour arrêter alarme</string>
+	<string name="level">Niveau</string>
+	<string name="times">Fois</string>
+	<string name="times_lowercase_singular">fois</string>
+	<string name="times_lowercase">fois</string>
+	
+	<!-- Alarm go off activity -->
+	<string name="stop_alarm">Arrêter alarme</string>
+
+</resources>
