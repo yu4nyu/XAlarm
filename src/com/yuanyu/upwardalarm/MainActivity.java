@@ -108,14 +108,18 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 			overridePendingTransition(R.anim.shift_in_from_right, R.anim.shift_out_to_left);
 			break;
 		case R.id.action_test:
-			AlarmStopConfigDialog dialog = new AlarmStopConfigDialog();
-			dialog.setOnAlarmStopConfiguredListener(this);
-			dialog.show(getFragmentManager(), "Test sensor");
+			AlarmStopConfigDialog stopCofig = new AlarmStopConfigDialog();
+			stopCofig.setOnAlarmStopConfiguredListener(this);
+			stopCofig.show(getFragmentManager(), "Test sensor");
 			break;
 		/*case R.id.action_test_debug: // For test only
 			Intent i = new Intent(MainActivity.this, TestActivity.class);
 			startActivity(i);
 			break;*/
+		case R.id.action_about:
+			AboutDialog about = new AboutDialog();
+			about.show(getFragmentManager(), "About");
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
