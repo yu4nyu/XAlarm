@@ -19,7 +19,7 @@ public class Constants {
 		case STOP_WAY_UPWARD:
 		case STOP_WAY_TAP:
 		case STOP_WAY_SHAKE:
-			return false;
+			return true;
 		}
 		return false;
 	}
