@@ -8,12 +8,14 @@ import com.yuanyu.upwardalarm.sensor.MovementTracker.Sample;
 
 public class MovementShout extends Movement {
 
-	// TODO
-	private final static float VALUE_THRESHOLD_EASY = 2.0f;
-	private final static float VALUE_THRESHOLD_MODERATE = 4.0f;
-	private final static float VALUE_THRESHOLD_HARD = 6.0f;
+	private final static float VALUE_THRESHOLD_EASY = 80.0f;
+	private final static float VALUE_THRESHOLD_MODERATE = 100.0f;
+	private final static float VALUE_THRESHOLD_HARD = 120.0f;
+	private final static long SHOUT_INTERVAL = 3000;
 	
 	private float mValueThreshold;
+	
+	private long mLastDetectedTime = 0;
 	
 	public MovementShout(List<MovementListener> listeners, int movementLevel) {
 		super(listeners, movementLevel);
@@ -36,9 +38,14 @@ public class MovementShout extends Movement {
 
 	@Override
 	void detectMovement(List<Sample> samples) {
-		for(Sample sample : samples) { // TODO maybe use average value
+		for(Sample sample : samples) {
+			if(System.currentTimeMillis() - mLastDetectedTime < SHOUT_INTERVAL) {
+				continue;
+			}
+			
 			if(sample.x > mValueThreshold) {
 				notifyMovementDetected();
+				mLastDetectedTime = System.currentTimeMillis();
 				break;
 			}
 		}

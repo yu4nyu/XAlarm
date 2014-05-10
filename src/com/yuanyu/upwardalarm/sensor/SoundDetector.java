@@ -9,7 +9,6 @@ public enum SoundDetector {
 
 	INSTANCE;
 
-	private static final double EMA_FILTER = 0.6;
 	private static final long SCHEDULE_PERIODE = 200;
 	
 	public static interface SoundAmplitudeListener {
@@ -18,7 +17,6 @@ public enum SoundDetector {
 	private SoundAmplitudeListener mSoundAmplitudeListener;
 
 	private MediaRecorder mMediaRecorder;
-	private double mEMA = 0.0;
 	
 	private Handler mHandler = new Handler();
 	private Runnable mTimerSchedule = new Runnable() {
@@ -31,7 +29,7 @@ public enum SoundDetector {
 	
 	private void notifyListener() {
 		if(mSoundAmplitudeListener != null) {
-			mSoundAmplitudeListener.onRegularSoundDetection(getAmplitude());
+			mSoundAmplitudeListener.onRegularSoundDetection(getDecibel());
 		}
 	}
 
@@ -42,7 +40,9 @@ public enum SoundDetector {
 		mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 		mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-		mMediaRecorder.setOutputFile("/tmp/audio");
+		mMediaRecorder.setAudioEncodingBitRate(44100);
+		mMediaRecorder.setAudioSamplingRate(16);
+		mMediaRecorder.setOutputFile("/dev/null");
 
 		try {
 			mMediaRecorder.prepare();
@@ -53,7 +53,6 @@ public enum SoundDetector {
 		}
 
 		mMediaRecorder.start();
-		mEMA = 0.0;
 		
 		mHandler.postDelayed(mTimerSchedule, SCHEDULE_PERIODE);
 	}
@@ -64,26 +63,24 @@ public enum SoundDetector {
 		if(mMediaRecorder != null) {
 			mMediaRecorder.stop();
 			mMediaRecorder.release();
+			mMediaRecorder = null;
 		}
 		
 		mHandler.removeCallbacksAndMessages(null);
 		
-		// TODO remove temp audio file
+		// TODO remove temp audio file ???
 	}
 
 	private double getAmplitude() {
 		if (mMediaRecorder != null) {
-			return (mMediaRecorder.getMaxAmplitude() / 2700.0);
+			return mMediaRecorder.getMaxAmplitude();
 		}
 		else {
 			return 0;
 		}
 	}
-
-	// TODO verify this
-	private double getAmplitudeEMA() {
-		double amp = getAmplitude();
-		mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
-		return mEMA;
+	
+	private double getDecibel() {
+		return 20 * Math.log10(getAmplitude());
 	}
 }
