@@ -182,6 +182,7 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, type);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, level);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, times);
+		i.putExtra(AlarmGoOffActivity.EXTRA_IS_TEST_SENSOR, true);
 		startActivity(i);
 	}
 }

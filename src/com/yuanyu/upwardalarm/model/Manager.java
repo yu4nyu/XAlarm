@@ -292,10 +292,14 @@ public enum Manager {
 	}
 	
 	public void showToast(Context context, String message) {
+		cancelToast();
+		mLastToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		mLastToast.show();
+	}
+	
+	public void cancelToast() {
 		if(mLastToast != null) {
 			mLastToast.cancel();
 		}
-		mLastToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-		mLastToast.show();
 	}
 }

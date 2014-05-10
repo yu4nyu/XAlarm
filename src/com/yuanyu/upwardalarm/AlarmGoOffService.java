@@ -263,7 +263,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	@Override
 	public void onMovementDetected() {
 		mStopTimesCount++;
-		Log.d(TAG, "onUpwardDetected, mStopTimesCount = " + mStopTimesCount);
+		Log.d(TAG, "onMovementDetected, mStopTimesCount = " + mStopTimesCount);
 		if(mStopTimesCount < mStopTimes) {
 			return;
 		}

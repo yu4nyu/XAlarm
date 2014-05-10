@@ -7,7 +7,6 @@ import com.yuanyu.upwardalarm.ui.AlarmItemAnimator;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +21,8 @@ import android.content.Intent;
 
 public class AlarmGoOffActivity extends Activity implements MovementAnalysor.MovementListener {
 
+	public final static String EXTRA_IS_TEST_SENSOR = "is_test_sensor"; // Boolean extra
+	
 	private static final String TAG = "AlarmGoOffActivity";
 
 	private String mLabel;
@@ -34,6 +35,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 	
 	private AlarmGoOffDialog mDialog;
 	private int mStopTimesCount;
+	
+	private boolean mIsTestSensor = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			mStopTimesCount = 0;
 			MovementAnalysor.INSTANCE.addMovementListener(this);
 		}
+		
+		mIsTestSensor = intent.getBooleanExtra(EXTRA_IS_TEST_SENSOR, false);
 
 		mDialog = new AlarmGoOffDialog();
 		Bundle args = new Bundle();
@@ -66,13 +71,9 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_WAY, mStopWay);
 		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, mStopLevel);
 		args.putInt(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, mStopTimes);
+		args.putBoolean(EXTRA_IS_TEST_SENSOR, mIsTestSensor);
 		mDialog.setArguments(args);
 		mDialog.show(getFragmentManager(), "alarmGoOff");
-	}
-
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent event) {
-		return true; // Disable all keys, but does not work for home key and power key
 	}
 
 	@Override
@@ -102,7 +103,6 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
-			setCancelable(false);
 
 			Bundle args = getArguments();
 			mLabel = args.getString(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL);
@@ -111,13 +111,17 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			mStopWay = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_WAY);
 			mStopLevel = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL);
 			mStopTimes = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, 1);
+			
+			if(!args.getBoolean(EXTRA_IS_TEST_SENSOR)) {
+				setCancelable(false);
+			}
 		}
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			LayoutInflater inflater = LayoutInflater.from(getActivity());
 			View view = inflater.inflate(R.layout.dialog_alarm_go_off, null);
-
+			
 			TextView labelView = (TextView) view.findViewById(R.id.dialog_alarm_go_off_label);
 			if(mLabel!= null && !mLabel.isEmpty()) {
 				labelView.setText(mLabel);
@@ -163,7 +167,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			
 			return builder.create();
 		}
-		
+
 		public void updateTimesText(int times) {
 			String text = times + "/" + mStopTimes;
 			mStopTimesText.setText(text);
@@ -171,6 +175,12 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 
 		public void release() {
 			mTimeProvider.stop();
+		}
+
+		@Override
+		public void onCancel(DialogInterface dialog) {
+			AlarmGoOffService.stopService(getActivity());
+			getActivity().finish();
 		}
 	}
 }

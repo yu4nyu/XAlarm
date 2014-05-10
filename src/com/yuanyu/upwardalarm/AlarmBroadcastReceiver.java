@@ -13,7 +13,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
 	public final static String EXTRA_ALARM_ID = "alarm_id"; // Integer extra
 	public final static String EXTRA_ALARM_LABEL = "alarm_label"; // String extra
-	public final static String EXTRA_IS_VIBRATE = "is_vibrate"; // boolean extra
+	public final static String EXTRA_IS_VIBRATE = "is_vibrate"; // Boolean extra
 	public final static String EXTRA_RINGTONE_URI = "ringtone"; // String extra
 	
 	public final static String EXTRA_STOP_WAY = "movement_type";
@@ -44,6 +44,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 		i.putExtra(EXTRA_STOP_WAY, intent.getIntExtra(EXTRA_STOP_WAY, Constants.STOP_WAY_BUTTON));
 		i.putExtra(EXTRA_STOP_LEVEL, intent.getIntExtra(EXTRA_STOP_LEVEL, Constants.LEVEL_EASY));
 		i.putExtra(EXTRA_STOP_TIMES, intent.getIntExtra(EXTRA_STOP_TIMES, 1));
+		i.putExtra(AlarmGoOffActivity.EXTRA_IS_TEST_SENSOR, false);
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(i);
 	}
