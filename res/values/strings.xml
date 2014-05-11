@@ -62,5 +62,6 @@
 	<!-- Advertisement activity -->
 	<string name="advertisement">Advertisement</string>
 	<string name="loading">Loading&#8230;</string>
+	<string name="load_failed">Load failed</string>
 
 </resources>

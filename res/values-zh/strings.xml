@@ -61,5 +61,6 @@
 	<!-- Advertisement activity -->
 	<string name="advertisement">广告</string>
 	<string name="loading">加载中&#8230;</string>
+	<string name="load_failed">加载失败</string>
 
 </resources>

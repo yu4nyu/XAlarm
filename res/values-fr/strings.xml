@@ -62,5 +62,6 @@
 	<!-- Advertisement activity -->
 	<string name="advertisement">Publicité</string>
 	<string name="loading">Chargement&#8230;</string>
+	<string name="load_failed">Chargement échoué</string>
 	
 </resources>
