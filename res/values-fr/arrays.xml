@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="stop_selections">
+        <item>Cliquer bouton</item>
+        <item>Jeter vers le haut</item>
+        <item>Tapoter</item>
+        <item>Secouer</item>
+        <item>Crier</item>
+    </string-array>
+    <string-array name="level">
+        <item>Facile</item>
+        <item>Moyen</item>
+        <item>Difficile</item>
+    </string-array>
+
+</resources>

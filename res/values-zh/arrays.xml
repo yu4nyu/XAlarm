@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="stop_selections">
+        <item>点击按钮</item>
+        <item>上抛</item>
+        <item>轻拍</item>
+        <item>摇晃</item>
+        <item>叫喊</item>
+    </string-array>
+    <string-array name="level">
+        <item>简单</item>
+        <item>适中</item>
+        <item>困难</item>
+    </string-array>
+
+</resources>
