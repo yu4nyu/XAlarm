@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">X Alarm</string>
+    
+    <!-- Menu actions -->
+    <string name="action_add">添加</string>
+    <string name="action_delete">删除</string>
+    <string name="action_test">测试</string>
+    <string name="action_share">分享</string>
+    <string name="action_ads">广告</string>
+    <string name="action_about">关于</string>
+    
+    <!-- Main activity -->
+    <string name="no_alarm">没有闹钟\n\n点击 \"+\" 按钮添加</string>
+    <string name="share_text">朋友们，我正在使用 %s。一个有趣而且有用的闹钟应用。当闹钟响起，你不仅可以通过点击关闭按钮，也可以通过轻拍，摇晃，大叫，甚至是上抛停止闹钟！</string>
+
+    <!-- Alarm define activity -->
+    <string name="title_add_alarm">添加闹钟</string>
+    <string name="title_edit_alarm">编辑闹钟</string>
+    <string name="sunday">周日</string>
+    <string name="monday">周一</string>
+    <string name="tuesday">周二</string>
+    <string name="wednesday">周三</string>
+    <string name="thursday">周四</string>
+    <string name="friday">周五</string>
+    <string name="saturday">周六</string>
+    <string name="every_day">每天</string>
+    <string name="label">标签</string>
+    <string name="time_separator">:</string>
+    <string name="silent">静音</string>
+    <string name="vibrate">震动</string>
+    <string name="repeat">重复</string>
+    <string name="label_define_dialog_title">闹钟标签</string>
+    <string name="ringtone_picker_title">选择铃声</string>
+    <string name="config_way_to_stop_alarm">编辑闹钟停止方式</string>
+
+    <!-- Delete dialog -->
+    <string name="selected">已选择</string>
+    <plurals name="delete_dialog_message">
+        <item quantity="other">删除选择的闹钟 ?</item>
+    </plurals>
+
+    <!-- Toast message -->
+    <string name="time_before_go_off_text">Alarm set for %s from now</string>
+    <string name="hour">小时</string>
+    <string name="minute">分钟</string>
+    <string name="less_than_one_minute">少于1分钟</string>
+    
+    <!-- Alarm stop config dialog -->
+	<string name="way_to_stop_alarm">闹钟停止方式</string>
+	<string name="level">等级</string>
+	<string name="times">次数</string>
+	<string name="times_lowercase_singular">次</string>
+	<string name="times_lowercase">次</string>
+	
+	<!-- Alarm go off activity -->
+	<string name="stop_alarm">停止闹钟</string>
+	
+	<!-- Advertisement activity -->
+	<string name="advertisement">广告</string>
+	<string name="loading">加载中&#8230;</string>
+
+</resources>

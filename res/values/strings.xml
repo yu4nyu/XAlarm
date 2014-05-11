@@ -33,6 +33,7 @@
     <string name="repeat">Repeat</string>
     <string name="label_define_dialog_title">Label of alarm</string>
     <string name="ringtone_picker_title">Select ringtone</string>
+    <string name="config_way_to_stop_alarm">Configurate the way to stop alarm</string>
 
     <!-- Delete dialog -->
     <string name="selected">Selected</string>
@@ -46,8 +47,6 @@
     <string name="hour">hour</string>
     <string name="minute">minute</string>
     <string name="less_than_one_minute">less than 1 minute</string>
-    <string name="config_way_to_stop_alarm">Configurate the way to stop alarm</string>
-    <string name="action_settings">Settings</string>
     
     <!-- Alarm stop config dialog -->
 	<string name="way_to_stop_alarm">Way to stop alarm</string>
