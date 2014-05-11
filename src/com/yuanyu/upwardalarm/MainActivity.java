@@ -74,8 +74,13 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 
 		// Ad
 		AdView adView = (AdView)this.findViewById(R.id.adView);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		adView.loadAd(adRequest);
+		if(Configuration.IS_PRO_VERSION) {
+			adView.setVisibility(View.GONE);
+		}
+		else {
+			AdRequest adRequest = new AdRequest.Builder().build();
+			adView.loadAd(adRequest);
+		}
 	}
 
 	@Override
@@ -105,6 +110,10 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 		mShareActionProvider.setShareIntent(shareIntent);
+		
+		if(Configuration.IS_PRO_VERSION) {
+			menu.findItem(R.id.action_ads).setVisible(false);
+		}
 
 		return super.onCreateOptionsMenu(menu);
 	}
