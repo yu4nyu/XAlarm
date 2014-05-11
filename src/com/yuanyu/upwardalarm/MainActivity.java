@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.yuanyu.upwardalarm.model.Alarm;
 import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
@@ -29,9 +31,9 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 	public final static int ACTIVITY_ALARM_EDIT = 1;
 
 	private AlarmItemsManager mManager;
-	ShareActionProvider mShareActionProvider;
+	private ShareActionProvider mShareActionProvider;
 	
-	BroadcastReceiver mReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             int alarmId = intent.getIntExtra(AlarmBroadcastReceiver.BROADCAST_KEY_ALARM_ID, -1);
@@ -67,6 +69,11 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// Ad
+		AdView adView = (AdView)this.findViewById(R.id.adView);
+	    AdRequest adRequest = new AdRequest.Builder().build();
+	    adView.loadAd(adRequest);
 	}
 
 	@Override
@@ -120,6 +127,11 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		case R.id.action_about:
 			AboutDialog about = new AboutDialog();
 			about.show(getFragmentManager(), "About");
+			break;
+		case R.id.action_ads:
+			Intent ads = new Intent(this, AdvertisementActivity.class);
+			startActivity(ads);
+			overridePendingTransition(R.anim.shift_in_from_left, R.anim.shift_out_to_right);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
