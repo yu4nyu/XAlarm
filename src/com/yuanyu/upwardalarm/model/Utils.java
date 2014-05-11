@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import com.yuanyu.upwardalarm.R;
 
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
@@ -291,5 +292,15 @@ public class Utils {
 					AudioManager.STREAM_ALARM, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 			player.start();
 		}
+	}
+	
+	public static String getVersionName(Context context) {
+		try {
+			return context.getPackageManager()
+				    .getPackageInfo(context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

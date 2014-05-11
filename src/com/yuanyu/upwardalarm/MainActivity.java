@@ -90,7 +90,8 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		// TODO add google play address
 		MenuItem shareItem = menu.findItem(R.id.action_share);
 		mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
-		String shareText = getString(R.string.share_text, getString(R.string.app_name));
+		String versionName = Utils.getVersionName(this);
+		String shareText = getString(R.string.share_text, getString(R.string.app_name) + " " + versionName);
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
