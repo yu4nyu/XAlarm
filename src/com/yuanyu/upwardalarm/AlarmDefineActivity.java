@@ -81,7 +81,7 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_alarm_define_standard);
+		setContentView(R.layout.activity_alarm_define);
 		
 		mEnabledColor = getResources().getColor(R.color.black);
 		mDisabledColor = getResources().getColor(R.color.gray);

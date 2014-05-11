@@ -30,4 +30,6 @@ public class Constants {
 		}
 		return false;
 	}
+	
+	public static String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=com.yuanyu.upwardalarm";
 }

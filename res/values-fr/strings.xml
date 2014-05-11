@@ -10,10 +10,11 @@
     <string name="action_share">Partager app</string>
     <string name="action_ads">Regarder pub</string>
     <string name="action_about">À propos</string>
+    <string name="action_rank">Avis</string>
     
     <!-- Main activity -->
     <string name="no_alarm">Aucune alarme\n\nAppuyer sur le button \"+\" pour en créer une</string>
-    <string name="share_text">Salut, je suis en train d\'utiliser %s. Une app d\'alarme drôle et utile. Lorsque l\'alarme se déclenche, vous pouvez l\'arrêter non seulement en cliquant sur un bouton, mais aussi par la tapotant, la secouant, criant à elle, ou même la jeter vers le haut !</string>
+    <string name="share_text">Salut, je suis en train d\'utiliser %s. Une app d\'alarme drôle et utile. Lorsque l\'alarme se déclenche, vous pouvez l\'arrêter non seulement en cliquant sur un bouton, mais aussi par la tapotant, la secouant, criant à elle, ou même la jetant vers le haut !</string>
 
     <!-- Alarm define activity -->
     <string name="title_add_alarm">Ajouter alarme</string>

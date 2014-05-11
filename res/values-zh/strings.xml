@@ -10,6 +10,7 @@
     <string name="action_share">分享</string>
     <string name="action_ads">广告</string>
     <string name="action_about">关于</string>
+    <string name="action_rank">评分</string>
     
     <!-- Main activity -->
     <string name="no_alarm">没有闹钟\n\n点击 \"+\" 按钮添加</string>

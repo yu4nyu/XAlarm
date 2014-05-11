@@ -7,10 +7,12 @@ import java.util.List;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.yuanyu.upwardalarm.model.Alarm;
+import com.yuanyu.upwardalarm.model.Constants;
 import com.yuanyu.upwardalarm.model.Manager;
 import com.yuanyu.upwardalarm.model.Utils;
 import com.yuanyu.upwardalarm.ui.AlarmItemsManager;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -32,16 +34,16 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 
 	private AlarmItemsManager mManager;
 	private ShareActionProvider mShareActionProvider;
-	
+
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int alarmId = intent.getIntExtra(AlarmBroadcastReceiver.BROADCAST_KEY_ALARM_ID, -1);
-            if(alarmId >= 0) {
-            	mManager.disable(alarmId);
-            }
-        }
-    };
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int alarmId = intent.getIntExtra(AlarmBroadcastReceiver.BROADCAST_KEY_ALARM_ID, -1);
+			if(alarmId >= 0) {
+				mManager.disable(alarmId);
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +71,11 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		// Ad
 		AdView adView = (AdView)this.findViewById(R.id.adView);
-	    AdRequest adRequest = new AdRequest.Builder().build();
-	    adView.loadAd(adRequest);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		adView.loadAd(adRequest);
 	}
 
 	@Override
@@ -93,17 +95,17 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		
-		// TODO add google play address
+
 		MenuItem shareItem = menu.findItem(R.id.action_share);
 		mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
 		String versionName = Utils.getVersionName(this);
 		String shareText = getString(R.string.share_text, getString(R.string.app_name) + " " + versionName);
+		shareText += " " + Constants.GOOGLE_PLAY_URI;
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-        mShareActionProvider.setShareIntent(shareIntent);
-		
+		shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+		mShareActionProvider.setShareIntent(shareIntent);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -124,14 +126,22 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 			Intent i = new Intent(MainActivity.this, TestActivity.class);
 			startActivity(i);
 			break;*/
-		case R.id.action_about:
-			AboutDialog about = new AboutDialog();
-			about.show(getFragmentManager(), "About");
+		case R.id.action_rank:
+			final String appPackageName = getPackageName();
+			try {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+			} catch (android.content.ActivityNotFoundException anfe) {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+			}
 			break;
 		case R.id.action_ads:
 			Intent ads = new Intent(this, AdvertisementActivity.class);
 			startActivity(ads);
 			overridePendingTransition(R.anim.shift_in_from_left, R.anim.shift_out_to_right);
+			break;
+		case R.id.action_about:
+			AboutDialog about = new AboutDialog();
+			about.show(getFragmentManager(), "About");
 			break;
 		}
 		return super.onOptionsItemSelected(item);
