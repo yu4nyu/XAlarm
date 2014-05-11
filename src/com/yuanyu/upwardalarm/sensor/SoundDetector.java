@@ -67,8 +67,6 @@ public enum SoundDetector {
 		}
 		
 		mHandler.removeCallbacksAndMessages(null);
-		
-		// TODO remove temp audio file ???
 	}
 
 	private double getAmplitude() {

@@ -17,6 +17,7 @@ public class MovementTracker implements SensorEventListener, SoundDetector.Sound
 	private final static int TRACK_RATE = SensorManager.SENSOR_DELAY_NORMAL;
 	
 	private final static int THRESHOLD_NUMBER_TO_ANALYSE = 20;
+	private final static int THRESHOLD_NUMBER_TO_ANALYSE_SOUND = 5;
 
 	private SensorManager mSensorManager;
 	private Sensor mAcceleroMeter;
@@ -99,7 +100,7 @@ public class MovementTracker implements SensorEventListener, SoundDetector.Sound
 		sample.x = (float) amplitude;
 		mData.add(sample);
 		
-		if(mData.size() >= THRESHOLD_NUMBER_TO_ANALYSE) {
+		if(mData.size() >= THRESHOLD_NUMBER_TO_ANALYSE_SOUND) {
 			MovementAnalysor.INSTANCE.analyse(mData);
 		}
 	}
