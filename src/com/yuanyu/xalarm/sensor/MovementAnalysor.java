@@ -46,6 +46,9 @@ public enum MovementAnalysor {
 		case Constants.STOP_WAY_SHOUT:
 			mMovement = new MovementShout(mMovementListeners, movementLevel);
 			break;
+		case Constants.STOP_WAY_TURN_OVER:
+			mMovement = new MovementTurnOver(mMovementListeners, movementLevel);
+			break;
 		}
 	}
 

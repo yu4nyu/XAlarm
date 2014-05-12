@@ -8,6 +8,7 @@ public class Constants {
 	public static final int STOP_WAY_TAP = 2;
 	public static final int STOP_WAY_SHAKE = 3;
 	public static final int STOP_WAY_SHOUT = 4;
+	public static final int STOP_WAY_TURN_OVER = 5;
 
 	public static final int LEVEL_EASY = 0;
 	public static final int LEVEL_MODERATE = 1;
@@ -19,6 +20,7 @@ public class Constants {
 		case STOP_WAY_UPWARD:
 		case STOP_WAY_TAP:
 		case STOP_WAY_SHAKE:
+		case STOP_WAY_TURN_OVER:
 			return true;
 		}
 		return false;
@@ -31,5 +33,12 @@ public class Constants {
 		return false;
 	}
 	
-	public static String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=com.yuanyu.xalarm";
+	public static boolean isForProVersion(int stopWay) {
+		if(stopWay == STOP_WAY_TURN_OVER) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=com.yuanyu.upwardalarm";
 }
