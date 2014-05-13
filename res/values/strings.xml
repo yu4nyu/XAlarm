@@ -59,6 +59,7 @@
 	
 	<!-- Alarm go off activity -->
 	<string name="stop_alarm">Stop alarm</string>
+	<string name="press_again_to_exit">Press again to exit</string>
 	
 	<!-- Advertisement activity -->
 	<string name="advertisement">Advertisement</string>

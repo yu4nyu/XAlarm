@@ -2,12 +2,14 @@ package com.yuanyu.xalarm;
 
 import com.yuanyu.xalarm.R;
 import com.yuanyu.xalarm.model.Constants;
+import com.yuanyu.xalarm.model.Manager;
 import com.yuanyu.xalarm.model.RealTimeProvider;
 import com.yuanyu.xalarm.sensor.MovementAnalysor;
 import com.yuanyu.xalarm.ui.AlarmItemAnimator;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 
 public class AlarmGoOffActivity extends Activity implements MovementAnalysor.MovementListener {
@@ -89,6 +92,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 	}
 
 	public static class AlarmGoOffDialog extends DialogFragment {
+		
+		private final static long PRESS_BACK_TWICE_DURATION = 2000;
 
 		private RealTimeProvider mTimeProvider;
 		private String mLabel;
@@ -100,6 +105,9 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 		private int mStopTimes;
 		
 		private TextView mStopTimesText;
+		
+		private boolean mIsTestSensor;
+		private long mBackKeyLastPressedTime = 0;
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -112,10 +120,9 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			mStopWay = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_WAY);
 			mStopLevel = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL);
 			mStopTimes = args.getInt(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, 1);
+			mIsTestSensor = args.getBoolean(EXTRA_IS_TEST_SENSOR);
 			
-			if(!args.getBoolean(EXTRA_IS_TEST_SENSOR)) {
-				setCancelable(false);
-			}
+			setCancelable(false);
 		}
 
 		@Override
@@ -166,7 +173,34 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 				});
 			}
 			
-			return builder.create();
+			Dialog dialog = builder.create();
+			if(mIsTestSensor) {
+				dialog.setOnKeyListener(new OnKeyListener(){
+					@Override
+					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+						if(keyCode == KeyEvent.KEYCODE_BACK) {
+							if(mBackKeyLastPressedTime == 0) {
+								mBackKeyLastPressedTime = System.currentTimeMillis();
+								Manager.INSTANCE.showToast(getActivity(), getString(R.string.press_again_to_exit));
+							}
+							else {
+								if(System.currentTimeMillis() - mBackKeyLastPressedTime < PRESS_BACK_TWICE_DURATION) {
+									Manager.INSTANCE.cancelToast();
+									dialog.dismiss();
+								}
+								else {
+									mBackKeyLastPressedTime = System.currentTimeMillis();
+									Manager.INSTANCE.showToast(getActivity(), getString(R.string.press_again_to_exit));
+								}
+							}
+							return true;
+						}
+						return false;
+					}
+				});
+			}
+			
+			return dialog;
 		}
 
 		public void updateTimesText(int times) {

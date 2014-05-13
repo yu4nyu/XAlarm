@@ -58,6 +58,7 @@
 	
 	<!-- Alarm go off activity -->
 	<string name="stop_alarm">停止闹钟</string>
+	<string name="press_again_to_exit">zai an 一次 tui chu</string> <!-- TODO -->
 	
 	<!-- Advertisement activity -->
 	<string name="advertisement">广告</string>
