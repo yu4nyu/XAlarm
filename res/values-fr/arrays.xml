@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="stop_selections">
-        <item>Cliquer bouton</item>
-        <item>Jeter vers le haut</item>
+        <item>Button</item>
+        <item>Lancer vers le haut</item>
         <item>Tapoter</item>
         <item>Secouer</item>
         <item>Crier</item>

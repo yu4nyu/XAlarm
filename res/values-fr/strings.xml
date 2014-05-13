@@ -18,7 +18,7 @@
 
     <!-- Alarm define activity -->
     <string name="title_add_alarm">Ajouter alarme</string>
-    <string name="title_edit_alarm">Edit alarm</string>
+    <string name="title_edit_alarm">Editer alarme</string>
     <string name="sunday">Dim</string>
     <string name="monday">Lun</string>
     <string name="tuesday">Mar</string>
@@ -34,7 +34,7 @@
     <string name="repeat">Répéter</string>
     <string name="label_define_dialog_title">Label d\'alarme</string>
     <string name="ringtone_picker_title">Selectionner Sonnerie</string>
-    <string name="config_way_to_stop_alarm">Configurer le moyen pour arrêter alarme</string>
+    <string name="config_way_to_stop_alarm">Méthode d'arrêt de l'alarme</string>
 
     <!-- Delete dialog -->
     <string name="selected">Selected</string>
@@ -50,7 +50,7 @@
     <string name="less_than_one_minute">1 minute</string>
     
     <!-- Alarm stop config dialog -->
-	<string name="way_to_stop_alarm">Moyen pour arrêter alarme</string>
+	<string name="way_to_stop_alarm">Méthode d'arrêt de l'alarme</string>
 	<string name="level">Niveau</string>
 	<string name="times">Fois</string>
 	<string name="times_lowercase_singular">fois</string>
