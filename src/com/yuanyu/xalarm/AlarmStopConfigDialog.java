@@ -184,7 +184,13 @@ public class AlarmStopConfigDialog extends DialogFragment {
 		
 		return dialog;
 	}
-	
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		FloatingToast.INSTANCE.setVisibility(false);
+	}
+
 	@Override
 	public void onCancel(DialogInterface dialog) {
 		FloatingToast.INSTANCE.destroy();
