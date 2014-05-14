@@ -52,7 +52,10 @@
     <!-- Alarm stop config dialog -->
 	<string name="way_to_stop_alarm">Méthode d\'arrêt de l\'alarme</string>
 	<string name="level">Niveau</string>
-	<string name="times">Fois</string>
+	<plurals name="times">
+        <item quantity="one">Fois</item>
+        <item quantity="other">Fois</item>
+    </plurals>
 	<string name="times_lowercase_singular">fois</string>
 	<string name="times_lowercase">fois</string>
 	<string name="only_on_pro_version">Uniquement disponible sur la version Pro</string>

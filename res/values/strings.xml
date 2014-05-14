@@ -52,7 +52,10 @@
     <!-- Alarm stop config dialog -->
 	<string name="way_to_stop_alarm">The way you stop the alarm</string>
 	<string name="level">Level</string>
-	<string name="times">Times</string>
+	<plurals name="times">
+        <item quantity="one">Time</item>
+        <item quantity="other">Times</item>
+    </plurals>
 	<string name="times_lowercase_singular">time</string>
 	<string name="times_lowercase">times</string>
 	<string name="only_on_pro_version">Only available on Pro version</string>

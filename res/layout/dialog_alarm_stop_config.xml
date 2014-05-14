@@ -33,8 +33,7 @@
         android:id="@+id/dialog_alarm_stop_config_times_text"
         style="@style/AlarmStopConfig"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/times" />
+        android:layout_height="wrap_content" />
 
     <SeekBar
         android:id="@+id/dialog_alarm_stop_config_seekbar"

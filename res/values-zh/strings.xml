@@ -14,7 +14,7 @@
     
     <!-- Main activity -->
     <string name="no_alarm">没有闹钟\n\n点击 \"+\" 按钮添加</string>
-    <string name="share_text">朋友们，我正在使用 %s。一个有趣而且有用的闹钟应用。当闹钟响起，你不仅可以通过点击关闭按钮，也可以通过轻拍，摇晃，大叫，甚至是上抛停止闹钟！</string>
+    <string name="share_text">朋友们，我正在使用 %s。一个有趣而且有用的闹钟应用。当闹钟响起，你不仅可以通过点击关闭按钮，也可以通过轻拍，摇晃，叫喊，甚至是上抛停止闹钟！</string>
 
     <!-- Alarm define activity -->
     <string name="title_add_alarm">添加闹钟</string>
@@ -52,7 +52,9 @@
     <!-- Alarm stop config dialog -->
 	<string name="way_to_stop_alarm">闹钟停止方式</string>
 	<string name="level">等级</string>
-	<string name="times">次数</string>
+	<plurals name="times">
+        <item quantity="other">次数</item>
+    </plurals>
 	<string name="times_lowercase_singular">次</string>
 	<string name="times_lowercase">次</string>
 	

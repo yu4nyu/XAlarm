@@ -75,13 +75,13 @@ public class AlarmStopConfigDialog extends DialogFragment {
 		mLevelSpinner.setAdapter(levelAdapter);
 		
 		mTimesText = (TextView) view.findViewById(R.id.dialog_alarm_stop_config_times_text);
-		mTimesText.setText(getString(R.string.times) + " x1");
+		mTimesText.setText(getResources().getQuantityString(R.plurals.times, 1) + " x1");
 		
 		mTimesSeekBar = (SeekBar) view.findViewById(R.id.dialog_alarm_stop_config_seekbar);
 		mTimesSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				mTimesText.setText(getString(R.string.times) + " x" + (progress + 1));
+				mTimesText.setText(getResources().getQuantityString(R.plurals.times, progress + 1) + " x" + (progress + 1));
 			}
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
