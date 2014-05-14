@@ -178,7 +178,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 				dialog.setOnKeyListener(new OnKeyListener(){
 					@Override
 					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-						if(keyCode == KeyEvent.KEYCODE_BACK) {
+						if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
 							if(mBackKeyLastPressedTime == 0) {
 								mBackKeyLastPressedTime = System.currentTimeMillis();
 								Manager.INSTANCE.showToast(getActivity(), getString(R.string.press_again_to_exit));
@@ -193,7 +193,6 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 									Manager.INSTANCE.showToast(getActivity(), getString(R.string.press_again_to_exit));
 								}
 							}
-							return true;
 						}
 						return false;
 					}
