@@ -249,6 +249,7 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 	}
 	
 	private void startStopWayConfigActivity() {
+		mDefineAlarmStopLayout.setClickable(false);
 		AlarmStopConfigDialog dialog = new AlarmStopConfigDialog();
 		dialog.setOnAlarmStopConfiguredListener(this);
 		Bundle args = new Bundle();
@@ -269,6 +270,12 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 		mStopLevel = level;
 		mStopTimes = times;
 		updateStopWayText();
+		mDefineAlarmStopLayout.setClickable(true);
+	}
+	
+	@Override
+	public void onAlarmStopConfigurationCanceled() {
+		mDefineAlarmStopLayout.setClickable(true);
 	}
 	
 	private void showTitleDefineDialog() {

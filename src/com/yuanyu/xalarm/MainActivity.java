@@ -218,4 +218,9 @@ public class MainActivity extends Activity implements AlarmStopConfigDialog.OnAl
 		i.putExtra(AlarmGoOffActivity.EXTRA_IS_TEST_SENSOR, true);
 		startActivity(i);
 	}
+	
+	@Override
+	public void onAlarmStopConfigurationCanceled() {
+		
+	}
 }

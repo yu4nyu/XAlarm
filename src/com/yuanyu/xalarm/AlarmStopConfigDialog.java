@@ -29,6 +29,7 @@ public class AlarmStopConfigDialog extends DialogFragment {
 	
 	public static interface OnAlarmStopConfiguredListener {
 		void onAlarmStopConfigured(int type, int level, int times);
+		void onAlarmStopConfigurationCanceled();
 	}
 	
 	private OnAlarmStopConfiguredListener mOnAlarmStopConfiguredListener;
@@ -153,7 +154,12 @@ public class AlarmStopConfigDialog extends DialogFragment {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setView(view)
-			.setNegativeButton(android.R.string.cancel, null)
+			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					mOnAlarmStopConfiguredListener.onAlarmStopConfigurationCanceled();
+				}
+			})
 			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -182,6 +188,7 @@ public class AlarmStopConfigDialog extends DialogFragment {
 	@Override
 	public void onCancel(DialogInterface dialog) {
 		FloatingToast.INSTANCE.destroy();
+		mOnAlarmStopConfiguredListener.onAlarmStopConfigurationCanceled();
 		super.onCancel(dialog);
 	}
 
