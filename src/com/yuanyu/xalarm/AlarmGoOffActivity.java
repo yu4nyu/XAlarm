@@ -186,7 +186,8 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 							else {
 								if(System.currentTimeMillis() - mBackKeyLastPressedTime < PRESS_BACK_TWICE_DURATION) {
 									Manager.INSTANCE.cancelToast();
-									dialog.dismiss();
+									AlarmGoOffService.stopService(getActivity());
+									getActivity().finish();
 								}
 								else {
 									mBackKeyLastPressedTime = System.currentTimeMillis();
