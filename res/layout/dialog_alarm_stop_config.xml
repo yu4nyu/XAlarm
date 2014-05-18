@@ -15,6 +15,7 @@
         android:id="@+id/dialog_alarm_stop_config_selection_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="100dp"
         android:layout_gravity="center" />
 
     <TextView
@@ -27,6 +28,7 @@
         android:id="@+id/dialog_alarm_stop_config_level_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="100dp"
         android:layout_gravity="center" />
 
     <TextView
