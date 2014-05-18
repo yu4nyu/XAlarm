@@ -26,6 +26,7 @@ import android.widget.ToggleButton;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 
 public class AlarmDefineActivity extends Activity implements View.OnClickListener,
@@ -230,6 +231,7 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.activity_alarm_define_label_layout:
+			mLabelLayout.setClickable(false);
 			showTitleDefineDialog();
 			break;
 		case R.id.activity_alarm_define_ringtone_layout:
@@ -284,7 +286,12 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 		final EditText edit = new EditText(this);
 		builder.setTitle(R.string.label_define_dialog_title)
 			.setView(edit)
-			.setNegativeButton(android.R.string.cancel, null)
+			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					mLabelLayout.setClickable(true);
+				}
+			})
 			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -306,6 +313,12 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 		        }
 		    }
 		});
+		dialog.setOnCancelListener(new OnCancelListener(){
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				mLabelLayout.setClickable(true);
+			}
+		});
 		dialog.show();
 	}
 	
@@ -319,6 +332,7 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 			Uri defaultUri = Uri.parse(mRingtoneUri);
 			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, defaultUri);
 		}
+		mRingtoneLayout.setClickable(false);
 		startActivityForResult(intent, ACTIVITY_RINGTONE_PICKER);
 	}
 	
@@ -364,21 +378,25 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(requestCode == ACTIVITY_RINGTONE_PICKER && resultCode == Activity.RESULT_OK) {
-			Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-			if(uri != null) {
-				mRingtoneUri = uri.toString();
-				Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
-				mRingtoneTxt.setText(ringtone.getTitle(this));
-				mRingtoneTxt.setTextColor(mEnabledColor);
+		
+		if(requestCode == ACTIVITY_RINGTONE_PICKER) {
+			mRingtoneLayout.setClickable(true);
+			if(resultCode == Activity.RESULT_OK) {
+				Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+				if(uri != null) {
+					mRingtoneUri = uri.toString();
+					Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
+					mRingtoneTxt.setText(ringtone.getTitle(this));
+					mRingtoneTxt.setTextColor(mEnabledColor);
+				}
+				else {
+					mRingtoneUri = "";
+					mRingtoneTxt.setText(""); // It will the default hint text
+					mRingtoneTxt.setTextColor(mDisabledColor);
+				}
+				
+				Log.d(TAG, "mRingtoneUri = " + mRingtoneUri);
 			}
-			else {
-				mRingtoneUri = "";
-				mRingtoneTxt.setText(""); // It will the default hint text
-				mRingtoneTxt.setTextColor(mDisabledColor);
-			}
-			
-			Log.d(TAG, "mRingtoneUri = " + mRingtoneUri);
 		}
 	}
 
