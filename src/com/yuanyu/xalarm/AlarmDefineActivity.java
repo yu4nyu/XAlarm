@@ -31,7 +31,7 @@ import android.content.Intent;
 public class AlarmDefineActivity extends Activity implements View.OnClickListener,
 	CompoundButton.OnCheckedChangeListener, AlarmStopConfigDialog.OnAlarmStopConfiguredListener {
 	
-	private final static String TAG = "AlarmDefineStandardActivity";
+	private final static String TAG = "AlarmDefineActivity";
 	
 	private final static int ACTIVITY_RINGTONE_PICKER = 0;
 	
@@ -266,6 +266,7 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 	
 	@Override
 	public void onAlarmStopConfigured(int type, int level, int times) {
+		Log.d(TAG, "Selected stop way: " + type);
 		mStopWay = type;
 		mStopLevel = level;
 		mStopTimes = times;

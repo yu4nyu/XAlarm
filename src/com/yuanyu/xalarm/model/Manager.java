@@ -101,7 +101,7 @@ public enum Manager {
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, alarm.getStopWay());
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, alarm.getStopLevel());
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, alarm.getStopTimes());
-		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarm.getId(), intent, 0);
+		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
 		if(Utils.isKitKatOrLater()) {
 			registerForKitKatOrLater(alarmManager, timeInMillis, alarmPending);
@@ -128,7 +128,7 @@ public enum Manager {
 	public void unregister(Context context, int alarmId) {
 		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
 		intent.setData(Uri.parse(INTENT_DATA_PREFIX + alarmId));
-		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarmId, intent, 0);
+		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
 		alarmManager.cancel(alarmPending);
 	}
