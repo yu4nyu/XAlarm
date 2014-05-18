@@ -238,7 +238,7 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 			showRingtonePicker();
 			break;
 		case R.id.activity_alarm_define_stop_layout:
-			startStopWayConfigActivity();
+			startStopWayConfigDialog();
 			break;
 		case R.id.activity_alarm_define_done_btn:
 			done();
@@ -250,7 +250,7 @@ public class AlarmDefineActivity extends Activity implements View.OnClickListene
 		}
 	}
 	
-	private void startStopWayConfigActivity() {
+	private void startStopWayConfigDialog() {
 		mDefineAlarmStopLayout.setClickable(false);
 		AlarmStopConfigDialog dialog = new AlarmStopConfigDialog();
 		dialog.setOnAlarmStopConfiguredListener(this);

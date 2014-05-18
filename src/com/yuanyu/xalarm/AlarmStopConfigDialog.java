@@ -47,9 +47,17 @@ public class AlarmStopConfigDialog extends DialogFragment {
 		mOnAlarmStopConfiguredListener = listener;
 	}
 	
-	private void notifyOnAlarmStopConfiguredListener(int type, int level, int times) {
+	private void notifyOnAlarmStopConfigured(int type, int level, int times) {
 		if(mOnAlarmStopConfiguredListener != null) {
 			mOnAlarmStopConfiguredListener.onAlarmStopConfigured(type, level, times);
+			mOnAlarmStopConfiguredListener = null;
+		}
+	}
+	
+	private void notifyOnAlarmStopConfigurationCanceled() {
+		if(mOnAlarmStopConfiguredListener != null) {
+			mOnAlarmStopConfiguredListener.onAlarmStopConfigurationCanceled();
+			mOnAlarmStopConfiguredListener = null;
 		}
 	}
 
@@ -157,7 +165,7 @@ public class AlarmStopConfigDialog extends DialogFragment {
 			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					mOnAlarmStopConfiguredListener.onAlarmStopConfigurationCanceled();
+					notifyOnAlarmStopConfigurationCanceled();
 				}
 			})
 			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -169,8 +177,7 @@ public class AlarmStopConfigDialog extends DialogFragment {
 					}
 					int level = mLevelSpinner.getSelectedItemPosition();
 					int times = mTimesSeekBar.getProgress() + 1;
-					notifyOnAlarmStopConfiguredListener(type, level, times);
-					mOnAlarmStopConfiguredListener = null;
+					notifyOnAlarmStopConfigured(type, level, times);
 				}
 			});
 
@@ -194,7 +201,7 @@ public class AlarmStopConfigDialog extends DialogFragment {
 	@Override
 	public void onCancel(DialogInterface dialog) {
 		FloatingToast.INSTANCE.destroy();
-		mOnAlarmStopConfiguredListener.onAlarmStopConfigurationCanceled();
+		notifyOnAlarmStopConfigurationCanceled();
 		super.onCancel(dialog);
 	}
 
