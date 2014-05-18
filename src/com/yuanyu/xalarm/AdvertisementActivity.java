@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class AdvertisementActivity extends Activity {
 
-	private static final String AD_UNIT_ID = "ca-app-pub-3028123579469785/8682166555";
+	private static final String AD_UNIT_ID = "ca-app-pub-3028123579469785/6900722159";
 
 	private InterstitialAd mInterstitial;
 	private TextView mTextView;
