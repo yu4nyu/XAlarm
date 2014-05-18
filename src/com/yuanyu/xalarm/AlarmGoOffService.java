@@ -62,13 +62,14 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
     };
 
 	public static void startService(Context context, boolean isVibrate, String ringtoneUri,
-			int stopWay, int stopLevel, int stopTimes) {
+			int stopWay, int stopLevel, int stopTimes, boolean isTestSensor) {
 		Intent i = new Intent(context, AlarmGoOffService.class);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, isVibrate);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_RINGTONE_URI, ringtoneUri);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_WAY, stopWay);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_LEVEL, stopLevel);
 		i.putExtra(AlarmBroadcastReceiver.EXTRA_STOP_TIMES, stopTimes);
+		i.putExtra(AlarmGoOffActivity.EXTRA_IS_TEST_SENSOR, isTestSensor);
 		i.setAction(ACTION_START);
 		Manager.INSTANCE.requireWakeLock(context);
 		context.startService(i);
@@ -108,7 +109,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			mTracker.stop();
 			mTracker.clearData();
 			stopSelf();
-			return Service.START_NOT_STICKY;
+			return START_NOT_STICKY;
 		}
 		
 		boolean started = false;
@@ -156,6 +157,9 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 			Manager.INSTANCE.releaseWakeLock();
 		}
 
+		if(intent.getBooleanExtra(AlarmGoOffActivity.EXTRA_IS_TEST_SENSOR, false)) {
+			return START_NOT_STICKY;
+		}
 		return START_STICKY ;
 	}
 

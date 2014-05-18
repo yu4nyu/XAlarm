@@ -156,7 +156,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 			builder.setView(view);
 			
 			// Start the ringtone and vibrate service
-			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri, mStopWay, mStopLevel, mStopTimes);
+			AlarmGoOffService.startService(getActivity(), mIsVibrate, mRingtoneUri, mStopWay, mStopLevel, mStopTimes, mIsTestSensor);
 			
 			if(mStopWay == Constants.STOP_WAY_BUTTON) {
 				View separator = view.findViewById(R.id.dialog_alarm_go_off_separator);
