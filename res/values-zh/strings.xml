@@ -45,8 +45,12 @@
 
     <!-- Toast message -->
     <string name="time_before_go_off_text">已将闹钟设置为从现在起  %s 后提醒</string>
-    <string name="hour">小时</string>
-    <string name="minute">分钟</string>
+    <plurals name="hour">
+        <item quantity="other">小时</item>
+    </plurals>
+    <plurals name="minute">
+        <item quantity="other">分钟</item>
+    </plurals>
     <string name="less_than_one_minute">不到1分钟</string>
     
     <!-- Alarm stop config dialog -->

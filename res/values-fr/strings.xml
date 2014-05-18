@@ -45,8 +45,14 @@
 
     <!-- Toast message -->
     <string name="time_before_go_off_text">Prochaine alarme prévue dans %s</string>
-    <string name="hour">heure</string>
-    <string name="minute">minute</string>
+    <plurals name="hour">
+        <item quantity="one">heure</item>
+        <item quantity="other">heures</item>
+    </plurals>
+    <plurals name="minute">
+        <item quantity="one">minute</item>
+        <item quantity="other">minutes</item>
+    </plurals>
     <string name="less_than_one_minute">1 minute</string>
     
     <!-- Alarm stop config dialog -->

@@ -233,20 +233,12 @@ public class Utils {
 		int minute = (int) minuteCount % 60;
 
 		String timeText = "";
-		if(hour >= 1) {
-			timeText += hour + " " + context.getString(R.string.hour);
-			if(hour > 1) {
-				timeText += "s";
-			}
+		if(hour > 0) {
+			timeText = hour + " " + context.getResources().getQuantityString(R.plurals.hour, hour);
 		}
-
-		if(minute >= 1) {
-			timeText += " " + minute + " " + context.getString(R.string.minute);
-			if(minute > 1) {
-				timeText += "s";
-			}
+		if(minute > 0) {
+			timeText += " " + minute + " " + context.getResources().getQuantityString(R.plurals.minute, minute);
 		}
-
 		if(hour == 0 && minute == 0) {
 			timeText += context.getString(R.string.less_than_one_minute);
 		}
