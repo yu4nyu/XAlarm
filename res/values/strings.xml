@@ -34,7 +34,6 @@
     <string name="repeat">Repeat</string>
     <string name="label_define_dialog_title">Label of alarm</string>
     <string name="ringtone_picker_title">Select ringtone</string>
-    <string name="config_way_to_stop_alarm">Configure the way you stop the alarm</string>
 
     <!-- Delete dialog -->
     <string name="selected">Selected</string>
@@ -64,7 +63,7 @@
     </plurals>
 	<string name="times_lowercase_singular">time</string>
 	<string name="times_lowercase">times</string>
-	<string name="only_on_pro_version">Only available on Pro version</string>
+	<string name="only_on_pro_version">Only available in Pro version</string>
 	
 	<!-- Alarm go off activity -->
 	<string name="stop_alarm">Stop alarm</string>

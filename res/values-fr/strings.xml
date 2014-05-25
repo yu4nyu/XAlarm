@@ -34,7 +34,6 @@
     <string name="repeat">Répéter</string>
     <string name="label_define_dialog_title">Label d\'alarme</string>
     <string name="ringtone_picker_title">Selectionner Sonnerie</string>
-    <string name="config_way_to_stop_alarm">Méthode d\'arrêt de l\'alarme</string>
 
     <!-- Delete dialog -->
     <string name="selected">Selected</string>
@@ -64,7 +63,7 @@
     </plurals>
 	<string name="times_lowercase_singular">fois</string>
 	<string name="times_lowercase">fois</string>
-	<string name="only_on_pro_version">Uniquement disponible sur la version Pro</string>
+	<string name="only_on_pro_version">Uniquement disponible dans la version Pro</string>
 	
 	<!-- Alarm go off activity -->
 	<string name="stop_alarm">Arrêter alarme</string>

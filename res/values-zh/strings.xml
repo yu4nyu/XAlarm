@@ -34,8 +34,6 @@
     <string name="repeat">重复</string>
     <string name="label_define_dialog_title">闹钟标签</string>
     <string name="ringtone_picker_title">选择铃声</string>
-    <string name="config_way_to_stop_alarm">编辑闹钟停止方式</string>
-    <string name="only_on_pro_version">仅适用于专业版</string>
 
     <!-- Delete dialog -->
     <string name="selected">已选择</string>
@@ -61,6 +59,7 @@
     </plurals>
 	<string name="times_lowercase_singular">次</string>
 	<string name="times_lowercase">次</string>
+    <string name="only_on_pro_version">仅适用于专业版</string>
 	
 	<!-- Alarm go off activity -->
 	<string name="stop_alarm">停止闹钟</string>
