@@ -9,8 +9,8 @@ import com.yuanyu.xalarm.sensor.MovementTracker.Sample;
 public class MovementShout extends Movement {
 
 	private final static float VALUE_THRESHOLD_EASY = 80.0f;
-	private final static float VALUE_THRESHOLD_MODERATE = 100.0f;
-	private final static float VALUE_THRESHOLD_HARD = 120.0f;
+	private final static float VALUE_THRESHOLD_MODERATE = 90.0f;
+	private final static float VALUE_THRESHOLD_HARD = 100.0f;
 	private final static long SHOUT_INTERVAL = 1000;
 	
 	private float mValueThreshold;
