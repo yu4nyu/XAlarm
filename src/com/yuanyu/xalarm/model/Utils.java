@@ -301,6 +301,8 @@ public class Utils {
 		}
 		return "";
 	}
+
+	private static Set<WeakReference<Context>> sVibrationContexts = new HashSet<WeakReference<Context>>();
 	
 	public static void startVibration(Context context) {
 		Vibrator vibrator = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
@@ -318,18 +320,12 @@ public class Utils {
 				long_gap
 		};
 		vibrator.vibrate(pattern, 0);
-	}
-
-	private static Set<WeakReference<Context>> sVibrationContexts = new HashSet<WeakReference<Context>>();
-	public static void keepVibrationContextReference(Context context) {
+		
 		WeakReference<Context> reference = new WeakReference<Context>(context);
 		sVibrationContexts.add(reference);
 	}
 	
-	public static void stopVibration(Context context) {
-		Vibrator vibrator = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
-		vibrator.cancel();
-		
+	public static void stopVibration() {
 		Iterator<WeakReference<Context>> iterator = sVibrationContexts.iterator();
 		while(iterator.hasNext()) {
 			Context c = iterator.next().get();

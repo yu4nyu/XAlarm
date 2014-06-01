@@ -12,7 +12,6 @@ public class KeepVibrationActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		Utils.startVibration(this);
-		Utils.keepVibrationContextReference(this);
 		
 		finish();
 	}

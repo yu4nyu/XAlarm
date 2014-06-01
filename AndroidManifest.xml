@@ -49,13 +49,7 @@
             android:showOnLockScreen="true"
             android:theme="@style/Transparent"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="com.yuanyu.xalarm.KeepVibrationActivity"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:showOnLockScreen="true"
-            android:theme="@style/Transparent"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name="com.yuanyu.xalarm.KeepVibrationActivity" />
 
         <receiver android:name="com.yuanyu.xalarm.AlarmBroadcastReceiver" />
 

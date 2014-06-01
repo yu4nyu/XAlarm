@@ -222,7 +222,7 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		stopAlarmNoise();
 		
 		unregisterScreenOnOffReceiver();
-		Utils.stopVibration(this);
+		Utils.stopVibration();
 		isVibrating = false;
 		
 		Manager.INSTANCE.releaseWakeLock();
