@@ -1,12 +1,17 @@
 package com.yuanyu.xalarm.model;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import com.yuanyu.xalarm.R;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
@@ -15,6 +20,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Vibrator;
 import android.text.Html;
 import android.text.Spanned;
 
@@ -294,5 +300,45 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return "";
+	}
+	
+	public static void startVibration(Context context) {
+		Vibrator vibrator = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
+
+		int dot = 200;      // Length of a Morse Code "dot" in milliseconds
+		int dash = 500;     // Length of a Morse Code "dash" in milliseconds
+		int short_gap = 200;    // Length of Gap Between dots/dashes
+		int medium_gap = 500;   // Length of Gap Between Letters
+		int long_gap = 1000;    // Length of Gap Between Words
+		long[] pattern = {
+				0,  // Start immediately
+				dash, short_gap, dot, short_gap, dash, short_gap, dash, // Y
+				medium_gap,
+				dash, short_gap, dot, short_gap, dash, short_gap, dash, // Y
+				long_gap
+		};
+		vibrator.vibrate(pattern, 0);
+	}
+
+	private static Set<WeakReference<Context>> sVibrationContexts = new HashSet<WeakReference<Context>>();
+	public static void keepVibrationContextReference(Context context) {
+		WeakReference<Context> reference = new WeakReference<Context>(context);
+		sVibrationContexts.add(reference);
+	}
+	
+	public static void stopVibration(Context context) {
+		Vibrator vibrator = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
+		vibrator.cancel();
+		
+		Iterator<WeakReference<Context>> iterator = sVibrationContexts.iterator();
+		while(iterator.hasNext()) {
+			Context c = iterator.next().get();
+			if(c == null) {
+				iterator.remove();
+			}
+			else {
+				((Vibrator)c.getSystemService(Service.VIBRATOR_SERVICE)).cancel();
+			}
+		}
 	}
 }

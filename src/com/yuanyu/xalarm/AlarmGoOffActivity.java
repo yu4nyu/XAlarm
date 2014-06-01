@@ -49,7 +49,7 @@ public class AlarmGoOffActivity extends Activity implements MovementAnalysor.Mov
 				| WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 				| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 				| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-		setContentView(R.layout.activity_test);
+		setContentView(R.layout.activity_alarm_go_off);
 
 		Intent intent = getIntent();
 		mLabel = intent.getStringExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL);

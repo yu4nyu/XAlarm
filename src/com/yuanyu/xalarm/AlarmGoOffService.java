@@ -11,8 +11,10 @@ import com.yuanyu.xalarm.sensor.MovementAnalysor;
 import com.yuanyu.xalarm.sensor.MovementTracker;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -20,7 +22,6 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -60,6 +61,22 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
             }
         }
     };
+    
+    // Broadcast used to keep vibration when screen turned off
+    private class ScreenOffReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if(isVibrating) {
+				if(intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+					Intent i = new Intent(AlarmGoOffService.this, KeepVibrationActivity.class);
+					i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(i);
+				}
+			}
+		}
+    }
+    ScreenOffReceiver mScreenOffReceiver;
+    private boolean isVibrating = false;
 
 	public static void startService(Context context, boolean isVibrate, String ringtoneUri,
 			int stopWay, int stopLevel, int stopTimes, boolean isTestSensor) {
@@ -90,6 +107,18 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		MovementAnalysor.INSTANCE.addMovementListener(this);
 		
 		mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+		mScreenOffReceiver = new ScreenOffReceiver();
+	}
+	
+	private void registerScreenOnOffReceiver() {
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Intent.ACTION_SCREEN_OFF);
+		registerReceiver(mScreenOffReceiver, filter);
+	}
+	
+	private void unregisterScreenOnOffReceiver() {
+		unregisterReceiver(mScreenOffReceiver);
 	}
 
 	@Override
@@ -179,7 +208,9 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 		boolean isInCall = mlastPhoneState != TelephonyManager.CALL_STATE_IDLE;
 		if(!isInCall) {
 			if(mIsVibrate && !isInCall) {
-				startVibration();
+				isVibrating = true;
+				registerScreenOnOffReceiver();
+				Utils.startVibration(this);
 			}
 			if(mRingtoneUri != null && !mRingtoneUri.isEmpty()) {
 				startAlarmNoise(mRingtoneUri);
@@ -189,7 +220,11 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
 	
 	private void stopAlarm() {
 		stopAlarmNoise();
-		stopVibration();
+		
+		unregisterScreenOnOffReceiver();
+		Utils.stopVibration(this);
+		isVibrating = false;
+		
 		Manager.INSTANCE.releaseWakeLock();
 	}
 
@@ -240,29 +275,6 @@ public class AlarmGoOffService extends Service implements MovementAnalysor.Movem
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
-	}
-
-	private void startVibration() {
-		Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-
-		int dot = 200;      // Length of a Morse Code "dot" in milliseconds
-		int dash = 500;     // Length of a Morse Code "dash" in milliseconds
-		int short_gap = 200;    // Length of Gap Between dots/dashes
-		int medium_gap = 500;   // Length of Gap Between Letters
-		int long_gap = 1000;    // Length of Gap Between Words
-		long[] pattern = {
-				0,  // Start immediately
-				dash, short_gap, dot, short_gap, dash, short_gap, dash, // Y
-				medium_gap,
-				dash, short_gap, dot, short_gap, dash, short_gap, dash, // Y
-				long_gap
-		};
-		vibrator.vibrate(pattern, 0);
-	}
-
-	private void stopVibration() {
-		Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-		vibrator.cancel();
 	}
 
 	@Override
