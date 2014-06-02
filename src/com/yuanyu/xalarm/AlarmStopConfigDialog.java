@@ -65,7 +65,7 @@ public class AlarmStopConfigDialog extends DialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if(!Configuration.IS_PRO_VERSION) {
-			FloatingToast.INSTANCE.create(getActivity(), R.string.only_on_pro_version);
+			FloatingToast.INSTANCE.create(getActivity());
 		}
 	}
 

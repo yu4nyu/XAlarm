@@ -64,6 +64,7 @@
 	<string name="times_lowercase_singular">time</string>
 	<string name="times_lowercase">times</string>
 	<string name="only_on_pro_version">Only available in Pro version</string>
+	<string name="buy">Buy</string>
 	
 	<!-- Alarm go off activity -->
 	<string name="stop_alarm">Stop alarm</string>

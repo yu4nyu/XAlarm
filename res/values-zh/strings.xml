@@ -60,6 +60,7 @@
 	<string name="times_lowercase_singular">次</string>
 	<string name="times_lowercase">次</string>
     <string name="only_on_pro_version">仅适用于专业版</string>
+	<string name="buy">购买</string>
 	
 	<!-- Alarm go off activity -->
 	<string name="stop_alarm">停止闹钟</string>

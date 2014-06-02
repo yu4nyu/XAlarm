@@ -1,12 +1,17 @@
 package com.yuanyu.xalarm.ui;
 
+import com.yuanyu.xalarm.R;
+
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 import android.widget.TextView;
 
 public enum FloatingToast {
@@ -16,34 +21,30 @@ public enum FloatingToast {
 	private WindowManager mWindowManager;
 	private WindowManager.LayoutParams mWinLayoutParams;
 	
-	private TextView mTextView;
+	private View mView;
 	
-	public void create(Context context, String text) {
+	public void create(Context context) {
 		initLayoutParams(context);
-		createFloatingView(context, text);
-	}
-	
-	public void create(Context context, int textResId) {
-		create(context, context.getString(textResId));
+		createFloatingView(context);
 	}
 	
 	public void destroy() {
 		if(mWindowManager != null) {
-			mWindowManager.removeView(mTextView);
+			mWindowManager.removeView(mView);
 			mWindowManager = null;
 			mWinLayoutParams = null;
 		}
 	}
 	
 	public void setVisibility(boolean visibility) {
-		if(mTextView == null) {
+		if(mView == null) {
 			return;
 		}
 		if(visibility) {
-			mTextView.setVisibility(View.VISIBLE);
+			mView.setVisibility(View.VISIBLE);
 		}
 		else {
-			mTextView.setVisibility(View.INVISIBLE);
+			mView.setVisibility(View.INVISIBLE);
 		}
 	}
 	
@@ -63,14 +64,14 @@ public enum FloatingToast {
 	    mWinLayoutParams.height = LayoutParams.WRAP_CONTENT;
 	}
 	
-	private void createFloatingView(Context context, String text){
-		mTextView = new TextView(context);
-		mTextView.setText(text);
-		mTextView.setVisibility(View.INVISIBLE);
-		mTextView.setPadding(5, 5, 5, 5);
-		mTextView.setGravity(Gravity.CENTER);
-		mTextView.setBackgroundResource(android.R.color.background_light);
+	private void createFloatingView(Context context){
+		LayoutInflater inflater = LayoutInflater.from(context);
+		mView = inflater.inflate(R.layout.floating_toast_view, null);
+		
+		TextView text = (TextView) mView.findViewById(R.id.floating_toast_view_text);
+		text.setTextSize(TypedValue.COMPLEX_UNIT_PX, new Button(context).getTextSize());
+		
 		mWinLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-		mWindowManager.addView(mTextView, mWinLayoutParams);
+		mWindowManager.addView(mView, mWinLayoutParams);
     }
 }

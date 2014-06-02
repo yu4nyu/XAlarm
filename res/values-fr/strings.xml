@@ -64,6 +64,7 @@
 	<string name="times_lowercase_singular">fois</string>
 	<string name="times_lowercase">fois</string>
 	<string name="only_on_pro_version">Uniquement disponible dans la version Pro</string>
+	<string name="buy">Acheter</string>
 	
 	<!-- Alarm go off activity -->
 	<string name="stop_alarm">Arrêter alarme</string>
