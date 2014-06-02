@@ -15,11 +15,4 @@
     
     <dimen name="go_off_image_size">200dp</dimen>
     
-    <!-- not be used -->
-    <dimen name="number_on_circle_inter_margin">-8dp</dimen>
-    <dimen name="number_on_circle_parent_margin">32dp</dimen>
-    <dimen name="inter_view_margin_small">8dp</dimen>
-    <dimen name="inter_view_margin_medium">16dp</dimen>
-    <dimen name="inter_view_margin_huge">32dp</dimen>
-    
 </resources>
