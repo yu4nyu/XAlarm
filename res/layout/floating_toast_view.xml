@@ -14,13 +14,16 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
+        android:textSize="@dimen/floating_view_text_size"
         android:text="@string/only_on_pro_version" />
 
     <Button
         android:id="@+id/floating_toast_view_buy_button"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/floating_view_button_width"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/floating_view_text_size"
         android:text="@string/buy" />
 
 </LinearLayout>

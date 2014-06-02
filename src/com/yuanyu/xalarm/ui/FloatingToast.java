@@ -5,14 +5,11 @@ import com.yuanyu.xalarm.R;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.widget.Button;
-import android.widget.TextView;
 
 public enum FloatingToast {
 
@@ -67,9 +64,6 @@ public enum FloatingToast {
 	private void createFloatingView(Context context){
 		LayoutInflater inflater = LayoutInflater.from(context);
 		mView = inflater.inflate(R.layout.floating_toast_view, null);
-		
-		TextView text = (TextView) mView.findViewById(R.id.floating_toast_view_text);
-		text.setTextSize(TypedValue.COMPLEX_UNIT_PX, new Button(context).getTextSize());
 		
 		mWinLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
 		mWindowManager.addView(mView, mWinLayoutParams);
