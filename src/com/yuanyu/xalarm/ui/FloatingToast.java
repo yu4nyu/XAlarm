@@ -3,14 +3,18 @@ package com.yuanyu.xalarm.ui;
 import com.yuanyu.xalarm.R;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 
 public enum FloatingToast {
 
@@ -65,11 +69,24 @@ public enum FloatingToast {
 	    mWinLayoutParams.height = LayoutParams.WRAP_CONTENT;
 	}
 	
-	private void createFloatingView(Context context){
+	private void createFloatingView(final Context context){
 		LayoutInflater inflater = LayoutInflater.from(context);
 		mView = inflater.inflate(R.layout.floating_toast_view, null);
 		
 		mWinLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
 		mWindowManager.addView(mView, mWinLayoutParams);
+		
+		Button buyButton = (Button) mView.findViewById(R.id.floating_toast_view_buy_button);
+		buyButton.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				final String appPackageName = context.getPackageName() + "pro";
+				try {
+					context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+				} catch (android.content.ActivityNotFoundException anfe) {
+					context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+				}
+			}
+		});
     }
 }
