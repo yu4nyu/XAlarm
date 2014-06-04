@@ -62,14 +62,6 @@ public class AlarmStopConfigDialog extends DialogFragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if(!Configuration.IS_PRO_VERSION) {
-			FloatingToast.INSTANCE.create(getActivity());
-		}
-	}
-
-	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View view = inflater.inflate(R.layout.dialog_alarm_stop_config, null);
@@ -182,10 +174,15 @@ public class AlarmStopConfigDialog extends DialogFragment {
 			});
 
 		Dialog dialog = builder.create();
+		final View finalView = view;
 		dialog.setOnShowListener(new OnShowListener(){
 			@Override
 			public void onShow(DialogInterface dialog) {
 				mPositiveButton = ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+				
+				if(!Configuration.IS_PRO_VERSION) {
+					FloatingToast.INSTANCE.create(getActivity(), finalView.getWindowToken());
+				}
 			}
 		});
 		

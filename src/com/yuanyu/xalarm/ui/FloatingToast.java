@@ -4,6 +4,7 @@ import com.yuanyu.xalarm.R;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,8 +20,10 @@ public enum FloatingToast {
 	private WindowManager.LayoutParams mWinLayoutParams;
 	
 	private View mView;
+	private IBinder mToken;
 	
-	public void create(Context context) {
+	public void create(Context context, IBinder token) {
+		mToken = token;
 		initLayoutParams(context);
 		createFloatingView(context);
 	}
@@ -51,7 +54,8 @@ public enum FloatingToast {
 	    mWindowManager.getDefaultDisplay().getMetrics(display);
 	    mWinLayoutParams = new WindowManager.LayoutParams();
 
-	    mWinLayoutParams.type = LayoutParams.TYPE_PHONE;
+	    mWinLayoutParams.type = LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+	    mWinLayoutParams.token = mToken;
 	    mWinLayoutParams.format = PixelFormat.RGBA_8888;
 	    mWinLayoutParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
 
