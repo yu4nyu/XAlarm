@@ -2,20 +2,17 @@ package com.yuanyu.xalarm;
 
 import com.yuanyu.xalarm.R;
 import com.yuanyu.xalarm.model.Constants;
-import com.yuanyu.xalarm.ui.FloatingToast;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
@@ -40,8 +37,6 @@ public class AlarmStopConfigDialog extends DialogFragment {
 	private TextView mTimesText;
 	
 	private boolean mIsTestSensor;
-	
-	private Button mPositiveButton;
 
 	public void setOnAlarmStopConfiguredListener(OnAlarmStopConfiguredListener listener) {
 		mOnAlarmStopConfiguredListener = listener;
@@ -134,17 +129,6 @@ public class AlarmStopConfigDialog extends DialogFragment {
 					mLevelSpinner.setEnabled(true);
 					mTimesSeekBar.setEnabled(true);
 				}
-				
-				if(!Configuration.IS_PRO_VERSION) {
-					if(Constants.isForProVersion(stopWay)) {
-						FloatingToast.INSTANCE.setVisibility(true);
-						setPositiveButtonEnable(false);
-					}
-					else {
-						FloatingToast.INSTANCE.setVisibility(false);
-						setPositiveButtonEnable(true);
-					}
-				}
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -172,51 +156,13 @@ public class AlarmStopConfigDialog extends DialogFragment {
 					notifyOnAlarmStopConfigured(type, level, times);
 				}
 			});
-
-		Dialog dialog = builder.create();
-		final View finalView = view;
-		dialog.setOnShowListener(new OnShowListener(){
-			@Override
-			public void onShow(DialogInterface dialog) {
-				mPositiveButton = ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				
-				if(!Configuration.IS_PRO_VERSION) {
-					FloatingToast.INSTANCE.create(getActivity(), finalView.getWindowToken());
-				}
-			}
-		});
 		
-		return dialog;
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		FloatingToast.INSTANCE.setVisibility(false);
+		return builder.create();
 	}
 
 	@Override
 	public void onCancel(DialogInterface dialog) {
-		FloatingToast.INSTANCE.destroy();
 		notifyOnAlarmStopConfigurationCanceled();
 		super.onCancel(dialog);
-	}
-
-	@Override
-	public void onDestroyView() {
-		FloatingToast.INSTANCE.destroy();
-		super.onDestroyView();
-	}
-
-	@Override
-	public void onDismiss(DialogInterface dialog) {
-		FloatingToast.INSTANCE.destroy();
-		super.onDismiss(dialog);
-	}
-
-	private void setPositiveButtonEnable(boolean enabled) {
-		if(mPositiveButton != null) {
-			mPositiveButton.setEnabled(enabled);
-		}
 	}
 }

@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.yuanyu.xalarm.AlarmBroadcastReceiver;
-import com.yuanyu.xalarm.Configuration;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -44,7 +43,6 @@ public enum Manager {
 
 	final static String PREFS_KEY = "prefs";
 	private final static String INTENT_DATA_PREFIX = "com.yuanyu.xalarm:";
-	private final static String INTENT_DATA_PREFIX_PRO = "com.yuanyu.xalarmpro:";
 	private final static String PREFS_UNIQUE_ID_KEY = "unique_id";
 
 	private final static String ALARM_DATA_FILE_PREFIX = "alarm_data_";
@@ -95,8 +93,7 @@ public enum Manager {
 		}
 		
 		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-		String dataPrefix = Configuration.IS_PRO_VERSION ? INTENT_DATA_PREFIX_PRO : INTENT_DATA_PREFIX;
-		intent.setData(Uri.parse(dataPrefix + alarm.getId()));
+		intent.setData(Uri.parse(INTENT_DATA_PREFIX + alarm.getId()));
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_ID, alarm.getId());
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_ALARM_LABEL, alarm.getLabel());
 		intent.putExtra(AlarmBroadcastReceiver.EXTRA_IS_VIBRATE, alarm.getVibrateEnable());
@@ -130,8 +127,7 @@ public enum Manager {
 	 */
 	public void unregister(Context context, int alarmId) {
 		Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-		String dataPrefix = Configuration.IS_PRO_VERSION ? INTENT_DATA_PREFIX_PRO : INTENT_DATA_PREFIX;
-		intent.setData(Uri.parse(dataPrefix + alarmId));
+		intent.setData(Uri.parse(INTENT_DATA_PREFIX + alarmId));
 		PendingIntent alarmPending = PendingIntent.getBroadcast(context, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
 		alarmManager.cancel(alarmPending);
