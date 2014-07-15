@@ -52,7 +52,8 @@
         <activity android:name="com.yuanyu.xalarm.KeepVibrationActivity" />
 
         <receiver android:name="com.yuanyu.xalarm.AlarmBroadcastReceiver" />
-        <receiver android:name="com.yuanyu.xalarm.BootReceiver" >
+        <receiver android:name="com.yuanyu.xalarm.BootReceiver"
+            android:enabled="false" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" >
                 </action>
