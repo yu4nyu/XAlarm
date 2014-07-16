@@ -6,9 +6,12 @@ import com.yuanyu.xalarm.AlarmBroadcastReceiver;
 import com.yuanyu.xalarm.BootReceiver;
 
 import android.content.Context;
+import android.util.Log;
 
 public class BroadcastEnabler {
 
+	private final static String TAG = "BroadcastEnabler";
+	
 	private static boolean hasEnabledAlarm(List<Alarm> allAlarms) {
 		for(Alarm alarm : allAlarms) {
 			if(alarm.getEnable()) {
@@ -22,10 +25,12 @@ public class BroadcastEnabler {
 		if(hasEnabledAlarm(allAlarms)) {
 			AlarmBroadcastReceiver.setEnabled(context, true);
 			BootReceiver.setEnabled(context, true);
+			Log.d(TAG, "Enable all broadcasts");
 		}
 		else {
 			AlarmBroadcastReceiver.setEnabled(context, false);
 			BootReceiver.setEnabled(context, false);
+			Log.d(TAG, "Disable all broadcasts");
 		}
 	}
 	

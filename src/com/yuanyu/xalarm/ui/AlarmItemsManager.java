@@ -376,6 +376,8 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		}
 		updateEnableState(mItems.get(position), isChecked);
 		Manager.INSTANCE.saveAlarm(mContext, alarm);
+		
+		BroadcastEnabler.determine(mContext, mData);
 	}
 
 	private void editMode(int position) {
