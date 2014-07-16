@@ -5,8 +5,10 @@ import com.yuanyu.xalarm.model.Constants;
 import com.yuanyu.xalarm.model.Manager;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
@@ -67,5 +69,20 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 		Intent intent = new Intent(BROADCAST_ACTION_UPDATE_ITEM);
 		intent.putExtra(BROADCAST_KEY_ALARM_ID, alarmId);
 		broadcaster.sendBroadcast(intent);
+	}
+	
+	public static void setEnabled(Context context, boolean enabled) {
+		ComponentName receiver = new ComponentName(context, AlarmBroadcastReceiver.class);
+		PackageManager pm = context.getPackageManager();
+		if(enabled) {
+			pm.setComponentEnabledSetting(receiver,
+			        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+			        PackageManager.DONT_KILL_APP);
+		}
+		else {
+			pm.setComponentEnabledSetting(receiver,
+			        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+			        PackageManager.DONT_KILL_APP);
+		}
 	}
 }

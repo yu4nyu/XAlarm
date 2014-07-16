@@ -29,6 +29,7 @@ import com.yuanyu.xalarm.R;
 import com.yuanyu.xalarm.AlarmDefineActivity;
 import com.yuanyu.xalarm.MainActivity;
 import com.yuanyu.xalarm.model.Alarm;
+import com.yuanyu.xalarm.model.BroadcastEnabler;
 import com.yuanyu.xalarm.model.Manager;
 import com.yuanyu.xalarm.model.Utils;
 
@@ -174,6 +175,8 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 				}
 			}
 		}
+		
+		BroadcastEnabler.determine(mContext, mData);
 
 		return true;
 	}
@@ -190,6 +193,9 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 			mData.get(position).setEnabled(false);
 			ViewHolder holder = mItems.get(position);
 			updateView(holder, position);
+			
+			BroadcastEnabler.determine(mContext, mData);
+			
 			return true;
 		}
 		return false;
@@ -209,6 +215,8 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		updateIndexTags();
 
 		mEmptyText.setVisibility(View.GONE);
+		
+		BroadcastEnabler.determine(mContext, mData);
 	}
 
 	/**
@@ -234,6 +242,8 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		if(mData.isEmpty()) {
 			mEmptyText.setVisibility(View.VISIBLE);
 		}
+		
+		BroadcastEnabler.determine(mContext, mData);
 	}
 
 	private ViewHolder createView(int position) {
@@ -495,5 +505,7 @@ public class AlarmItemsManager implements View.OnTouchListener, CompoundButton.O
 		}
 		updateIndexTags(); // This must not be called in the for loop above.
 		mActionMode.finish();
+		
+		BroadcastEnabler.determine(mContext, mData);
 	}
 }
