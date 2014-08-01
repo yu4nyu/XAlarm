@@ -1,3 +1,6 @@
+X Alarm
+==========
+
 A funny and useful alarm app.
 
 When the alarm goes off, you can stop it by:
